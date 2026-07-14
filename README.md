@@ -127,7 +127,3 @@ Every individual mechanism here has strong prior art. The composition — user-d
 ```
 
 Apache-2.0 license. Issues and pack contributions welcome — especially domain packs (medicine, law, finance) and disputed gold labels.
-
----
-
-**Maintainer:** Maggie Nanyonga ([@maggienanyonga](https://x.com/maggienanyonga)) · a [DIMAGGI AI](https://dimaggi.ai) open-source project — the *measure* leg of declare → measure → enforce ([Tool Guard](https://dimaggi.ai) is the enforce leg). Cite via [CITATION.cff](CITATION.cff).
