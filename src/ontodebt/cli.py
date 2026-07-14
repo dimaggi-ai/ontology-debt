@@ -205,7 +205,11 @@ def main(argv: list[str] | None = None) -> int:
     p.set_defaults(func=cmd_ledger)
 
     args = parser.parse_args(argv)
-    return args.func(args)
+    try:
+        return args.func(args)
+    except RuntimeError as exc:  # friendly config errors (e.g. missing API key)
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":
