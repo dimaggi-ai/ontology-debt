@@ -17,7 +17,7 @@ from pathlib import Path
 from . import __version__
 from .analysis import analyze
 from .ledger import load_ledger, save_ledger
-from .providers import load_model_configs
+from .providers import load_model_configs, preflight
 from .report import estimate_cost, render_report
 from .runner import load_run, run_probes, save_run
 from .schema import build_probes, load_commitments
@@ -93,6 +93,14 @@ def cmd_run(args: argparse.Namespace) -> int:
             file=sys.stderr,
         )
         return 2
+    missing = preflight([configs[n] for n in names])
+    if missing:
+        print(
+            f"Missing credentials for the requested models: {', '.join(missing)}. "
+            f"Put them in your environment or a local .env file (see README: Quickstart).",
+            file=sys.stderr,
+        )
+        return 2
     probes = list(build_probes(commitments, limit_scenarios=args.limit))
     args.results.mkdir(parents=True, exist_ok=True)
 
@@ -110,14 +118,28 @@ def cmd_run(args: argparse.Namespace) -> int:
         )
         save_run(record, args.results / f"run-{record.run_id}.json")
         stats = analyze(record, commitments)
-        changes = ledger.update(name, record.run_id, stats)
-        # Persist reconciliation immediately so a failure on a later model
-        # never loses a completed model's ledger state.
-        save_ledger(ledger, ledger_path)
-        print(
-            f"  done. cost ~${estimate_cost(record, cfg):.2f} | "
-            f"debt accrued {changes['accrued']}, paid {changes['paid']}, renewed {changes['renewed']}"
+        error_rate = (
+            sum(1 for r in record.results if r.error) / len(record.results)
+            if record.results
+            else 0.0
         )
+        if error_rate > 0.5:
+            # A mostly-errored run proves nothing; reconciling it against the
+            # ledger would fabricate a clean (or dirty) bill of health.
+            print(
+                f"  WARNING: {error_rate:.0%} of probes errored - run treated as "
+                f"INVALID; ledger not updated for {name}.",
+                file=sys.stderr,
+            )
+        else:
+            changes = ledger.update(name, record.run_id, stats)
+            # Persist reconciliation immediately so a failure on a later model
+            # never loses a completed model's ledger state.
+            save_ledger(ledger, ledger_path)
+            print(
+                f"  done. cost ~${estimate_cost(record, cfg):.2f} | "
+                f"debt accrued {changes['accrued']}, paid {changes['paid']}, renewed {changes['renewed']}"
+            )
         runs.append((record, cfg, stats))
 
     report = render_report(runs, ledger)

@@ -6,7 +6,7 @@
 
 **Audit the world-model of a chat LLM (Anthropic- or OpenAI-compatible APIs) against ontological commitments *you* declare — and track the debt.**
 
-> Package: `pip install ontology-debt` · Command: `ontodebt` · A [DIMAGGI AI](https://dimaggi.ai) open-source project.
+> Package name: `ontology-debt` (PyPI release imminent — install from source below for now) · Command: `ontodebt` · A [DIMAGGI AI](https://dimaggi.ai) open-source project.
 
 `ontodebt` is a small Python library + CLI. You declare typed, testable commitments about how the world works (object permanence, causal ordering, temporal consistency, …) as YAML. The harness probes a model with paraphrase families of constrained-format questions, detects two kinds of failure — **violations** (the model contradicts your commitment) and **contradictions** (the model contradicts *itself* across paraphrases or logically linked scenarios) — and accrues every unresolved failure into a persistent, per-model **debt ledger** that is paid down only when a later run passes.
 
@@ -14,11 +14,11 @@ It **audits and accounts**. It does not repair answers (unlike the BeliefBank �
 
 ## Why
 
-Teams increasingly have a *declared domain model* — an ontology, a glossary, a set of invariants their product logic assumes — and no tooling-mature way to check a live LLM against it. The SHACL/OWL stack validates RDF data, not model behavior. Extraction benchmarks test reading, not holding. Generic eval harnesses assert on single outputs with no ontology typing, no cross-answer contradiction checking, and no memory between runs. Practitioners have said the quiet part in print — *"practical pipelines for converting ontologies into eval scripts are nascent"* (Ojitha, *Ontology Evals for LLMs*, Oct 2025) — and one 2025 attempt at a reasoner-checked correction loop (arXiv:2504.07640) was withdrawn by its authors.
+Teams increasingly have a *declared domain model* — an ontology, a glossary, a set of invariants their product logic assumes — and no tooling-mature way to check a live LLM against it. The SHACL/OWL stack validates RDF data, not model behavior. Extraction benchmarks test reading, not holding. Generic eval harnesses assert on single outputs with no ontology typing, no cross-answer contradiction checking, and no memory between runs. Practitioners have said the quiet part in print — *"practical pipelines for converting ontologies into eval scripts are nascent"* (Ojitha, *Ontology Evals for LLMs*, Oct 2025) — and one 2025 attempt at a reasoner-checked correction loop ([arXiv:2504.07640](https://arxiv.org/abs/2504.07640)) was withdrawn by its authors.
 
 `ontodebt` is a deliberately small answer to that gap, plus one framing borrowed from software engineering: a failed check is not a number in a report, it is **debt** — it stays on the books, weighted by the severity *you* assigned, until the model (or your commitment) changes.
 
-The name says what it measures: **ontology debt** — the accumulated, unresolved gap between the world-model a system is supposed to hold and the one it demonstrably operates with. (Jorge Arango sketched a kindred idea for product terminology as ["ontological debt"](https://jarango.com), 2024; the software-engineering term *epistemic debt* — Ionescu et al. 2019, and a 2026 revival for AI-assisted coding — names related but distinct concepts. See [Terminology](#terminology).)
+The name says what it measures: **ontology debt** — the accumulated, unresolved gap between the world-model a system is supposed to hold and the one it demonstrably operates with. (Jorge Arango sketched a kindred idea for product terminology as "ontological debt" in 2024; the software-engineering term *epistemic debt* — Ionescu et al. 2019, and a 2026 revival for AI-assisted coding — names related but distinct concepts. See [Terminology](#terminology).)
 
 ## Quickstart
 
@@ -32,7 +32,9 @@ python3 -m venv .venv && .venv/bin/pip install -e ".[all]"
 # What will it cost?
 .venv/bin/ontodebt estimate --models claude-sonnet-5,gpt-5.1
 
-# Dry run, no API keys, deterministic mock model
+# Dry run, no API keys, deterministic mock model. The mock's "debt" is
+# fabricated by construction - it demonstrates the pipeline (verdicts,
+# ledger accrual and pay-down), it does not measure anything.
 .venv/bin/ontodebt run --models mock
 
 # Real audit: put keys in .env (never in shell history), then
@@ -79,17 +81,15 @@ Six packs ship with the repo (150 scenarios, 750 probes per model): `object_perm
 - **Format nonconformance is its own bucket.** A rambling answer is not evidence about the world-model; it is evidence about instruction-following. Counting it as a violation would inflate the headline number.
 - **Ranges, not just means.** Accuracy is reported as a *range across paraphrase positions* — paraphrase sensitivity is a finding, not noise.
 - **No sampling-parameter theater.** Current-generation Anthropic models reject `temperature`; several OpenAI reasoning models do too. We pass none and report run-to-run stability empirically instead of pretending `temperature=0` buys determinism.
-- **Debt semantics.** `ledger.json` persists across runs. A violation, paraphrase contradiction, or broken link constraint accrues an item (weighted by commitment severity); a later passing run pays it down — but only when the run produced enough evidence (a contradiction item needs a re-testable cluster, not a single lucky answer); a regression re-opens it, preserving first-seen, last-paid, and reopen counts. `ontodebt ledger` shows the open book.
+- **Debt semantics.** `ledger.json` persists across runs. A violation, paraphrase contradiction, or broken link constraint accrues an item, weighted by commitment severity (high = 5, medium = 3, low = 1); a later passing run pays it down — but only when the run produced enough evidence (a contradiction item needs a re-testable cluster, not a single lucky answer); a regression re-opens it, preserving first-seen, last-paid, and reopen counts. `ontodebt ledger` shows the open book. A run in which more than half the probes error is treated as invalid and never touches the ledger.
 
 ## Results
 
-> Results from the maintainers' audit runs (pinned model snapshots, full transcripts committed under `results/`) are published here after each run. Run `ontodebt run` to reproduce against current snapshots — model behavior drifts, which is rather the point of keeping a ledger.
-
-*(Section populated by `results/report.md` after the first audited run.)*
+> **First maintainers' audit: pending.** When it runs, the report, ledger, and full transcripts will be committed here with the exact model ids invoked. Until then, [`examples/mock-run/`](examples/mock-run/) shows exactly what a report and ledger look like — generated by the deterministic mock model, whose numbers are fabricated by construction. Run `ontodebt run` to audit current snapshots yourself — model behavior drifts, which is rather the point of keeping a ledger.
 
 ## Related work — what this is not
 
-Every individual mechanism here has strong prior art. The composition — user-declared typed commitments + declared paraphrase-family probing of current chat APIs + violation *and* contradiction detection + a persistent debt ledger — is, to our knowledge, the part that has not shipped as a usable tool. (Paraphrases are hand-authored in the packs, not generated at runtime — unlike CheckList's perturbation generation; runtime generation is a natural v0.2.) Corrections welcome.
+Every individual mechanism here has strong prior art. The composition — user-declared typed commitments + declared paraphrase-family probing of current chat APIs + violation *and* contradiction detection + a persistent debt ledger — is, to our knowledge, unshipped as a whole; **the ledger is the one component for which we could locate no precedent at all**. (Paraphrases are hand-authored in the packs, not generated at runtime — unlike CheckList's perturbation generation; runtime generation is a natural v0.2.) Corrections welcome.
 
 | Prior work | What it does | How `ontodebt` differs |
 |---|---|---|
@@ -98,15 +98,20 @@ Every individual mechanism here has strong prior art. The composition — user-d
 | [CheckList](https://github.com/marcotcr/checklist) (ACL 2020) | Declared behavioral tests + perturbation generation for pre-LLM classifiers | Closest OSS ancestor in UX. No constraint semantics *between* answers, no contradiction graph, no persistence. Think "CheckList for the ontology layer of chat LLMs, with an accounting model" |
 | [ChatProtect](https://github.com/eth-sri/ChatProtect) (ICLR 2024), SelfCheckGPT | Self-contradiction detection within one generated text / across samples | Ours is cross-answer over commitment-derived probe sets, tied to a ledger |
 | [ParaRel](https://github.com/yanaiela/pararel) (TACL 2021), SCORE (2025), BECEL (COLING 2022) | Paraphrase/negation consistency benchmarks (largely fixed datasets, encoder-era) | We adopt their protocols (paraphrase families, range reporting) as *harness mechanics* over user-declared content |
+| [AuditLLM](https://huggingface.co/spaces/Amirizaniani/AuditLLM) (LREC-COLING 2024) | Runtime paraphrase-probe generation + cross-answer inconsistency flagging, as a hosted demo | No declared commitments or gold labels, no violation-vs-contradiction split, no persistence; similarity-scored rather than deterministic |
+| Metamorphic testing of LLMs — [PromptOps](https://github.com/MUICT-SERU/PromptOps), LLMORPH | Semantic-preserving perturbations + output-invariance checks (robustness framing, similarity-based) | We declare typed commitments with expected answers and logical links, split violations from contradictions, and keep books across runs |
+| Agent belief-consistency benchmarks (BeliefShift, NeuroState-Bench, 2026) | Fixed longitudinal benchmarks of belief drift/contradiction in agents | They benchmark agent memory across sessions; we audit declared world-model commitments of the base model and account for failures over time |
 | EWOK (2024), CoreCognition (2024), ChronoScope (ACL 2026) | Fixed benchmarks of world-knowledge / core-cognition / temporal consistency | Our default packs borrow their category vocabulary, with citation. They benchmark; this tool lets you declare and track |
 | arXiv 2604.14525 (2026) | Extracts "commitments" from answers within one reasoning case; solver-checked contradiction density + repair | Vocabulary collision, different object: theirs are *extracted post-hoc* and repaired immediately; ours are *user-declared ex ante* and ledgered longitudinally |
-| [promptfoo](https://github.com/promptfoo/promptfoo), [DeepEval](https://github.com/confident-ai/deepeval), Giskard | Per-output assertion DSLs, CI regression tracking | No ontology typing, no cross-answer checks, no debt semantics. Complementary: export ledger deltas into their CI gates |
+| [promptfoo](https://github.com/promptfoo/promptfoo), [DeepEval](https://github.com/confident-ai/deepeval) | Per-output assertion DSLs, CI regression tracking | No ontology typing, no cross-answer contradiction checks over probe sets (promptfoo's `select-best` ranks outputs; DeepEval's conversational metrics judge within one dialog), no debt semantics. Complementary: export ledger deltas into their CI gates |
+| [Giskard](https://docs.giskard.ai) LLM scan | Generated-pair coherency/sycophancy detection — a real shipped cross-answer check | LLM-judged, fixed detector categories, no user-declared commitments, per-scan rather than ledgered |
 | xpSHACL violation KG, ROBOT report / ODK | Continuous validation with violation records — for RDF data / ontologies as the system under test | We invert the target: the *LLM* is the system under audit; the pattern ("ROBOT report where the model is the codebase") is borrowed with thanks |
 
 ## Terminology
 
 - **Ontological commitment** is used here in the practical sense — an assertion a system is committed to holding — not in Quine's full philosophical sense, and not in the sense of arXiv 2604.14525's *extracted* reasoning commitments, nor agent task-state "commitment integrity."
-- **Ontology debt** (this project): the weighted sum of open ledger items — unresolved violations and contradictions against declared commitments. Distinct from *technical debt* (code), *ontological debt* (Arango 2024: product terminology drift), and *epistemic debt* (Ionescu et al. 2019: rework from process ignorance; 2026 usage: human understanding lagging AI-generated code).
+- **Ontology debt** (this project): the weighted sum of open ledger items — unresolved violations and contradictions against declared commitments. Distinct from *technical debt* (code), *ontological debt* (Jorge Arango, 2024: product terminology drift), and *epistemic debt* (Ionescu et al. 2019: rework from process ignorance; 2026 usage: human understanding lagging AI-generated code).
+- **And no, this is not a formal ontology.** There are no classes, axioms, or reasoner here — commitments are flat typed assertions with pairwise links, and "ontology" is used in the practical sense of a declared world-model. If you prefer the duller, more accurate name, this is *declared-invariant consistency tracking with an accounting model*. We chose the name that says what it costs you.
 
 ## Limitations (read before citing)
 

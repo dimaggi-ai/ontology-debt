@@ -85,6 +85,7 @@ def run_probes(
             error=completion.error,
         )
 
+    FAIL_FAST_AFTER = 10  # abort if the first N completions are all errors
     try:
         with ThreadPoolExecutor(max_workers=max_workers) as pool:
             futures = [pool.submit(work, p) for p in probes]
@@ -97,6 +98,15 @@ def run_probes(
                     record = {"run_id": run_id, "model": config.model_id, **asdict(result)}
                     transcript_file.write(json.dumps(record, ensure_ascii=False) + "\n")
                     transcript_file.flush()
+                # A bad API key or model id errors every probe. Abort before
+                # burning the whole run - and never report a false clean bill.
+                if i == FAIL_FAST_AFTER and all(r.error for r in results):
+                    pool.shutdown(wait=False, cancel_futures=True)
+                    raise RuntimeError(
+                        f"first {FAIL_FAST_AFTER} probes against {config.name} all "
+                        f"errored - aborting run. Check the API key and model id. "
+                        f"Last error: {results[-1].error}"
+                    )
                 if progress and (i % 50 == 0 or i == len(probes)):
                     print(f"  [{config.name}] {i}/{len(probes)} probes")
     finally:

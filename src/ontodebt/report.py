@@ -53,6 +53,15 @@ def render_report(
 
         lines.append(f"## {record.model_name}")
         lines.append("")
+        error_rate = total_err / total_probes if total_probes else 0.0
+        if error_rate > 0.2:
+            lines.append(
+                f"> ⚠️ **RUN UNRELIABLE: {error_rate:.0%} of probes errored.** "
+                f"Headline rates below are computed on the surviving probes and "
+                f"should not be trusted; the ledger was not updated from this run "
+                f"if errors exceeded 50%."
+            )
+            lines.append("")
         lines.append(f"- Model id (as invoked): `{record.model_id}`")
         lines.append(f"- Run: `{record.run_id}` started {record.started_at}")
         lines.append(

@@ -105,9 +105,12 @@ class OpenAIProvider(Provider):
 class MockProvider(Provider):
     """Deterministic offline provider for tests and dry runs.
 
-    Answers correctly by default. `failure_rate` deterministically flips a
-    fraction of answers (keyed by prompt hash, so runs are reproducible), and
-    `inconsistent` makes one paraphrase variant per unlucky scenario disagree.
+    Answers "Yes" to everything unless `answer_book` overrides a prompt;
+    `failure_rate` deterministically flips a fraction of answers (keyed by
+    prompt hash, so runs are reproducible). Its numbers are fabricated by
+    construction - it demonstrates the pipeline, never a finding.
+    `raise_error` makes every call fail with that message (for testing the
+    harness's error handling).
     """
 
     def __init__(self, config: ModelConfig):
@@ -115,8 +118,11 @@ class MockProvider(Provider):
         p = config.params
         self._failure_rate = float(p.get("failure_rate", 0.0))
         self._answer_book: dict[str, str] = dict(p.get("answer_book", {}))
+        self._raise_error = str(p.get("raise_error", ""))
 
     def complete(self, system: str, prompt: str) -> Completion:
+        if self._raise_error:
+            return Completion("", 0, 0, 0.0, error=self._raise_error)
         digest = int(hashlib.sha256(prompt.encode()).hexdigest(), 16)
         fail = (digest % 10_000) / 10_000 < self._failure_rate
         answer = self._answer_book.get(prompt, "Yes")
@@ -141,8 +147,21 @@ def _require_env(name: str) -> None:
     if not os.environ.get(name):
         raise RuntimeError(
             f"{name} is not set. Put it in your environment or a local .env file "
-            f"(see README: Running the audit)."
+            f"(see README: Quickstart)."
         )
+
+
+REQUIRED_ENV = {"anthropic": "ANTHROPIC_API_KEY", "openai": "OPENAI_API_KEY"}
+
+
+def preflight(configs: list[ModelConfig]) -> list[str]:
+    """Return every missing credential for the requested models, all at once."""
+    missing = []
+    for cfg in configs:
+        var = REQUIRED_ENV.get(cfg.provider)
+        if var and not os.environ.get(var) and var not in missing:
+            missing.append(var)
+    return missing
 
 
 def load_model_configs(path) -> dict[str, ModelConfig]:

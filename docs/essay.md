@@ -6,7 +6,7 @@
 
 Your product logic assumes a world-model. Somewhere in your system there is a set of things that must be true for the code around the LLM to make sense: an occluded object still exists, a cause precedes its effect, a question and its negation cannot both be "yes," a quantity doesn't change because you rephrased the sentence describing it. Nobody wrote these down, because nobody writes down the obvious.
 
-The model you call over an API also has a world-model. It is implicit, statistical, and — this is the uncomfortable part — *not the same one*. Frontier models in 2026 still fail atomic world-model probes, still drift across paraphrases of the same question, still answer a question and its negation the same way often enough to matter. The research literature keeps re-measuring this. The tooling ecosystem keeps not addressing it.
+The model you call over an API also has a world-model. It is implicit, statistical, and — this is the uncomfortable part — *not the same one*. Published evaluations keep finding that frontier models still fail atomic world-model probes, still drift across paraphrases of the same question, still answer a question and its negation the same way often enough to matter. The tooling ecosystem keeps not addressing it.
 
 ## The gap between validation and behavior
 
