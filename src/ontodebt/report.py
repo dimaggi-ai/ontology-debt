@@ -53,7 +53,7 @@ def render_report(
 
         lines.append(f"## {record.model_name}")
         lines.append("")
-        lines.append(f"- Model snapshot: `{record.model_id}`")
+        lines.append(f"- Model id (as invoked): `{record.model_id}`")
         lines.append(f"- Run: `{record.run_id}` started {record.started_at}")
         lines.append(
             f"- Probes: {total_probes} ({total_answered} answered, "
@@ -63,10 +63,24 @@ def render_report(
             f"- Tokens: {record.total_input_tokens:,} in / {record.total_output_tokens:,} out"
             + (f" - estimated cost ${cost:.2f}" if cost else "")
         )
+        total_checkable = sum(cs.n_checkable_scenarios for cs in stats.values())
         overall_viol_rate = total_viol / total_answered if total_answered else 0.0
-        overall_contra_rate = total_incons / total_scen if total_scen else 0.0
-        lines.append(f"- **Overall violation rate: {_pct(overall_viol_rate)}** ({total_viol}/{total_answered} answered probes)")
-        lines.append(f"- **Overall contradiction rate: {_pct(overall_contra_rate)}** ({total_incons}/{total_scen} paraphrase clusters)")
+        overall_contra_rate = total_incons / total_checkable if total_checkable else 0.0
+        pessimistic = (
+            (total_viol + total_noncon) / (total_answered + total_noncon)
+            if (total_answered + total_noncon)
+            else 0.0
+        )
+        lines.append(
+            f"- **Overall violation rate: {_pct(overall_viol_rate)}** "
+            f"({total_viol}/{total_answered} answered probes; "
+            f"pessimistic bound counting nonconformance as failure: {_pct(pessimistic)})"
+        )
+        lines.append(
+            f"- **Overall contradiction rate: {_pct(overall_contra_rate)}** "
+            f"({total_incons}/{total_checkable} checkable paraphrase clusters; "
+            f"{total_scen - total_checkable} of {total_scen} clusters untestable)"
+        )
         if total_links:
             lines.append(f"- Link constraints broken: {total_link_contra}/{total_links}")
         if ledger:
@@ -74,17 +88,26 @@ def render_report(
         lines.append("")
         lines.append(
             "| Commitment | Sev | Violation rate (95% CI) | Contradiction rate (95% CI) "
-            "| Accuracy range across paraphrases | Nonconf. | n |"
+            "| Accuracy range across paraphrases | Nonconf. | n answered |"
         )
         lines.append("|---|---|---|---|---|---|---|")
         for cid in sorted(stats):
             cs = stats[cid]
-            lo, hi = cs.accuracy_range
+            viol = (
+                f"{_pct(cs.violation_rate)} {_ci(cs.violation_ci)}"
+                if cs.n_answered
+                else "—"
+            )
+            contra = (
+                f"{_pct(cs.contradiction_rate)} {_ci(cs.contradiction_ci)}"
+                if cs.n_checkable_scenarios
+                else "—"
+            )
+            acc_range = cs.accuracy_range
+            acc = f"{_pct(acc_range[0])} – {_pct(acc_range[1])}" if acc_range else "—"
             lines.append(
                 f"| {cs.title} | {cs.severity} "
-                f"| {_pct(cs.violation_rate)} {_ci(cs.violation_ci)} "
-                f"| {_pct(cs.contradiction_rate)} {_ci(cs.contradiction_ci)} "
-                f"| {_pct(lo)} – {_pct(hi)} "
+                f"| {viol} | {contra} | {acc} "
                 f"| {cs.n_nonconformant} | {cs.n_answered} |"
             )
         lines.append("")
@@ -110,6 +133,10 @@ def render_report(
         "*Methodology: constrained-format probes, deterministic verdicts (no LLM judge), "
         "Wilson 95% intervals. Violations (wrong vs. declared commitment) and contradictions "
         "(model disagreeing with itself across paraphrases or linked scenarios) are counted "
-        "separately. Full transcripts are committed alongside this report.*"
+        "separately. Violation rates condition on answered probes (the pessimistic bound above "
+        "counts nonconformance as failure); contradiction rates condition on checkable clusters "
+        "(>= 2 answered variants). Link checks use the strict majority answer of each cluster; "
+        "ties and under-answered clusters are excluded as indeterminate, and symmetric link "
+        "declarations are deduplicated. Full transcripts are recorded alongside this report.*"
     )
     return "\n".join(lines) + "\n"

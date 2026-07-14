@@ -1,6 +1,6 @@
 # ontodebt
 
-**Audit the world-model of any chat LLM against ontological commitments *you* declare — and track the debt.**
+**Audit the world-model of a chat LLM (Anthropic- or OpenAI-compatible APIs) against ontological commitments *you* declare — and track the debt.**
 
 `ontodebt` is a small Python library + CLI. You declare typed, testable commitments about how the world works (object permanence, causal ordering, temporal consistency, …) as YAML. The harness probes a model with paraphrase families of constrained-format questions, detects two kinds of failure — **violations** (the model contradicts your commitment) and **contradictions** (the model contradicts *itself* across paraphrases or logically linked scenarios) — and accrues every unresolved failure into a persistent, per-model **debt ledger** that is paid down only when a later run passes.
 
@@ -8,7 +8,7 @@ It **audits and accounts**. It does not repair answers (unlike the BeliefBank �
 
 ## Why
 
-Teams increasingly have a *declared domain model* — an ontology, a glossary, a set of invariants their product logic assumes — and no tooling-mature way to check a live LLM against it. The SHACL/OWL stack validates RDF data, not model behavior. Extraction benchmarks test reading, not holding. Generic eval harnesses assert on single outputs with no ontology typing, no cross-answer contradiction checking, and no memory between runs. Practitioners have said the quiet part in print: *"practical pipelines for converting ontologies into eval scripts are nascent."*
+Teams increasingly have a *declared domain model* — an ontology, a glossary, a set of invariants their product logic assumes — and no tooling-mature way to check a live LLM against it. The SHACL/OWL stack validates RDF data, not model behavior. Extraction benchmarks test reading, not holding. Generic eval harnesses assert on single outputs with no ontology typing, no cross-answer contradiction checking, and no memory between runs. Practitioners have said the quiet part in print — *"practical pipelines for converting ontologies into eval scripts are nascent"* (Ojitha, *Ontology Evals for LLMs*, Oct 2025) — and one 2025 attempt at a reasoner-checked correction loop (arXiv:2504.07640) was withdrawn by its authors.
 
 `ontodebt` is a deliberately small answer to that gap, plus one framing borrowed from software engineering: a failed check is not a number in a report, it is **debt** — it stays on the books, weighted by the severity *you* assigned, until the model (or your commitment) changes.
 
@@ -40,6 +40,7 @@ Outputs land in `results/`: a markdown report with Wilson 95% CIs, a full per-pr
 ## What a commitment looks like
 
 ```yaml
+# illustrative example - ids abbreviated; see commitments/ for the real packs
 id: object_permanence
 title: "Object permanence"
 statement: >
@@ -47,7 +48,7 @@ statement: >
   and retains its properties.
 severity: high
 scenarios:
-  - id: op-001
+  - id: ex-001
     setup: >
       A red ball rolls behind an opaque wooden screen. Nothing touches
       the ball after that.
@@ -58,19 +59,21 @@ scenarios:
     expected: { type: choice, values: ["Yes", "No"], value: "Yes" }
     difficulty: basic
     links:
-      - { relation: same_answer, target: op-002 }
+      # ex-002 asks the complementary question ("Has the ball stopped
+      # existing?"), so a consistent model must answer the two differently.
+      - { relation: different_answer, target: ex-002 }
 ```
 
 Six packs ship with the repo (150 scenarios, 750 probes per model): `object_permanence`, `entity_persistence`, `temporal_consistency`, `causal_ordering`, `negation_invariance`, `quantity_conservation`. The first four descend from the probe taxonomy of core-knowledge evaluations (CoreCognition 2024, EWOK 2024); they are *illustrative packs*, not a benchmark claim — the point of the tool is that you write packs for **your** domain.
 
 ## Design decisions (and what they buy)
 
-- **No LLM judge anywhere in the loop.** Every probe uses a constrained answer format, so every verdict is a deterministic string comparison. This trades open-text coverage for zero judge-validation burden and full reproducibility of the analysis given a transcript. (Unvalidated LLM violation-detectors have been measured at ~40% false positives; we opted out of that problem class for v0.1.)
+- **No LLM judge anywhere in the loop.** Every probe uses a constrained answer format, so every verdict is a deterministic string comparison. This trades open-text coverage for zero judge-validation burden and full reproducibility of the analysis given a transcript. (LLM judges that ship without a published human-agreement number are a known false-positive factory; we opted out of that problem class for v0.1.)
 - **Violations ≠ contradictions.** A model can be consistently wrong (violation, no contradiction) or inconsistently right (contradiction, low violation rate). The report keeps the columns separate because the two failure modes have different fixes.
 - **Format nonconformance is its own bucket.** A rambling answer is not evidence about the world-model; it is evidence about instruction-following. Counting it as a violation would inflate the headline number.
 - **Ranges, not just means.** Accuracy is reported as a *range across paraphrase positions* — paraphrase sensitivity is a finding, not noise.
 - **No sampling-parameter theater.** Current-generation Anthropic models reject `temperature`; several OpenAI reasoning models do too. We pass none and report run-to-run stability empirically instead of pretending `temperature=0` buys determinism.
-- **Debt semantics.** `ledger.json` persists across runs. A violation accrues an item (weighted by commitment severity); a later passing run pays it down; a regression re-opens it with its history intact. `ontodebt ledger` shows the open book.
+- **Debt semantics.** `ledger.json` persists across runs. A violation, paraphrase contradiction, or broken link constraint accrues an item (weighted by commitment severity); a later passing run pays it down — but only when the run produced enough evidence (a contradiction item needs a re-testable cluster, not a single lucky answer); a regression re-opens it, preserving first-seen, last-paid, and reopen counts. `ontodebt ledger` shows the open book.
 
 ## Results
 
@@ -80,7 +83,7 @@ Six packs ship with the repo (150 scenarios, 750 probes per model): `object_perm
 
 ## Related work — what this is not
 
-Every individual mechanism here has strong prior art. The composition — user-declared typed commitments + generated paraphrase probing of arbitrary chat APIs + violation *and* contradiction detection + a persistent debt ledger — is, to our knowledge, the part that has not shipped as a usable tool. Corrections welcome.
+Every individual mechanism here has strong prior art. The composition — user-declared typed commitments + declared paraphrase-family probing of current chat APIs + violation *and* contradiction detection + a persistent debt ledger — is, to our knowledge, the part that has not shipped as a usable tool. (Paraphrases are hand-authored in the packs, not generated at runtime — unlike CheckList's perturbation generation; runtime generation is a natural v0.2.) Corrections welcome.
 
 | Prior work | What it does | How `ontodebt` differs |
 |---|---|---|
@@ -105,12 +108,15 @@ Every individual mechanism here has strong prior art. The composition — user-d
 2. **Constrained formats trade coverage for determinism.** Open-text failure modes are invisible to v0.1 by design.
 3. **Six packs ≠ an ontology.** The shipped packs are worked examples. Real value requires writing packs for your own domain model.
 4. **Gold labels are human-spot-checked, not crowd-validated.** Every scenario passed an adversarial review pass for ambiguity; that is weaker than multi-annotator agreement. Dispute a label by opening an issue — that is the ledger working as intended.
-5. **A high pass rate is not safety.** These are floor checks. Passing all 750 probes means the floor holds, nothing more.
+5. **Conditioning on answered probes can deflate as well as protect.** Nonconformance is plausibly informative missingness (harder probes provoke hedging), so the headline violation rate conditions on compliance; the report therefore also prints a pessimistic bound counting nonconformance as failure. Read both.
+6. **Model ids are as-invoked, not guaranteed immutable.** Pin dated snapshot ids in `models.yaml` where the provider offers them; the report labels the id it actually called.
+7. **A high pass rate is not safety.** These are floor checks. Passing all 750 probes means the floor holds, nothing more.
 
 ## Development
 
 ```bash
-.venv/bin/python -m pytest        # unit tests (mock provider, no network)
+.venv/bin/pip install -e ".[dev]"   # adds pytest to the quickstart install
+.venv/bin/python -m pytest          # unit tests (mock provider, no network)
 .venv/bin/ontodebt run --models mock --limit 3   # 90-probe smoke audit
 ```
 

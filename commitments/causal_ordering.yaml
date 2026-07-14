@@ -172,7 +172,7 @@ scenarios:
       - "After Leo removes the battery, does the train stop? Answer with exactly one word: Yes or No."
       - "With the battery pulled out, does the train quit running? Answer with exactly one word: Yes or No."
       - "Once the battery has been taken out by Leo, does the train come to a stop? Answer with exactly one word: Yes or No."
-      - "Does removing the battery bring the train's running to an end? Answer with exactly one word: Yes or No."
+      - "Once the battery is out, is the train no longer running? Answer with exactly one word: Yes or No."
     expected:
       type: choice
       values: ["Yes", "No"]

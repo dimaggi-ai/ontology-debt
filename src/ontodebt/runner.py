@@ -7,7 +7,6 @@ transcript (one JSON line per probe), and computes deterministic verdicts.
 from __future__ import annotations
 
 import json
-import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
@@ -59,9 +58,8 @@ def run_probes(
 ) -> RunRecord:
     provider = make_provider(config)
     started = datetime.now(timezone.utc)
-    run_id = f"{config.name}-{started.strftime('%Y%m%dT%H%M%SZ')}"
+    run_id = f"{config.name}-{started.strftime('%Y%m%dT%H%M%S')}{started.microsecond // 1000:03d}Z"
     results: list[ProbeResult] = []
-    lock = threading.Lock()
     transcript_file = open(transcript_path, "a") if transcript_path else None
 
     def work(probe: Probe) -> ProbeResult:
@@ -90,14 +88,15 @@ def run_probes(
     try:
         with ThreadPoolExecutor(max_workers=max_workers) as pool:
             futures = [pool.submit(work, p) for p in probes]
+            # Workers only compute; all shared state (results list, transcript
+            # file) is touched exclusively on this thread - no lock needed.
             for i, future in enumerate(as_completed(futures), 1):
                 result = future.result()
-                with lock:
-                    results.append(result)
-                    if transcript_file:
-                        record = {"run_id": run_id, "model": config.model_id, **asdict(result)}
-                        transcript_file.write(json.dumps(record, ensure_ascii=False) + "\n")
-                        transcript_file.flush()
+                results.append(result)
+                if transcript_file:
+                    record = {"run_id": run_id, "model": config.model_id, **asdict(result)}
+                    transcript_file.write(json.dumps(record, ensure_ascii=False) + "\n")
+                    transcript_file.flush()
                 if progress and (i % 50 == 0 or i == len(probes)):
                     print(f"  [{config.name}] {i}/{len(probes)} probes")
     finally:

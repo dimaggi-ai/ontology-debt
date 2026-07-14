@@ -43,13 +43,27 @@ class ScenarioOutcome:
         return Verdict.VIOLATION.value in self.verdicts
 
     @property
-    def majority_answer(self) -> str:
-        if not self.answers:
+    def checkable(self) -> bool:
+        """Paraphrase consistency is only testable with >= 2 answered variants."""
+        return len(self.answers) >= 2
+
+    @property
+    def cluster_answer(self) -> str:
+        """Strict majority of answered variants; '' when indeterminate.
+
+        Indeterminate means: fewer than 2 answered variants, or no answer
+        holds a strict majority (ties). Indeterminate clusters are excluded
+        from link-constraint checks rather than guessed at.
+        """
+        if len(self.answers) < 2:
             return ""
         counts: dict[str, int] = defaultdict(int)
         for a in self.answers:
             counts[a] += 1
-        return max(sorted(counts), key=lambda a: counts[a])
+        best = max(sorted(counts), key=lambda a: counts[a])
+        if counts[best] * 2 > len(self.answers):
+            return best
+        return ""
 
 
 @dataclass
@@ -63,10 +77,12 @@ class CommitmentStats:
     n_nonconformant: int = 0
     n_errors: int = 0
     n_scenarios: int = 0
+    n_checkable_scenarios: int = 0        # >= 2 answered variants (consistency testable)
     n_inconsistent_scenarios: int = 0     # paraphrase invariance breaks
-    n_link_contradictions: int = 0        # declared link constraint breaks
+    n_link_contradictions: int = 0        # declared link constraint breaks (deduplicated)
     n_links_checked: int = 0
-    variant_accuracy: list[float] = field(default_factory=list)  # per variant position
+    link_results: dict[tuple[str, str, str], bool] = field(default_factory=dict)  # canonical link -> broken
+    variant_accuracy: dict[int, float] = field(default_factory=dict)  # variant position -> accuracy
     scenario_outcomes: dict[str, ScenarioOutcome] = field(default_factory=dict)
 
     @property
@@ -79,17 +95,28 @@ class CommitmentStats:
 
     @property
     def contradiction_rate(self) -> float:
-        return self.n_inconsistent_scenarios / self.n_scenarios if self.n_scenarios else 0.0
+        """Inconsistent clusters over *checkable* clusters (>= 2 answered variants).
+
+        Using all scenarios as the denominator would structurally deflate the
+        rate for models that break format often - an untestable cluster is
+        not a consistent one.
+        """
+        return (
+            self.n_inconsistent_scenarios / self.n_checkable_scenarios
+            if self.n_checkable_scenarios
+            else 0.0
+        )
 
     @property
     def contradiction_ci(self) -> tuple[float, float]:
-        return wilson_interval(self.n_inconsistent_scenarios, self.n_scenarios)
+        return wilson_interval(self.n_inconsistent_scenarios, self.n_checkable_scenarios)
 
     @property
-    def accuracy_range(self) -> tuple[float, float]:
+    def accuracy_range(self) -> tuple[float, float] | None:
         if not self.variant_accuracy:
-            return (0.0, 0.0)
-        return (min(self.variant_accuracy), max(self.variant_accuracy))
+            return None
+        values = list(self.variant_accuracy.values())
+        return (min(values), max(values))
 
 
 def analyze(record: RunRecord, commitments: list[Commitment]) -> dict[str, CommitmentStats]:
@@ -132,34 +159,47 @@ def analyze(record: RunRecord, commitments: list[Commitment]) -> dict[str, Commi
                     if r.verdict == Verdict.VIOLATION.value:
                         cs.n_violations += 1
             # Paraphrase invariance: all answered variants must agree.
-            if len(set(outcome.answers)) > 1:
-                outcome.inconsistent = True
-                cs.n_inconsistent_scenarios += 1
+            # Only clusters with >= 2 answered variants are testable.
+            if outcome.checkable:
+                cs.n_checkable_scenarios += 1
+                if len(set(outcome.answers)) > 1:
+                    outcome.inconsistent = True
+                    cs.n_inconsistent_scenarios += 1
             cs.n_scenarios += 1
             cs.scenario_outcomes[sid] = outcome
 
-        for _, vresults in sorted(by_variant.items()):
+        for variant_index, vresults in sorted(by_variant.items()):
             answered = [r for r in vresults if r.verdict in (Verdict.PASS.value, Verdict.VIOLATION.value)]
             if answered:
                 acc = sum(1 for r in answered if r.verdict == Verdict.PASS.value) / len(answered)
-                cs.variant_accuracy.append(acc)
+                cs.variant_accuracy[variant_index] = acc
 
-        # Declared link constraints between scenarios.
+        # Declared link constraints between scenarios, deduplicated to one
+        # check per undirected (pair, relation): packs commonly declare both
+        # directions, and double-counting would overstate broken counts.
         if commitment:
+            canonical: dict[tuple[str, str, str], LinkRelation] = {}
             for scenario in commitment.scenarios:
-                source = cs.scenario_outcomes.get(scenario.id)
-                if source is None or not source.majority_answer:
-                    continue
                 for link in scenario.links:
-                    target = cs.scenario_outcomes.get(link.target)
-                    if target is None or not target.majority_answer:
-                        continue
-                    cs.n_links_checked += 1
-                    same = source.majority_answer == target.majority_answer
-                    if link.relation is LinkRelation.SAME_ANSWER and not same:
-                        cs.n_link_contradictions += 1
-                    elif link.relation is LinkRelation.DIFFERENT_ANSWER and same:
-                        cs.n_link_contradictions += 1
+                    a, b = sorted((scenario.id, link.target))
+                    canonical[(a, b, link.relation.value)] = link.relation
+            for (a, b, rel_value), relation in sorted(canonical.items()):
+                source = cs.scenario_outcomes.get(a)
+                target = cs.scenario_outcomes.get(b)
+                if source is None or target is None:
+                    continue
+                # Indeterminate clusters (ties, < 2 answers) are excluded,
+                # not guessed at.
+                if not source.cluster_answer or not target.cluster_answer:
+                    continue
+                cs.n_links_checked += 1
+                same = source.cluster_answer == target.cluster_answer
+                broken = (relation is LinkRelation.SAME_ANSWER and not same) or (
+                    relation is LinkRelation.DIFFERENT_ANSWER and same
+                )
+                cs.link_results[(a, b, rel_value)] = broken
+                if broken:
+                    cs.n_link_contradictions += 1
 
         stats[cid] = cs
 

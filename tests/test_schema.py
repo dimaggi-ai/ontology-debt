@@ -59,10 +59,32 @@ def test_expected_choice():
     assert exp.check("") is Verdict.NONCONFORMANT
 
 
+def test_expected_choice_rejects_hedges():
+    """Mentioning several allowed options is not an answer."""
+    exp = Expected(type="choice", values=("Yes", "No"), value="Yes")
+    assert exp.check("Yes and no") is Verdict.NONCONFORMANT
+    assert exp.check("Yes or No") is Verdict.NONCONFORMANT       # echoing the option list
+    assert exp.check("No, wait, yes") is Verdict.NONCONFORMANT
+    assert exp.check("Yes, definitely yes") is Verdict.PASS      # repeated same option is fine
+
+
 def test_expected_exact_number():
     exp = Expected(type="exact", value="3")
     assert exp.check("3") is Verdict.PASS
-    assert exp.check("three") is Verdict.VIOLATION
+    assert exp.check("3.") is Verdict.PASS
+    assert exp.check("4") is Verdict.VIOLATION
+    # Format failures are NOT world-model violations.
+    assert exp.check("three") is Verdict.NONCONFORMANT
+    assert exp.check("Yes") is Verdict.NONCONFORMANT
+    assert exp.check("Sure, I can help") is Verdict.NONCONFORMANT
+    assert exp.check("3 or 4") is Verdict.NONCONFORMANT          # hedge across numbers
+
+
+def test_expected_regex_conformance():
+    exp = Expected(type="regex", pattern="3", conformance=r"\d+")
+    assert exp.check("3") is Verdict.PASS
+    assert exp.check("7") is Verdict.VIOLATION       # answer-shaped, wrong value
+    assert exp.check("banana") is Verdict.NONCONFORMANT
 
 
 def test_load_and_probes(commitment):

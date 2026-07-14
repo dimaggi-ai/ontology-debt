@@ -14,7 +14,7 @@ If you work near knowledge graphs, you already own validation tooling — SHACL 
 
 If you work near LLM evals, you own the other half: assertion frameworks that check single outputs, benchmark suites that produce a score per model per week, regression gates in CI. What none of them have is *ontology typing* — a way to say "this failure is a violation of object permanence, severity high" rather than "test 41 failed" — and none of them check answers against *each other*. An eval that scores each output independently cannot see the most characteristic LLM failure there is: the model disagreeing with itself.
 
-One practitioner essay in late 2025 proposed exactly the missing piece — ontology-grounded evals for LLMs — and then conceded that "practical pipelines for converting ontologies into eval scripts are nascent." An arXiv preprint that tried to close a related loop was withdrawn by its authors. The gap is not hypothetical; people keep walking up to it and then not shipping the tool.
+One practitioner essay in late 2025 proposed exactly the missing piece — ontology-grounded evals for LLMs (Ojitha, *Ontology Evals for LLMs*, Oct 2025) — and then conceded that "practical pipelines for converting ontologies into eval scripts are nascent." An arXiv preprint that tried to close a related loop with a reasoner-checked correction cycle (arXiv:2504.07640) was withdrawn by its authors. The gap is not hypothetical; people keep walking up to it and then not shipping the tool.
 
 ## Scores evaporate. Debt accrues.
 
@@ -34,9 +34,9 @@ The framing has cousins that deserve their names kept distinct: Jorge Arango's *
 
 1. **You declare commitments** — typed, severity-weighted assertions in YAML, each with scenarios, a canonical question, four paraphrases, and a machine-checkable expected answer.
 2. **The harness probes a model** — any chat API — and produces two strictly separated failure counts: **violations** (the model contradicts your commitment) and **contradictions** (the model contradicts itself, across paraphrases of one scenario or across scenarios you declared logically linked).
-3. **Failures accrue into a ledger** that persists across runs. A later passing run pays an item down; a regression re-opens it with its history intact. `ontodebt ledger` shows the open book, weighted by the severity you assigned.
+3. **Failures accrue into a ledger** that persists across runs. A later passing run pays an item down — but only when it produced enough evidence to certify absence; a regression re-opens it, preserving first-seen, last-paid, and reopen history. `ontodebt ledger` shows the open book, weighted by the severity you assigned.
 
-Two design choices do most of the work. First, *there is no LLM judge anywhere in the loop*. Every probe uses a constrained answer format, so every verdict is a deterministic string comparison — reproducible from the committed transcript by anyone, with no judge-validation study required. That trades away open-text coverage, deliberately: unvalidated LLM violation-detectors have been measured at ~40% false positives, and an audit tool whose auditor hallucinates is a joke that writes itself.
+Two design choices do most of the work. First, *there is no LLM judge anywhere in the loop*. Every probe uses a constrained answer format, so every verdict is a deterministic string comparison — reproducible from the recorded transcript by anyone, with no judge-validation study required. That trades away open-text coverage, deliberately: an LLM judge that ships without a published human-agreement number is a false-positive factory, and an audit tool whose auditor hallucinates is a joke that writes itself.
 
 Second, *violations and contradictions never share a column*. A model can be consistently wrong — a genuine world-model gap — or inconsistently right — a robustness gap. They have different fixes (retrain or re-prompt vs. constrain or ensemble), and averaging them into one score hides both.
 

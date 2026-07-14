@@ -36,51 +36,87 @@ class LinkRelation(str, Enum):
 _WORD_RE = re.compile(r"[a-z0-9]+(?:[./-][a-z0-9]+)*")
 
 
+def _clean(text: str) -> str:
+    cleaned = text.strip().lower()
+    # Strip common wrappers: markdown emphasis, quotes, leading labels.
+    cleaned = re.sub(r"[*_`\"'“”‘’]", "", cleaned)
+    cleaned = re.sub(r"^(answer|response)\s*[:\-]\s*", "", cleaned)
+    return cleaned
+
+
 def normalize_answer(text: str) -> str:
     """Normalize a model answer to a comparable token.
 
     Lowercases, strips markdown/quote/punctuation noise, and returns the
     first word-like token. Constrained-format probes ("Answer with exactly
     one word: Yes or No") make this extraction safe; anything that yields
-    no token is treated as nonconformant by the caller.
+    no token is treated as nonconformant by the caller. Hedged answers that
+    mention several candidate answers are rejected by `Expected.check`, not
+    here — this function only extracts.
     """
-    cleaned = text.strip().lower()
-    # Strip common wrappers: markdown emphasis, quotes, leading labels.
-    cleaned = re.sub(r"[*_`\"'“”‘’]", "", cleaned)
-    cleaned = re.sub(r"^(answer|response)\s*[:\-]\s*", "", cleaned)
-    match = _WORD_RE.search(cleaned)
+    match = _WORD_RE.search(_clean(text))
     return match.group(0) if match else ""
 
 
 @dataclass(frozen=True)
 class Expected:
-    """Machine-checkable answer spec. `type` is one of exact|choice|regex."""
+    """Machine-checkable answer spec. `type` is one of exact|choice|regex.
+
+    Verdict semantics: VIOLATION means the model gave a *conforming* answer
+    of the wrong value; anything that is not a plausible answer attempt
+    (hedges mentioning several options, word-form numbers where digits were
+    demanded, rambling) is NONCONFORMANT — a format failure, never evidence
+    about the world-model. For `regex`, an optional `conformance` pattern
+    defines what counts as answer-shaped; without it, non-matching tokens
+    are conservatively NONCONFORMANT unless they match `conformance`.
+    """
 
     type: str
     value: str = ""
     values: tuple[str, ...] = ()
     pattern: str = ""
+    conformance: str = ""
 
     def check(self, answer: str) -> Verdict:
         token = normalize_answer(answer)
         if not token:
             return Verdict.NONCONFORMANT
+
         if self.type == "exact":
-            return Verdict.PASS if token == normalize_answer(self.value) else Verdict.VIOLATION
+            expected_token = normalize_answer(self.value)
+            if expected_token.isdigit():
+                # Digits were demanded ("Answer with a single number written
+                # in digits."). A non-digit token is a format failure, and a
+                # hedge naming several numbers is too.
+                digit_groups = set(re.findall(r"\b\d+\b", _clean(answer)))
+                if not token.isdigit() or len(digit_groups) > 1:
+                    return Verdict.NONCONFORMANT
+            return Verdict.PASS if token == expected_token else Verdict.VIOLATION
+
         if self.type == "choice":
             allowed = {normalize_answer(v) for v in self.values}
+            # Reject hedges: if the response mentions more than one distinct
+            # allowed option ("Yes and no", "No, wait, yes", echoing
+            # "Yes or No"), it did not commit to an answer.
+            mentioned = {
+                w for w in re.findall(r"[a-z0-9]+", _clean(answer)) if w in allowed
+            }
+            if len(mentioned) > 1:
+                return Verdict.NONCONFORMANT
             correct = normalize_answer(self.value)
             if token == correct:
                 return Verdict.PASS
             if token in allowed:
                 return Verdict.VIOLATION
             return Verdict.NONCONFORMANT
+
         if self.type == "regex":
-            return (
-                Verdict.PASS
-                if re.fullmatch(self.pattern, token) is not None
-                else Verdict.VIOLATION
-            )
+            if re.fullmatch(self.pattern, token) is not None:
+                return Verdict.PASS
+            if self.conformance and re.fullmatch(self.conformance, token) is not None:
+                return Verdict.VIOLATION  # answer-shaped, wrong value
+            return Verdict.NONCONFORMANT
+
         raise ValueError(f"unknown expected.type: {self.type}")
 
 
@@ -146,6 +182,7 @@ def _parse_expected(raw: dict) -> Expected:
         value=str(raw.get("value", "")),
         values=tuple(str(v) for v in raw.get("values", [])),
         pattern=str(raw.get("pattern", "")),
+        conformance=str(raw.get("conformance", "")),
     )
 
 

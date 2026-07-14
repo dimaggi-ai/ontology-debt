@@ -61,17 +61,20 @@ def cmd_estimate(args: argparse.Namespace) -> int:
     configs = load_model_configs(args.models_file)
     names = args.models.split(",") if args.models else list(configs)
     probes = list(build_probes(commitments, limit_scenarios=args.limit))
-    # Rough token estimate: chars/3.5 for input; ~6 output tokens per probe.
+    # Rough token estimate: chars/3.5 for input. Output defaults to ~6 tokens
+    # per probe, but reasoning models bill hidden thinking tokens as output -
+    # models.yaml can override with est_output_tokens_per_probe.
     est_in = sum(len(p.prompt) + 220 for p in probes) / 3.5
-    est_out = len(probes) * 6
     print(f"{len(probes)} probes per model\n")
     total = 0.0
     for name in names:
         cfg = configs[name]
+        est_out = len(probes) * cfg.est_output_tokens_per_probe
         cost = est_in / 1e6 * cfg.input_price_per_mtok + est_out / 1e6 * cfg.output_price_per_mtok
         total += cost
         print(f"  {name:24s} ~{est_in:,.0f} in / ~{est_out:,.0f} out tokens -> ~${cost:.2f}")
-    print(f"\nEstimated total: ~${total:.2f} (rough; pricing from models.yaml)")
+    print(f"\nEstimated total: ~${total:.2f} (rough; pricing from models.yaml; "
+          f"reasoning-model output includes hidden thinking tokens)")
     return 0
 
 
@@ -80,6 +83,16 @@ def cmd_run(args: argparse.Namespace) -> int:
     commitments = load_commitments(args.commitments, only=args.only.split(",") if args.only else None)
     configs = load_model_configs(args.models_file)
     names = args.models.split(",") if args.models else list(configs)
+    # Validate every requested model up front - a typo must fail before any
+    # API spend, not after the first model has already run.
+    unknown = [n for n in names if n not in configs]
+    if unknown:
+        print(
+            f"Unknown model(s): {', '.join(unknown)}. "
+            f"Available: {', '.join(configs)}",
+            file=sys.stderr,
+        )
+        return 2
     probes = list(build_probes(commitments, limit_scenarios=args.limit))
     args.results.mkdir(parents=True, exist_ok=True)
 
@@ -98,13 +111,15 @@ def cmd_run(args: argparse.Namespace) -> int:
         save_run(record, args.results / f"run-{record.run_id}.json")
         stats = analyze(record, commitments)
         changes = ledger.update(name, record.run_id, stats)
+        # Persist reconciliation immediately so a failure on a later model
+        # never loses a completed model's ledger state.
+        save_ledger(ledger, ledger_path)
         print(
             f"  done. cost ~${estimate_cost(record, cfg):.2f} | "
             f"debt accrued {changes['accrued']}, paid {changes['paid']}, renewed {changes['renewed']}"
         )
         runs.append((record, cfg, stats))
 
-    save_ledger(ledger, ledger_path)
     report = render_report(runs, ledger)
     report_path = args.results / "report.md"
     report_path.write_text(report)
@@ -117,13 +132,23 @@ def cmd_report(args: argparse.Namespace) -> int:
     commitments = load_commitments(args.commitments)
     configs = load_model_configs(args.models_file)
     ledger = load_ledger(args.results / "ledger.json")
-    runs = []
+    latest: dict[str, object] = {}
     for path in sorted(args.results.glob("run-*.json")):
         record = load_run(path)
-        cfg = configs.get(record.model_name)
-        if cfg is None:
+        if record.model_name not in configs:
+            print(
+                f"warning: skipping {path.name} - model '{record.model_name}' "
+                f"not in {args.models_file}",
+                file=sys.stderr,
+            )
             continue
-        runs.append((record, cfg, analyze(record, commitments)))
+        prior = latest.get(record.model_name)
+        if prior is None or record.started_at > prior.started_at:  # type: ignore[union-attr]
+            latest[record.model_name] = record
+    runs = [
+        (record, configs[name], analyze(record, commitments))
+        for name, record in sorted(latest.items())
+    ]
     if not runs:
         print("No saved runs found. Run `ontodebt run` first.", file=sys.stderr)
         return 1

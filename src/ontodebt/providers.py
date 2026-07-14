@@ -33,6 +33,7 @@ class ModelConfig:
     params: dict = field(default_factory=dict)   # provider-specific extras, passed through
     input_price_per_mtok: float = 0.0
     output_price_per_mtok: float = 0.0
+    est_output_tokens_per_probe: float = 6.0     # reasoning models bill hidden thinking tokens
 
 
 class Provider:
@@ -159,6 +160,7 @@ def load_model_configs(path) -> dict[str, ModelConfig]:
             params=dict(entry.get("params", {})),
             input_price_per_mtok=float(entry.get("input_price_per_mtok", 0.0)),
             output_price_per_mtok=float(entry.get("output_price_per_mtok", 0.0)),
+            est_output_tokens_per_probe=float(entry.get("est_output_tokens_per_probe", 6.0)),
         )
         configs[cfg.name] = cfg
     return configs
