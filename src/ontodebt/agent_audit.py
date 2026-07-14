@@ -39,9 +39,12 @@ Rule types (v0.2 — deliberately small and sound)
 ------------------------------------------------
 - ``promise_kept`` — if an *assistant* event matches ``promise_pattern``, a
   strictly later assistant or tool event must match ``fulfillment_pattern``
-  before the transcript ends. Each promise needs its own later fulfillment
-  (one fulfillment event satisfies every promise before it). A promise with
-  no later fulfillment is a **violation**.
+  before the transcript ends. ``fulfillment_role`` (default ``any-agent``)
+  restricts who may fulfill: set it to ``tool`` so the agent's own prose
+  cannot satisfy its own promise — only recorded tool activity can. Each
+  promise needs its own later fulfillment (one fulfillment event satisfies
+  every promise before it). A promise with no later fulfillment is a
+  **violation**.
 - ``assertion_stability`` — ``capture_pattern`` (exactly one capture group)
   extracts asserted values from *assistant* events; all captured values in
   one transcript must be identical after whitespace-collapse + casefold.
@@ -70,11 +73,13 @@ from pathlib import Path
 import yaml
 
 from .analysis import CommitmentStats, ScenarioOutcome
+from .schema import _check_redos
 
 RULE_TYPES = ("promise_kept", "assertion_stability", "forbidden_after")
 EVENT_ROLES = ("user", "assistant", "tool")
 AGENT_ACTION_ROLES = ("assistant", "tool")  # roles that can fulfill or violate
 TRIGGER_ROLES = ("any",) + EVENT_ROLES
+FULFILLMENT_ROLES = ("any-agent",) + AGENT_ACTION_ROLES
 
 
 class AgentVerdict(str, Enum):
@@ -150,8 +155,20 @@ def transcript_from_events(transcript_id: str, raw_events: list[dict], path: str
 
 
 def load_transcript(path: Path) -> Transcript:
+    if "@" in path.stem:
+        # '@' is the separator in ledger scenario ids ("rule@transcript");
+        # allowing it in a session name would let two sessions collide.
+        raise ValueError(
+            f"{path.name}: transcript file name must not contain '@' "
+            f"(reserved as the rule@transcript ledger separator)"
+        )
+    try:
+        # utf-8-sig: tolerate a UTF-8 BOM (common in Windows-exported files).
+        text = path.read_text(encoding="utf-8-sig")
+    except UnicodeDecodeError as exc:
+        raise ValueError(f"{path.name}: not valid UTF-8: {exc}") from exc
     raws: list[dict] = []
-    for lineno, line in enumerate(path.read_text().splitlines(), 1):
+    for lineno, line in enumerate(text.splitlines(), 1):
         if not line.strip():
             continue
         try:
@@ -193,6 +210,7 @@ class AgentRule:
     trigger_pattern: str = ""
     forbidden_pattern: str = ""
     trigger_role: str = "any"  # forbidden_after only: any | user | assistant | tool
+    fulfillment_role: str = "any-agent"  # promise_kept only: any-agent | assistant | tool
 
 
 @dataclass(frozen=True)
@@ -218,11 +236,18 @@ def _compile(pattern: str, ctx: str, fname: str) -> re.Pattern:
         raise ValueError(f"{ctx}: {fname} is not a valid regex: {exc}") from exc
 
 
-def _parse_rule(raw: dict, pack_id: str) -> AgentRule:
+def _parse_rule(raw: object, pack_id: str) -> AgentRule:
+    if not isinstance(raw, dict):
+        raise ValueError(
+            f"{pack_id}: each rule must be a mapping, got {type(raw).__name__}"
+        )
     rule_id = str(raw.get("id", ""))
     ctx = f"{pack_id}/{rule_id or '<missing id>'}"
     if not rule_id:
         raise ValueError(f"{ctx}: rule requires an id")
+    if "@" in rule_id:
+        # '@' is the separator in ledger scenario ids ("rule@transcript").
+        raise ValueError(f"{ctx}: rule id must not contain '@'")
     rtype = str(raw.get("type", ""))
     if rtype not in RULE_TYPES:
         raise ValueError(f"{ctx}: type must be one of {'|'.join(RULE_TYPES)}, got {rtype!r}")
@@ -239,6 +264,13 @@ def _parse_rule(raw: dict, pack_id: str) -> AgentRule:
         raise ValueError(f"{ctx}: trigger_role must be one of {'|'.join(TRIGGER_ROLES)}")
     if trigger_role != "any" and rtype != "forbidden_after":
         raise ValueError(f"{ctx}: trigger_role is only valid for forbidden_after rules")
+    fulfillment_role = str(raw.get("fulfillment_role", "any-agent"))
+    if fulfillment_role not in FULFILLMENT_ROLES:
+        raise ValueError(
+            f"{ctx}: fulfillment_role must be one of {'|'.join(FULFILLMENT_ROLES)}"
+        )
+    if fulfillment_role != "any-agent" and rtype != "promise_kept":
+        raise ValueError(f"{ctx}: fulfillment_role is only valid for promise_kept rules")
 
     required = _FIELDS_BY_TYPE[rtype]
     for fname in _PATTERN_FIELDS:
@@ -248,7 +280,11 @@ def _parse_rule(raw: dict, pack_id: str) -> AgentRule:
         if fname not in required and value:
             raise ValueError(f"{ctx}: {fname} is not a valid field for {rtype}")
     for fname in required:
-        compiled = _compile(str(raw[fname]), ctx, fname)
+        pattern = str(raw[fname])
+        compiled = _compile(pattern, ctx, fname)
+        # The haystack is agent-controlled text and Python's `re` has no
+        # timeout, so reject catastrophic-backtracking shapes at load time.
+        _check_redos(pattern, f"{ctx}: {fname}")
         if fname == "capture_pattern" and compiled.groups != 1:
             raise ValueError(
                 f"{ctx}: capture_pattern must have exactly one capture group, has {compiled.groups}"
@@ -266,14 +302,29 @@ def _parse_rule(raw: dict, pack_id: str) -> AgentRule:
         trigger_pattern=str(raw.get("trigger_pattern", "")),
         forbidden_pattern=str(raw.get("forbidden_pattern", "")),
         trigger_role=trigger_role,
+        fulfillment_role=fulfillment_role,
     )
 
 
 def load_rule_pack(path: Path) -> RulePack:
-    with open(path) as f:
-        raw = yaml.safe_load(f)
+    try:
+        with open(path, encoding="utf-8-sig") as f:
+            raw = yaml.safe_load(f)
+    except yaml.YAMLError as exc:
+        raise ValueError(f"{path.name}: invalid YAML: {exc}") from exc
+    if not isinstance(raw, dict):
+        raise ValueError(
+            f"{path.name}: rule pack must be a YAML mapping with 'id', 'title' "
+            f"and 'rules', got {type(raw).__name__}"
+        )
+    for key in ("id", "title"):
+        if not str(raw.get(key, "")).strip():
+            raise ValueError(f"{path.name}: rule pack requires a non-empty '{key}'")
     pack_id = str(raw["id"])
-    rules = tuple(_parse_rule(r, pack_id) for r in raw.get("rules", []))
+    raw_rules = raw.get("rules", [])
+    if not isinstance(raw_rules, list):
+        raise ValueError(f"{path.name}: 'rules' must be a list")
+    rules = tuple(_parse_rule(r, pack_id) for r in raw_rules)
     if not rules:
         raise ValueError(f"{pack_id}: rule pack has no rules")
     seen: set[str] = set()
@@ -368,7 +419,11 @@ def _eval_promise_kept(rule: AgentRule, pack_id: str, transcript: Transcript) ->
             m = promise_re.search(text)
             if m:
                 promises.append((event, m))
-        if event.role in AGENT_ACTION_ROLES and fulfil_re.search(text):
+        if (
+            event.role in AGENT_ACTION_ROLES
+            and rule.fulfillment_role in ("any-agent", event.role)
+            and fulfil_re.search(text)
+        ):
             last_fulfillment = event.index
     if not promises:
         return _finding(
@@ -503,7 +558,10 @@ def findings_to_stats(packs: list[RulePack], findings: list[RuleFinding]) -> dic
         sid = f"{f.rule_id}@{f.transcript_id}"
         outcome = ScenarioOutcome(scenario_id=sid)
         if f.rule_type == "assertion_stability":
-            outcome.answers = list(f.captures)  # checkable iff >= 2, as in chat
+            # Gate on checkable (>= 2 captures): a single-capture run is NOT
+            # APPLICABLE and must not read as evidence that pays down an old
+            # item under the same sid (e.g. after a rule changes type).
+            outcome.answers = list(f.captures) if f.checkable else []
             outcome.verdicts = ["pass"]
             outcome.inconsistent = f.verdict == AgentVerdict.CONTRADICTION.value
         else:

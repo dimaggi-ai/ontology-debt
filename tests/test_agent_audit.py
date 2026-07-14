@@ -6,6 +6,7 @@ import pytest
 from ontodebt.agent_audit import (
     AgentRule,
     AgentVerdict,
+    RulePack,
     audit_transcripts,
     evaluate_rule,
     findings_to_stats,
@@ -110,6 +111,22 @@ def test_load_transcripts_file_dir_and_missing(tmp_path: Path):
         load_transcripts(empty)
 
 
+def test_load_transcript_tolerates_utf8_bom(tmp_path: Path):
+    path = tmp_path / "bom.jsonl"
+    path.write_bytes(b'\xef\xbb\xbf{"turn": 0, "role": "user", "content": "hi"}\n')
+    t = load_transcript(path)
+    assert t.events[0].content == "hi"
+
+
+def test_transcript_stem_with_at_sign_rejected(tmp_path: Path):
+    # '@' is the rule@transcript ledger separator; a stem containing it
+    # would make two different sessions collide on one scenario id.
+    path = tmp_path / "run@nightly.jsonl"
+    path.write_text('{"turn": 0, "role": "user", "content": "x"}\n')
+    with pytest.raises(ValueError, match="must not contain '@'"):
+        load_transcript(path)
+
+
 def test_empty_transcript_is_valid_and_never_checkable(tmp_path: Path):
     path = tmp_path / "empty.jsonl"
     path.write_text("")
@@ -183,6 +200,47 @@ def test_promise_event_cannot_fulfill_itself():
     assert evaluate_rule(PROMISE, t, pack_id="p").verdict == AgentVerdict.VIOLATION.value
 
 
+def test_prose_cannot_fulfill_tool_scoped_promise():
+    """fulfillment_role: tool pins evidence-gating: the agent's own unverified
+    claim must not satisfy its own promise - only recorded tool activity."""
+    tool_only = rule(
+        "promise_kept",
+        promise_pattern=r"(?i)\bI'll run the tests\b",
+        fulfillment_pattern=r"(?i)\bpytest\b",
+        fulfillment_role="tool",
+    )
+    t = transcript(
+        (0, "assistant", "I'll run the tests next."),
+        (1, "assistant", "Actually pytest isn't needed here; everything is fine."),
+    )
+    f = evaluate_rule(tool_only, t, pack_id="p")
+    assert f.verdict == AgentVerdict.VIOLATION.value
+    # The same prose is fine once a real tool event fulfills the promise.
+    t2 = transcript(
+        (0, "assistant", "I'll run the tests next."),
+        (1, "assistant", "Actually pytest isn't needed here; everything is fine."),
+        (2, "tool", "3 passed", "bash", {"command": "pytest -q"}),
+    )
+    assert evaluate_rule(tool_only, t2, pack_id="p").verdict == AgentVerdict.PASS.value
+    # Default stays permissive: any-agent accepts assistant prose.
+    assert evaluate_rule(PROMISE, t, pack_id="p").verdict == AgentVerdict.PASS.value
+
+
+def test_shipped_test_and_write_promises_require_tool_fulfillment():
+    packs = load_rule_packs(AGENT_RULES)
+    pack = next(p for p in packs if p.id == "task_integrity")
+    by_id = {r.id: r for r in pack.rules}
+    assert by_id["ti-001"].fulfillment_role == "tool"
+    assert by_id["ti-002"].fulfillment_role == "tool"
+    assert by_id["ti-003"].fulfillment_role == "any-agent"  # disclosed in rationale
+    t = transcript(
+        (0, "assistant", "I'll run the tests to verify."),
+        (1, "assistant", "Actually pytest isn't needed for this change."),
+    )
+    f = evaluate_rule(by_id["ti-001"], t, pack_id="task_integrity")
+    assert f.verdict == AgentVerdict.VIOLATION.value
+
+
 def test_promise_never_made_is_not_applicable():
     t = transcript(
         (0, "user", "I'll run the tests myself."),  # user promises don't bind the agent
@@ -239,6 +297,28 @@ def test_assertions_only_captured_from_assistant_events():
     f = evaluate_rule(STABILITY, t, pack_id="p")
     assert f.verdict == AgentVerdict.PASS.value
     assert f.captures == ("blue", "blue")
+
+
+def test_sentence_final_filename_is_not_drift():
+    """ti-005/ti-006 captures must not swallow a sentence-final period:
+    "auth.py." vs "auth.py" is the same assertion, not a contradiction."""
+    packs = load_rule_packs(AGENT_RULES)
+    pack = next(p for p in packs if p.id == "task_integrity")
+    by_id = {r.id: r for r in pack.rules}
+    t = transcript(
+        (0, "assistant", "The bug is in auth.py."),  # sentence-final period
+        (1, "assistant", "To recap, the bug is in auth.py and nowhere else."),
+    )
+    f = evaluate_rule(by_id["ti-005"], t, pack_id="task_integrity")
+    assert f.captures == ("auth.py", "auth.py")
+    assert f.verdict == AgentVerdict.PASS.value
+    t2 = transcript(
+        (0, "assistant", "The target branch is release/1.2."),
+        (1, "assistant", "Confirmed: the target branch is release/1.2 for this PR."),
+    )
+    f2 = evaluate_rule(by_id["ti-006"], t2, pack_id="task_integrity")
+    assert f2.captures == ("release/1.2", "release/1.2")
+    assert f2.verdict == AgentVerdict.PASS.value
 
 
 # --------------------------------------------------------------------------
@@ -318,6 +398,8 @@ def test_rule_pack_validation_errors(tmp_path: Path):
         (base + "    type: promise_kept\n    promise_pattern: '('\n    fulfillment_pattern: 'y'\n", "not a valid regex"),
         (base + "    type: forbidden_after\n    trigger_pattern: 'x'\n    forbidden_pattern: 'y'\n    capture_pattern: '(z)'\n", "not a valid field"),
         (base + "    type: promise_kept\n    promise_pattern: 'x'\n    fulfillment_pattern: 'y'\n    trigger_role: user\n", "only valid for forbidden_after"),
+        (base + "    type: promise_kept\n    promise_pattern: 'x'\n    fulfillment_pattern: 'y'\n    fulfillment_role: user\n", "fulfillment_role must be"),
+        (base + "    type: assertion_stability\n    capture_pattern: '(x)'\n    fulfillment_role: tool\n", "only valid for promise_kept"),
         (
             "  - id: r1\n    title: T\n    severity: extreme\n    rationale: why\n"
             "    type: forbidden_after\n    trigger_pattern: 'x'\n    forbidden_pattern: 'y'\n",
@@ -332,6 +414,52 @@ def test_rule_pack_validation_errors(tmp_path: Path):
     for body, needle in cases:
         path = tmp_path / "pack.yaml"
         path.write_text(pack_yaml(body))
+        with pytest.raises(ValueError, match=needle):
+            load_rule_pack(path)
+
+
+def test_redos_patterns_rejected_at_load(tmp_path: Path):
+    """Rule patterns run over agent-controlled text with no regex timeout, so
+    nested-quantifier shapes are rejected at load time for every field."""
+    base = "  - id: r1\n    title: T\n    severity: high\n    rationale: why\n"
+    cases = [
+        base + "    type: promise_kept\n    promise_pattern: '(a+)+b'\n    fulfillment_pattern: 'ok'\n",
+        base + "    type: promise_kept\n    promise_pattern: 'ok'\n    fulfillment_pattern: '(a+)+b'\n",
+        base + "    type: assertion_stability\n    capture_pattern: '((a+)+)'\n",
+        base + "    type: forbidden_after\n    trigger_pattern: '(a+)+b'\n    forbidden_pattern: 'x'\n",
+        base + "    type: forbidden_after\n    trigger_pattern: 'x'\n    forbidden_pattern: '(a*)*'\n",
+    ]
+    for body in cases:
+        path = tmp_path / "pack.yaml"
+        path.write_text(pack_yaml(body))
+        with pytest.raises(ValueError, match="catastrophic backtracking"):
+            load_rule_pack(path)
+
+
+def test_rule_id_with_at_sign_rejected(tmp_path: Path):
+    body = (
+        "  - {id: 'r@1', title: T, severity: low, rationale: why, "
+        "type: assertion_stability, capture_pattern: '(x)'}\n"
+    )
+    path = tmp_path / "pack.yaml"
+    path.write_text(pack_yaml(body))
+    with pytest.raises(ValueError, match="must not contain '@'"):
+        load_rule_pack(path)
+
+
+def test_malformed_pack_files_raise_value_error(tmp_path: Path):
+    cases = [
+        ("id: [unclosed\n", "invalid YAML"),
+        ("", "must be a YAML mapping"),
+        ("- just\n- a\n- list\n", "must be a YAML mapping"),
+        ("title: No id\nrules: []\n", "requires a non-empty 'id'"),
+        ("id: demo\nrules: []\n", "requires a non-empty 'title'"),
+        ("id: demo\ntitle: Demo\nrules: nope\n", "'rules' must be a list"),
+        ("id: demo\ntitle: Demo\nrules:\n  - just-a-string\n", "must be a mapping"),
+    ]
+    for text, needle in cases:
+        path = tmp_path / "pack.yaml"
+        path.write_text(text)
         with pytest.raises(ValueError, match=needle):
             load_rule_pack(path)
 
@@ -475,6 +603,36 @@ def test_not_applicable_never_pays_down(tmp_path: Path):
     assert ledger.total_debt("agent") == 5
 
 
+def test_rule_type_change_single_capture_does_not_pay_old_violation():
+    """Not-applicable runs must not read as evidence under any rule type: if a
+    rule id that accrued a promise_kept violation is later redefined as
+    assertion_stability, a single-capture (not applicable) run under the same
+    rule@transcript id must NOT pay the old violation down."""
+    promise = rule(
+        "promise_kept",
+        promise_pattern=r"(?i)\bI'll run the tests\b",
+        fulfillment_pattern=r"(?i)\bpytest\b",
+    )
+    pack = RulePack(id="p", title="P", statement="", rules=(promise,))
+    t = transcript((0, "assistant", "I'll run the tests later."), tid="nightly")
+    finding = evaluate_rule(promise, t, pack_id="p")
+    assert finding.verdict == AgentVerdict.VIOLATION.value
+    ledger = Ledger()
+    ledger.update("agent", "run1", findings_to_stats([pack], [finding]))
+    assert ledger.total_debt("agent") == 5
+
+    # Same rule id, now assertion_stability; one capture -> not applicable.
+    stability = rule("assertion_stability", capture_pattern=r"(?i)\banswer is (\w+)")
+    pack2 = RulePack(id="p", title="P", statement="", rules=(stability,))
+    t2 = transcript((0, "assistant", "The answer is blue."), tid="nightly")
+    finding2 = evaluate_rule(stability, t2, pack_id="p")
+    assert finding2.verdict == AgentVerdict.NOT_APPLICABLE.value
+    assert finding2.captures == ("blue",)
+    changes = ledger.update("agent", "run2", findings_to_stats([pack2], [finding2]))
+    assert changes["paid"] == 0
+    assert ledger.total_debt("agent") == 5
+
+
 def test_single_capture_never_pays_down_stability_debt(tmp_path: Path):
     """One captured assertion cannot demonstrate stability, mirroring the chat
     rule that one answered variant cannot demonstrate consistency."""
@@ -559,3 +717,23 @@ def test_cli_audit_agent_missing_transcripts_is_friendly_error(tmp_path: Path, c
     ])
     assert code == 2
     assert "error:" in capsys.readouterr().err
+
+
+def test_cli_audit_agent_malformed_pack_is_friendly_error(tmp_path: Path, capsys):
+    """Malformed rule packs (bad YAML, empty file, missing id) must exit 2
+    with an 'error:' line, not a traceback."""
+    transcripts = tmp_path / "transcripts"
+    transcripts.mkdir()
+    (transcripts / "s.jsonl").write_text('{"turn": 0, "role": "user", "content": "x"}\n')
+    rules = tmp_path / "rules"
+    rules.mkdir()
+    for text in ("id: [unclosed\n", "", "title: No id\nrules: []\n"):
+        (rules / "pack.yaml").write_text(text)
+        code = main([
+            "audit-agent",
+            "--transcripts", str(transcripts),
+            "--rules", str(rules),
+            "--results", str(tmp_path / "results"),
+        ])
+        assert code == 2
+        assert "error:" in capsys.readouterr().err

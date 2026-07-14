@@ -10,11 +10,12 @@ reimplement the verdicts.
 ## Positioning — why this is whitespace
 
 Research on agent commitment/consistency has moved fast in 2026
-(NeuroState-Bench, BeliefShift, ReliabilityBench, Apr–Jun 2026): those papers
+(NeuroState-Bench, BeliefShift, ReliabilityBench, Mar–Jun 2026): those papers
 establish that agents drift on their own stated beliefs and task state, and
 they ship *benchmarks* — fixed datasets scoring models against the authors'
-scenarios. None of them ship a tool that audits *your* agent's transcripts
-against *your* commitments, with memory between audits. That composition —
+scenarios. None of them, to our knowledge, ship a tool that audits *your*
+agent's transcripts against *your* commitments, with memory between audits
+(corrections welcome). That composition —
 user-declared behavioral invariants + offline transcript replay + a
 persistent debt ledger — is the same gap `ontodebt` fills for chat models,
 one level up the stack.
@@ -35,7 +36,8 @@ for; `ontodebt` holds the line on behaviors you have explicitly committed to.
 Per-output assertion frameworks (promptfoo, DeepEval) can assert on a single
 agent response, but have no cross-event temporal semantics (promise → later
 fulfillment, trigger → no later occurrence, claim → same claim later) and no
-memory between runs.
+debt-ledger semantics (accrual / evidence-gated paydown / reopen) across
+runs.
 
 The **no-LLM-judge invariant is preserved**: every verdict below is a regex
 match over recorded text. This trades semantic coverage for zero
@@ -68,7 +70,15 @@ Two semantics worth stating explicitly:
 - **Search text.** Patterns are searched (`re.search`, not `match`) against
   `content` for user/assistant events; events carrying a `tool_name` expose
   `"<tool_name> <canonical-JSON-args> <content>"` (canonical = sorted keys),
-  so one regex can match a tool by name, argument, or output.
+  so one regex can match a tool by name, argument, or output. The parts are
+  joined with single spaces and **empty parts are omitted** — a tool event
+  with no args and empty content exposes just `"<tool_name>"`, with no
+  trailing whitespace, so don't anchor patterns on a fixed number of spaces.
+- **`--transcripts` takes a file or a directory.** A path to one `.jsonl`
+  file audits that single session; a directory loads every `*.jsonl` in it
+  (sorted by file name, deterministic), one session per file. Transcript
+  file stems must not contain `@` — it is reserved as the
+  `rule@transcript` separator in ledger scenario ids.
 - **Transcript id = file stem, treated as a stable session name.** Ledger
   items are keyed per (rule, transcript id). Re-recording the same named
   session — e.g. a nightly scripted task — and re-auditing is what pays a
@@ -101,13 +111,24 @@ Every rule carries `id`, `title`, `type`, `severity`, and a **required
 cannot justify is not a commitment. Patterns are Python regexes; add `(?i)`
 for case-insensitivity. Load-time validation rejects unknown types, bad
 severities, non-compiling patterns, fields that don't belong to the type,
-duplicate ids, and `capture_pattern`s without exactly one capture group.
+duplicate ids, rule ids containing `@` (reserved as the `rule@transcript`
+ledger separator), and `capture_pattern`s without exactly one capture group.
+
+**Authoring hazard — catastrophic backtracking (ReDoS).** Rule patterns run
+against *agent-controlled* text, and Python's `re` engine has no timeout: a
+nested-quantifier pattern like `(a+)+b` can hang the audit on an adversarial
+or merely unlucky transcript. Load-time validation rejects the textbook
+nested-quantifier shapes (a quantified group itself followed by `+`/`*`),
+same guard as the chat schema. The guard is deliberately coarse — it can
+reject safe patterns of that shape (prefer e.g. a single character class
+over a quantified group) and it cannot catch every pathological regex, so
+keep patterns simple and linear.
 
 ### Rule semantics (v0.2 — exactly three types)
 
 | type | fields | fails when | failure kind | not applicable when |
 |---|---|---|---|---|
-| `promise_kept` | `promise_pattern`, `fulfillment_pattern` | an **assistant** event matches the promise and **no strictly later** assistant/tool event matches the fulfillment | violation | no promise ever matched |
+| `promise_kept` | `promise_pattern`, `fulfillment_pattern`, optional `fulfillment_role` | an **assistant** event matches the promise and **no strictly later** assistant/tool event matches the fulfillment | violation | no promise ever matched |
 | `assertion_stability` | `capture_pattern` (1 group) | ≥ 2 values captured from **assistant** events and they are not all identical after whitespace-collapse + casefold | contradiction | fewer than 2 captures |
 | `forbidden_after` | `trigger_pattern`, `forbidden_pattern`, optional `trigger_role` | after the **first** trigger match, a strictly later assistant/tool event matches the forbidden pattern | violation | trigger never matched |
 
@@ -124,6 +145,12 @@ Fine print, chosen deliberately:
 - *`trigger_role`* (default `any`) scopes who can arm a `forbidden_after`
   rule — so "no edits after the agent declares done" cannot be armed by a
   user asking "done?".
+- *`fulfillment_role`* (default `any-agent` = assistant or tool) scopes who
+  can fulfill a `promise_kept` rule. Set `fulfillment_role: tool` so that
+  only recorded tool activity counts as fulfillment — otherwise the agent's
+  own unverified prose ("actually, pytest isn't needed") satisfies its own
+  promise. The shipped ti-001/ti-002 use `tool`; ti-003 stays permissive on
+  purpose (its rationale discloses the trade).
 - *Not applicable is a first-class outcome.* Absence of evidence is not
   evidence of compliance: an unexercised rule neither accrues debt nor pays
   it down. `assertion_stability` needs ≥ 2 captures to certify stability —
