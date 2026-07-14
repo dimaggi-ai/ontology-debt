@@ -3,12 +3,12 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "ontodebt"
+name = "ontology-debt"
 version = "0.1.0"
-description = "Audit the world-model of any chat LLM against ontological commitments you declare - and track the debt."
+description = "Ontology Debt: audit an LLM's world-model against ontological commitments you declare - and track the debt. CLI: ontodebt."
 readme = "README.md"
 requires-python = ">=3.10"
-license = { text = "MIT" }
+license = { text = "Apache-2.0" }
 authors = [{ name = "Margaret (Maggie) Nanyonga" }]
 keywords = ["llm", "evaluation", "ontology", "consistency", "world-model", "audit"]
 classifiers = [

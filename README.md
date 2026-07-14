@@ -1,6 +1,8 @@
-# ontodebt
+# Ontology Debt
 
 **Audit the world-model of a chat LLM (Anthropic- or OpenAI-compatible APIs) against ontological commitments *you* declare — and track the debt.**
+
+> Package: `pip install ontology-debt` · Command: `ontodebt` · A [DIMAGGI AI](https://dimaggi.ai) open-source project.
 
 `ontodebt` is a small Python library + CLI. You declare typed, testable commitments about how the world works (object permanence, causal ordering, temporal consistency, …) as YAML. The harness probes a model with paraphrase families of constrained-format questions, detects two kinds of failure — **violations** (the model contradicts your commitment) and **contradictions** (the model contradicts *itself* across paraphrases or logically linked scenarios) — and accrues every unresolved failure into a persistent, per-model **debt ledger** that is paid down only when a later run passes.
 
@@ -17,7 +19,7 @@ The name says what it measures: **ontology debt** — the accumulated, unresolve
 ## Quickstart
 
 ```bash
-git clone <this-repo> && cd ontodebt
+git clone https://github.com/dimaggi-ai/ontology-debt && cd ontology-debt
 python3 -m venv .venv && .venv/bin/pip install -e ".[all]"
 
 # Lint the commitment packs
@@ -120,7 +122,7 @@ Every individual mechanism here has strong prior art. The composition — user-d
 .venv/bin/ontodebt run --models mock --limit 3   # 90-probe smoke audit
 ```
 
-MIT license. Issues and pack contributions welcome — especially domain packs (medicine, law, finance) and disputed gold labels.
+Apache-2.0 license. Issues and pack contributions welcome — especially domain packs (medicine, law, finance) and disputed gold labels.
 
 ---
 

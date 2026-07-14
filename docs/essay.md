@@ -30,7 +30,7 @@ The framing has cousins that deserve their names kept distinct: Jorge Arango's *
 
 ## What we built
 
-[`ontodebt`](https://github.com/) is a small Python library and CLI that implements the accounting:
+[`ontodebt`](https://github.com/dimaggi-ai/ontology-debt) is a small Python library and CLI that implements the accounting:
 
 1. **You declare commitments** — typed, severity-weighted assertions in YAML, each with scenarios, a canonical question, four paraphrases, and a machine-checkable expected answer.
 2. **The harness probes a model** — any chat API — and produces two strictly separated failure counts: **violations** (the model contradicts your commitment) and **contradictions** (the model contradicts itself, across paraphrases of one scenario or across scenarios you declared logically linked).
@@ -62,4 +62,4 @@ A high pass rate is not safety, and passing 750 probes means only that the floor
 
 ---
 
-*Code, packs, transcripts, and the ledger: [github.com/…/ontodebt](https://github.com/). Disputes about gold labels are welcome — they are the point.*
+*Code, packs, transcripts, and the ledger: [github.com/dimaggi-ai/ontology-debt](https://github.com/dimaggi-ai/ontology-debt). Disputes about gold labels are welcome — they are the point.*
