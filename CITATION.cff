@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use ontodebt in research or reporting, please cite it as below."
+title: "ontodebt: declared-commitment world-model auditing for LLMs with a debt ledger"
+type: software
+authors:
+  - family-names: Nanyonga
+    given-names: Margaret
+    alias: maggienanyonga
+version: 0.1.0
+date-released: 2026-07-14
+license: MIT
+repository-code: "https://github.com/dimaggi-ai/ontodebt"
+keywords:
+  - llm-evaluation
+  - ontology
+  - consistency
+  - world-model
+  - audit

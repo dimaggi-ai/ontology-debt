@@ -9,6 +9,7 @@ description = "Audit the world-model of any chat LLM against ontological commitm
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
+authors = [{ name = "Margaret (Maggie) Nanyonga" }]
 keywords = ["llm", "evaluation", "ontology", "consistency", "world-model", "audit"]
 classifiers = [
     "Development Status :: 3 - Alpha",
