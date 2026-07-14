@@ -1,0 +1,455 @@
+id: temporal_consistency
+title: "Temporal Consistency"
+statement: >
+  A model must maintain a coherent timeline over explicitly stated times and
+  durations: if event A occurs before event B, then B did not occur before A;
+  a person born after an event cannot have been present at it; stated
+  durations combine additively; an activity is not finished before its stated
+  finishing time and remains finished afterward; and nothing that happens
+  later can alter what already happened earlier. These relations must survive
+  out-of-order narration and irrelevant or misleading time references.
+severity: high
+lineage: ["ChronoScope (2026)", "BECEL temporal consistency"]
+scenarios:
+  - id: tc-001
+    setup: >
+      At a village fair, the pie-eating contest started at 3:00pm and the
+      sack race started at 5:00pm on the same day.
+    question: "Did the sack race start before the pie-eating contest? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was the start of the sack race earlier than the start of the pie-eating contest? Answer with exactly one word: Yes or No."
+      - "Did the sack race get underway before the pie-eating contest did? Answer with exactly one word: Yes or No."
+      - "Is it true that the sack race began earlier in the day than the pie-eating contest? Answer with exactly one word: Yes or No."
+      - "Had the sack race already started by the time the pie-eating contest started? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The sack race started at 5:00pm, two hours after the 3:00pm contest, so it did not start before it."
+    difficulty: basic
+    links:
+      - relation: different_answer
+        target: tc-002
+  - id: tc-002
+    setup: >
+      At a village fair, the pie-eating contest started at 3:00pm and the
+      sack race started at 5:00pm on the same day.
+    question: "Did the pie-eating contest start before the sack race? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was the start of the pie-eating contest earlier than the start of the sack race? Answer with exactly one word: Yes or No."
+      - "Did the pie-eating contest get underway before the sack race did? Answer with exactly one word: Yes or No."
+      - "Is it true that the pie-eating contest began earlier in the day than the sack race? Answer with exactly one word: Yes or No."
+      - "Had the pie-eating contest already started by the time the sack race started? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "3:00pm is earlier than 5:00pm on the same day, so the contest started first."
+    difficulty: basic
+    links:
+      - relation: different_answer
+        target: tc-001
+  - id: tc-003
+    setup: >
+      The old wooden bridge in Priya's town was demolished on the morning of
+      June 3 of a certain year. Priya was born on the afternoon of June 5 of
+      that same year.
+    question: "Could Priya have watched the demolition of the bridge in person? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is it possible that Priya was there watching when the bridge was demolished? Answer with exactly one word: Yes or No."
+      - "Could Priya have seen the bridge being torn down with her own eyes? Answer with exactly one word: Yes or No."
+      - "Was it possible for Priya to be present at the demolition of the bridge? Answer with exactly one word: Yes or No."
+      - "Could Priya herself have been an eyewitness to the bridge's demolition? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Priya was born two days after the demolition, and someone not yet born cannot witness an event."
+    difficulty: basic
+  - id: tc-004
+    setup: >
+      The new town hall opened its doors on May 12 of a certain year. Rosa
+      was born exactly ten years before that opening day.
+    question: "Was Rosa already born on the day the town hall opened? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Had Rosa already been born by the day the town hall opened its doors? Answer with exactly one word: Yes or No."
+      - "On the town hall's opening day, had Rosa's birth already taken place? Answer with exactly one word: Yes or No."
+      - "By the time the town hall opened, was Rosa's birth already in the past? Answer with exactly one word: Yes or No."
+      - "Did Rosa's birth happen before the day the town hall opened? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Rosa was born ten years before the opening day, so her birth was already in the past on that day."
+    difficulty: basic
+  - id: tc-005
+    setup: >
+      On Saturday, Sam painted his fence for 2 hours in the morning, took a
+      break, and then painted for 3 more hours in the afternoon. He did no
+      other painting that day.
+    question: "How many hours in total did Sam spend painting the fence that day? Answer with a single number written in digits."
+    paraphrases:
+      - "What was the total number of hours Sam painted the fence on Saturday? Answer with a single number written in digits."
+      - "Adding his morning and afternoon sessions together, how many hours did Sam paint that day? Answer with a single number written in digits."
+      - "In total, for how many hours did Sam paint his fence on Saturday? Answer with a single number written in digits."
+      - "Counting all of his painting that day, how many hours did Sam spend on the fence? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "5"
+    rationale: "Durations add: 2 hours in the morning plus 3 hours in the afternoon is 5 hours."
+    difficulty: basic
+  - id: tc-006
+    setup: >
+      Leo started writing a report at 2:00pm and finished it at 6:00pm the
+      same day, working on it continuously the whole time.
+    question: "At 5:00pm, had Leo already finished the report? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was the report already finished by Leo at 5:00pm? Answer with exactly one word: Yes or No."
+      - "By 5:00pm, was Leo done with the report? Answer with exactly one word: Yes or No."
+      - "Had Leo completed the report by 5:00pm that day? Answer with exactly one word: Yes or No."
+      - "At 5:00pm, was the writing of the report already complete? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Leo finished at 6:00pm, so at 5:00pm he was still writing and had not yet finished."
+    difficulty: basic
+    links:
+      - relation: different_answer
+        target: tc-007
+  - id: tc-007
+    setup: >
+      Leo started writing a report at 2:00pm and finished it at 6:00pm the
+      same day, working on it continuously the whole time.
+    question: "At 7:00pm that evening, had Leo already finished the report? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was the report already finished by Leo at 7:00pm that evening? Answer with exactly one word: Yes or No."
+      - "By 7:00pm that evening, was Leo done with the report? Answer with exactly one word: Yes or No."
+      - "Had Leo completed the report by 7:00pm that day? Answer with exactly one word: Yes or No."
+      - "At 7:00pm that evening, was the writing of the report already complete? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Leo finished at 6:00pm, so one hour later, at 7:00pm, the report was already finished."
+    difficulty: basic
+    links:
+      - relation: different_answer
+        target: tc-006
+  - id: tc-008
+    setup: >
+      At 3:00pm Tom dropped a letter into the public mailbox. At 5:00pm that
+      same afternoon, Tom began to regret sending it.
+    question: "At 5:00pm, had the letter already been dropped into the mailbox? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "By 5:00pm, had the letter already been dropped into the mailbox? Answer with exactly one word: Yes or No."
+      - "At 5:00pm that afternoon, was the dropping of the letter into the mailbox already in the past? Answer with exactly one word: Yes or No."
+      - "Had Tom already put the letter into the mailbox by 5:00pm? Answer with exactly one word: Yes or No."
+      - "As of 5:00pm, had the letter already gone into the mailbox? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The letter went into the mailbox at 3:00pm, two hours before 5:00pm, and nothing later can undo that past event."
+    difficulty: basic
+    links:
+      - relation: same_answer
+        target: tc-009
+  - id: tc-009
+    setup: >
+      At 3:00pm Tom dropped a letter into the public mailbox. At 5:00pm that
+      same afternoon, Tom began to regret sending it.
+    question: "Was the letter dropped into the mailbox before Tom began to regret sending it? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Did the letter go into the mailbox earlier than the moment Tom's regret began? Answer with exactly one word: Yes or No."
+      - "Did Tom drop the letter into the mailbox before his regret about sending it began? Answer with exactly one word: Yes or No."
+      - "Was the moment the letter entered the mailbox earlier than the moment Tom started regretting it? Answer with exactly one word: Yes or No."
+      - "Had the letter already been dropped into the mailbox when Tom's regret first began? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The 3:00pm mailing happened two hours before the 5:00pm onset of regret."
+    difficulty: basic
+    links:
+      - relation: same_answer
+        target: tc-008
+  - id: tc-010
+    setup: >
+      A team meeting ran continuously from 10:00am to 11:30am. The office
+      phone rang twice that day: once at 10:45am and once at 11:45am.
+    question: "Did the 10:45am phone ring happen while the meeting was in progress? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was the meeting still going on when the phone rang at 10:45am? Answer with exactly one word: Yes or No."
+      - "Did the phone ring at 10:45am during the meeting? Answer with exactly one word: Yes or No."
+      - "When the 10:45am ring happened, was the meeting underway? Answer with exactly one word: Yes or No."
+      - "Did the first ring, at 10:45am, occur within the time the meeting was running? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "10:45am falls between 10:00am and 11:30am, so the meeting was in progress at that moment."
+    difficulty: basic
+    links:
+      - relation: different_answer
+        target: tc-011
+  - id: tc-011
+    setup: >
+      A team meeting ran continuously from 10:00am to 11:30am. The office
+      phone rang twice that day: once at 10:45am and once at 11:45am.
+    question: "Did the 11:45am phone ring happen while the meeting was in progress? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was the meeting still going on when the phone rang at 11:45am? Answer with exactly one word: Yes or No."
+      - "Did the phone ring at 11:45am during the meeting? Answer with exactly one word: Yes or No."
+      - "When the 11:45am ring happened, was the meeting underway? Answer with exactly one word: Yes or No."
+      - "Did the second ring, at 11:45am, occur within the time the meeting was running? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The meeting ended at 11:30am, so the 11:45am ring came fifteen minutes after it was over."
+    difficulty: basic
+    links:
+      - relation: different_answer
+        target: tc-010
+  - id: tc-012
+    setup: >
+      Nina has one brother, who was born exactly three years before Nina was
+      born. Both of them are alive today.
+    question: "Is Nina older than her brother? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is Nina the older of the two siblings? Answer with exactly one word: Yes or No."
+      - "Has Nina been alive longer than her brother? Answer with exactly one word: Yes or No."
+      - "Is Nina's age greater than her brother's age? Answer with exactly one word: Yes or No."
+      - "Between Nina and her brother, is Nina the one who is older? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Her brother was born three years earlier, so he is the older sibling, not Nina."
+    difficulty: basic
+  - id: tc-013
+    setup: >
+      A bus leaves the depot at exactly 8:00am. The ride to the harbor takes
+      exactly 45 minutes, with no stops or delays along the way.
+    question: "Does the bus arrive at the harbor before 9:00am? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the bus already at the harbor before the clock reaches 9:00am? Answer with exactly one word: Yes or No."
+      - "Will the bus reach the harbor earlier than 9:00am? Answer with exactly one word: Yes or No."
+      - "Does the bus complete its trip to the harbor before 9:00am? Answer with exactly one word: Yes or No."
+      - "Is the bus's arrival time at the harbor earlier than 9:00am? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Departing at 8:00am plus a 45-minute ride gives an 8:45am arrival, which is before 9:00am."
+    difficulty: basic
+  - id: tc-014
+    setup: >
+      A bakery opened its doors at 7:00am and closed at 3:00pm the same day,
+      staying open continuously the whole time in between.
+    question: "For how many hours was the bakery open that day? Answer with a single number written in digits."
+    paraphrases:
+      - "How many hours passed between the bakery opening and closing that day? Answer with a single number written in digits."
+      - "What was the total number of hours the bakery stayed open that day? Answer with a single number written in digits."
+      - "Counting from opening to closing, how many hours was the bakery open? Answer with a single number written in digits."
+      - "How many hours long was the bakery's open period that day? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "8"
+    rationale: "From 7:00am to 3:00pm is 8 hours."
+    difficulty: basic
+  - id: tc-015
+    setup: >
+      The library opens at exactly 9:00am. Kim leaves home at 8:50am, and
+      the walk from Kim's home to the library takes exactly 20 minutes.
+    question: "Is the library already open when Kim arrives? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "When Kim gets to the library, has it already opened? Answer with exactly one word: Yes or No."
+      - "Will the library doors already be open at the moment Kim arrives? Answer with exactly one word: Yes or No."
+      - "By the time Kim reaches the library, has its opening time already passed? Answer with exactly one word: Yes or No."
+      - "Does Kim arrive at the library after it has opened? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Kim arrives at 9:10am (8:50am plus 20 minutes), which is after the 9:00am opening."
+    difficulty: basic
+  - id: tc-016
+    setup: >
+      At 6:00pm a firefighter carried a cat down from a tall oak tree.
+      Earlier that same day, at 2:00pm, the cat had climbed up the tree and
+      gotten stuck.
+    question: "Did the cat climb the tree after the firefighter carried it down? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Did the cat's climb up the tree happen later than the firefighter carrying it down? Answer with exactly one word: Yes or No."
+      - "Did the cat go up the tree after it had been brought down by the firefighter? Answer with exactly one word: Yes or No."
+      - "Was the cat's climb something that happened after the rescue? Answer with exactly one word: Yes or No."
+      - "Did the climbing of the tree take place after the firefighter's rescue of the cat? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The climb was at 2:00pm and the rescue at 6:00pm, so the climb came first even though it is narrated second."
+    difficulty: adversarial
+  - id: tc-017
+    setup: >
+      Dan's wristwatch had been running an hour fast all day, so he never
+      trusted it. According to the printed schedule, which was accurate, the
+      concert began at 7:00pm and the fireworks began at 8:00pm that same
+      evening.
+    question: "Did the concert begin before the fireworks began? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Did the start of the concert come earlier than the start of the fireworks? Answer with exactly one word: Yes or No."
+      - "Was the concert already underway before the fireworks started? Answer with exactly one word: Yes or No."
+      - "Is it true that the concert started earlier in the evening than the fireworks? Answer with exactly one word: Yes or No."
+      - "Did the concert's starting time come before the fireworks' starting time? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "By the accurate schedule the concert began at 7:00pm and the fireworks at 8:00pm; the faulty watch is irrelevant."
+    difficulty: adversarial
+  - id: tc-018
+    setup: >
+      The harbor festival took place on March 1 of a certain year. Lily was
+      born on August 4 of that same year, five months after the festival.
+      Her grandfather has told her such vivid stories about the festival
+      that she can describe every stall and every song from it.
+    question: "Could Lily have attended the harbor festival herself? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is it possible that Lily was personally present at the harbor festival? Answer with exactly one word: Yes or No."
+      - "Could Lily have been at the harbor festival in person? Answer with exactly one word: Yes or No."
+      - "Was it possible for Lily to attend the harbor festival with her own eyes and ears? Answer with exactly one word: Yes or No."
+      - "Could Lily herself have gone to the harbor festival? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Lily was born five months after the festival, so she could not have attended it, however vivid the stories."
+    difficulty: adversarial
+  - id: tc-019
+    setup: >
+      An office building held a fire drill that began at exactly 10:00am.
+      The building's log for that day states that it is false that the
+      fire alarm stayed silent before the drill began.
+    question: "Did the fire alarm ring before the fire drill began? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Did the alarm sound before the start of the fire drill? Answer with exactly one word: Yes or No."
+      - "Was there a ring of the fire alarm earlier than the drill's 10:00am start? Answer with exactly one word: Yes or No."
+      - "Did the fire alarm go off before the drill got underway? Answer with exactly one word: Yes or No."
+      - "Before the fire drill began, had the fire alarm rung? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "If it is false that the alarm stayed silent before the drill, then the alarm rang at some point before the 10:00am start."
+    difficulty: adversarial
+  - id: tc-020
+    setup: >
+      A pot of soup simmered continuously from 1:00pm to 1:50pm. The recipe
+      card, written 14 years earlier, recommends simmering the soup for 45
+      minutes.
+    question: "Did the soup simmer for more than one hour? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was the soup's simmering time longer than one hour? Answer with exactly one word: Yes or No."
+      - "Did the simmering of the soup last over an hour? Answer with exactly one word: Yes or No."
+      - "Is it true that the soup spent more than sixty minutes simmering? Answer with exactly one word: Yes or No."
+      - "Did the pot simmer for a duration exceeding one hour? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "From 1:00pm to 1:50pm is 50 minutes, which is less than an hour; the recipe's age and recommendation are irrelevant."
+    difficulty: adversarial
+  - id: tc-021
+    setup: >
+      By 8:00pm Ana had already emailed her essay to her teacher. She had
+      finished writing the essay at 7:00pm, after starting it at 3:00pm that
+      afternoon.
+    question: "At 5:00pm, had Ana already finished writing the essay? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was the essay already finished by Ana at 5:00pm? Answer with exactly one word: Yes or No."
+      - "By 5:00pm that afternoon, was Ana done writing the essay? Answer with exactly one word: Yes or No."
+      - "Had Ana completed the writing of her essay by 5:00pm? Answer with exactly one word: Yes or No."
+      - "At 5:00pm, was Ana's essay already fully written? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Ana finished at 7:00pm, so at 5:00pm she was still writing, even though the story is told ending-first."
+    difficulty: adversarial
+  - id: tc-022
+    setup: >
+      In a road race, runner Petra started at 9:00am and crossed the finish
+      line at 9:50am. Runner Quinn started later, at 9:10am, and crossed the
+      finish line at 9:45am.
+    question: "Did Quinn cross the finish line before Petra did? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Did Quinn reach the finish line earlier than Petra? Answer with exactly one word: Yes or No."
+      - "Was Quinn's finishing time earlier in the morning than Petra's? Answer with exactly one word: Yes or No."
+      - "Did Quinn finish the race before Petra finished it? Answer with exactly one word: Yes or No."
+      - "Had Quinn already crossed the finish line at the moment Petra crossed it? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Quinn finished at 9:45am and Petra at 9:50am, so Quinn finished first despite starting later."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: tc-023
+  - id: tc-023
+    setup: >
+      In a road race, runner Petra started at 9:00am and crossed the finish
+      line at 9:50am. Runner Quinn started later, at 9:10am, and crossed the
+      finish line at 9:45am.
+    question: "Did Petra cross the finish line before Quinn did? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Did Petra reach the finish line earlier than Quinn? Answer with exactly one word: Yes or No."
+      - "Was Petra's finishing time earlier in the morning than Quinn's? Answer with exactly one word: Yes or No."
+      - "Did Petra finish the race before Quinn finished it? Answer with exactly one word: Yes or No."
+      - "Had Petra already crossed the finish line at the moment Quinn crossed it? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Petra finished at 9:50am, five minutes after Quinn's 9:45am finish, so Petra did not finish first."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: tc-022
+  - id: tc-024
+    setup: >
+      A bakery sold its last loaf of the morning at 11:00am. A fresh batch
+      of loaves came out of the oven at noon that same day. Marta walked
+      into the bakery at 11:30am hoping to buy a loaf from that fresh batch.
+    question: "When Marta walked in at 11:30am, was the fresh batch already out of the oven? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "At the moment Marta entered the bakery at 11:30am, had the fresh batch already come out of the oven? Answer with exactly one word: Yes or No."
+      - "Was the fresh batch of loaves out of the oven by the time Marta walked in at 11:30am? Answer with exactly one word: Yes or No."
+      - "Had the fresh loaves already emerged from the oven when Marta arrived at 11:30am? Answer with exactly one word: Yes or No."
+      - "As Marta stepped into the bakery at 11:30am, was the fresh batch's baking already done and out of the oven? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The batch came out at noon, thirty minutes after Marta's 11:30am arrival, so it was not yet out of the oven."
+    difficulty: adversarial
+  - id: tc-025
+    setup: >
+      For her trip across town, Mia walked 20 minutes to the bus stop, rode
+      a 12-year-old bus for 35 minutes, and then walked 15 minutes from the
+      bus stop to her friend's door. Her ticket had been bought three days
+      earlier.
+    question: "How many minutes in total did Mia spend traveling, counting walking and riding together? Answer with a single number written in digits."
+    paraphrases:
+      - "Adding up her two walks and the bus ride, how many minutes did Mia's trip take in total? Answer with a single number written in digits."
+      - "What was the total number of minutes Mia spent walking and riding on her trip? Answer with a single number written in digits."
+      - "Combining all walking and riding, how many minutes long was Mia's journey? Answer with a single number written in digits."
+      - "In total, how many minutes of walking and bus riding did Mia's trip involve? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "70"
+    rationale: "Durations add: 20 + 35 + 15 = 70 minutes; the bus's age and the ticket's purchase date are irrelevant."
+    difficulty: adversarial

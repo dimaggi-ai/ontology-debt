@@ -1,0 +1,469 @@
+id: negation_invariance
+title: "Negation Invariance"
+statement: >
+  A question and its negation about the same situation must receive
+  complementary answers: if "Is the box empty?" is answered Yes, then
+  "Does the box contain anything?" must be answered No, and vice versa.
+  Double negation must resolve to the plain affirmative ("it is not the
+  case that the door was left unlocked" means the door was locked), and
+  this resolution must survive distractors, quantified negation ("not a
+  single", "none of"), and paraphrase. A model that flips its answer when
+  the question is negated, or that miscounts the negations in a setup,
+  does not hold a stable model of the described situation.
+severity: medium
+lineage: ["CondaQA (2022)", "ParaRel negation probes (2021)", "BECEL negational consistency (2022)"]
+scenarios:
+  - id: ni-001
+    setup: >
+      A cardboard box sits on Marta's kitchen table. This morning she took
+      every item out of the box and put them all on a shelf. Since then,
+      nobody has put anything into the box.
+    question: "Is the box empty now? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Right now, is the box empty? Answer with exactly one word: Yes or No."
+      - "Would you say the box is empty at this point? Answer with exactly one word: Yes or No."
+      - "At this moment, is Marta's box empty? Answer with exactly one word: Yes or No."
+      - "Is the box on the kitchen table empty now? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Every item was removed and nothing was added afterward, so the box is empty."
+    difficulty: basic
+    links:
+      - relation: different_answer
+        target: ni-002
+  - id: ni-002
+    setup: >
+      A cardboard box sits on Marta's kitchen table. This morning she took
+      every item out of the box and put them all on a shelf. Since then,
+      nobody has put anything into the box.
+    question: "Does the box contain anything now? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is there anything inside the box now? Answer with exactly one word: Yes or No."
+      - "Right now, does the box hold anything at all? Answer with exactly one word: Yes or No."
+      - "At this moment, is there anything in Marta's box? Answer with exactly one word: Yes or No."
+      - "Does the box on the kitchen table have anything in it now? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Every item was removed and nothing was added afterward, so the box contains nothing."
+    difficulty: basic
+    links:
+      - relation: different_answer
+        target: ni-001
+  - id: ni-003
+    setup: >
+      Before leaving the study for the night, Tomas flipped the wall switch
+      and the ceiling light went dark. Nobody has entered the study or
+      touched the switch since then.
+    question: "Is the ceiling light on now? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Right now, is the ceiling light in the study on? Answer with exactly one word: Yes or No."
+      - "Is the study's ceiling light currently switched on? Answer with exactly one word: Yes or No."
+      - "At this moment, is the ceiling light shining? Answer with exactly one word: Yes or No."
+      - "Would you say the ceiling light is on at this point? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Tomas switched the light off and nobody touched the switch afterward, so it is not on."
+    difficulty: basic
+    links:
+      - relation: different_answer
+        target: ni-004
+  - id: ni-004
+    setup: >
+      Before leaving the study for the night, Tomas flipped the wall switch
+      and the ceiling light went dark. Nobody has entered the study or
+      touched the switch since then.
+    question: "Is the ceiling light off now? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Right now, is the ceiling light in the study off? Answer with exactly one word: Yes or No."
+      - "Is the study's ceiling light currently switched off? Answer with exactly one word: Yes or No."
+      - "At this moment, is the ceiling light dark? Answer with exactly one word: Yes or No."
+      - "Would you say the ceiling light is off at this point? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Tomas switched the light off and nobody touched the switch afterward, so it is off."
+    difficulty: basic
+    links:
+      - relation: different_answer
+        target: ni-003
+  - id: ni-005
+    setup: >
+      Lena poured all the water out of her mug into the sink and wiped the
+      inside dry with a towel. Since then, nothing has been added to the mug.
+    question: "Is there any water in the mug now? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Right now, does the mug contain any water? Answer with exactly one word: Yes or No."
+      - "Is any water left in Lena's mug at this point? Answer with exactly one word: Yes or No."
+      - "At this moment, is there water inside the mug? Answer with exactly one word: Yes or No."
+      - "Does Lena's mug currently hold any water? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "All the water was poured out and the mug was wiped dry, so no water remains in it."
+    difficulty: basic
+    links:
+      - relation: different_answer
+        target: ni-006
+  - id: ni-006
+    setup: >
+      Lena poured all the water out of her mug into the sink and wiped the
+      inside dry with a towel. Since then, nothing has been added to the mug.
+    question: "Is the mug free of water now? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Right now, is the mug completely without water? Answer with exactly one word: Yes or No."
+      - "Is Lena's mug free of water at this point? Answer with exactly one word: Yes or No."
+      - "At this moment, is the inside of the mug free of water? Answer with exactly one word: Yes or No."
+      - "Would you say the mug currently has no water in it? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "All the water was poured out and the mug was wiped dry, so it is free of water."
+    difficulty: basic
+    links:
+      - relation: different_answer
+        target: ni-005
+  - id: ni-007
+    setup: >
+      When Priya left her apartment this morning, it is not the case that
+      the front door was left unlocked. Nobody has touched the door since
+      she left.
+    question: "Is the front door locked? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Right now, is Priya's front door locked? Answer with exactly one word: Yes or No."
+      - "Is the front door of the apartment currently locked? Answer with exactly one word: Yes or No."
+      - "At this moment, is the front door in a locked state? Answer with exactly one word: Yes or No."
+      - "Would you say the front door is locked at this point? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Saying it is not the case that the door was left unlocked means the door was locked, and nobody touched it afterward."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: ni-008
+  - id: ni-008
+    setup: >
+      When Priya left her apartment this morning, it is not the case that
+      the front door was left unlocked. Nobody has touched the door since
+      she left.
+    question: "Is the front door unlocked? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Right now, is Priya's front door unlocked? Answer with exactly one word: Yes or No."
+      - "Is the front door of the apartment currently unlocked? Answer with exactly one word: Yes or No."
+      - "At this moment, is the front door in an unlocked state? Answer with exactly one word: Yes or No."
+      - "Would you say the front door is unlocked at this point? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Saying it is not the case that the door was left unlocked means the door was locked, so it is not unlocked."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: ni-007
+  - id: ni-009
+    setup: >
+      A cookie jar sits on Ravi's counter. It is not true that the jar
+      contains no cookies: Ravi baked yesterday and put several inside.
+      Nobody has opened the jar since.
+    question: "Are there any cookies in the jar? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Does the jar on the counter contain any cookies? Answer with exactly one word: Yes or No."
+      - "Right now, are cookies inside Ravi's jar? Answer with exactly one word: Yes or No."
+      - "At this moment, does the cookie jar hold any cookies? Answer with exactly one word: Yes or No."
+      - "Is at least one cookie in the jar? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "It is not true that the jar contains no cookies means it does contain cookies, and Ravi put several inside."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: ni-010
+  - id: ni-010
+    setup: >
+      A cookie jar sits on Ravi's counter. It is not true that the jar
+      contains no cookies: Ravi baked yesterday and put several inside.
+      Nobody has opened the jar since.
+    question: "Is the cookie jar empty? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the jar on Ravi's counter empty? Answer with exactly one word: Yes or No."
+      - "Right now, is there nothing inside the cookie jar? Answer with exactly one word: Yes or No."
+      - "At this moment, is Ravi's cookie jar empty? Answer with exactly one word: Yes or No."
+      - "Would you say the cookie jar is empty at this point? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The jar contains several cookies that Ravi put inside, so it is not empty."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: ni-009
+  - id: ni-011
+    setup: >
+      After the office move, it is not the case that anything was left
+      inside the desk drawer: the movers cleared it out completely. The
+      drawer has stayed shut and untouched since.
+    question: "Is the desk drawer empty? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Right now, is the drawer of the desk empty? Answer with exactly one word: Yes or No."
+      - "At this moment, is the desk drawer empty? Answer with exactly one word: Yes or No."
+      - "Would you say the desk drawer is empty at this point? Answer with exactly one word: Yes or No."
+      - "Is the desk drawer in the office empty now? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "It is not the case that anything was left in the drawer means nothing was left, so the drawer is empty."
+    difficulty: adversarial
+    links:
+      - relation: same_answer
+        target: ni-012
+  - id: ni-012
+    setup: >
+      After the office move, it is not the case that anything was left
+      inside the desk drawer: the movers cleared it out completely. The
+      drawer has stayed shut and untouched since.
+    question: "Is it true that the desk drawer holds nothing? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is it correct that there is nothing inside the desk drawer? Answer with exactly one word: Yes or No."
+      - "Is it accurate to say the drawer of the desk contains nothing? Answer with exactly one word: Yes or No."
+      - "Right now, is it true that nothing is in the desk drawer? Answer with exactly one word: Yes or No."
+      - "Is the statement that the desk drawer holds nothing true? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Nothing was left in the drawer and it has stayed untouched, so the statement that it holds nothing is true."
+    difficulty: adversarial
+    links:
+      - relation: same_answer
+        target: ni-011
+  - id: ni-013
+    setup: >
+      Noah's water bottle is not empty; it is about half full of drinking
+      water. He screws the cap on tightly and puts the bottle in his
+      backpack.
+    question: "Is there any water in Noah's bottle? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Does Noah's bottle contain any water? Answer with exactly one word: Yes or No."
+      - "Right now, is water inside the bottle in Noah's backpack? Answer with exactly one word: Yes or No."
+      - "At this moment, does the water bottle hold any water? Answer with exactly one word: Yes or No."
+      - "Is at least some water in Noah's bottle? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The bottle is about half full of water, so it contains water."
+    difficulty: basic
+  - id: ni-014
+    setup: >
+      In the clinic's waiting room there are eight chairs. None of the
+      chairs is occupied, no one is anywhere else in the room, and the
+      room is silent.
+    question: "Is anyone sitting in the waiting room? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is any person seated in the clinic's waiting room? Answer with exactly one word: Yes or No."
+      - "Right now, is somebody sitting in the clinic's waiting room? Answer with exactly one word: Yes or No."
+      - "At this moment, is anyone seated in the waiting room? Answer with exactly one word: Yes or No."
+      - "Is there a person sitting in the waiting room? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "None of the chairs is occupied, so nobody is sitting in the room."
+    difficulty: basic
+  - id: ni-015
+    setup: >
+      A small minibus has twelve passenger seats. Every single seat is
+      taken by a passenger, and the driver has just closed the doors.
+    question: "Are any of the minibus seats unoccupied? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is there an empty seat on the minibus? Answer with exactly one word: Yes or No."
+      - "Right now, is any seat on the minibus free? Answer with exactly one word: Yes or No."
+      - "At this moment, does the minibus have any unoccupied seats? Answer with exactly one word: Yes or No."
+      - "Is at least one of the twelve seats without a passenger? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Every seat is taken by a passenger, so no seat is unoccupied."
+    difficulty: basic
+  - id: ni-016
+    setup: >
+      The kitchen window was closed and latched last night. No one has
+      opened it since, and the latch has not been touched.
+    question: "Is the kitchen window still closed? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Right now, is the kitchen window closed? Answer with exactly one word: Yes or No."
+      - "At this moment, does the kitchen window remain closed? Answer with exactly one word: Yes or No."
+      - "Is the window in the kitchen currently closed? Answer with exactly one word: Yes or No."
+      - "Would you say the kitchen window is closed at this point? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The window was closed and latched and nobody has opened it since, so it remains closed."
+    difficulty: basic
+  - id: ni-017
+    setup: >
+      Dana unplugged the toaster from the wall socket, wrapped the cord
+      around it, and put the toaster away in a cupboard.
+    question: "Is the toaster plugged in? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Right now, is the toaster connected to the wall socket? Answer with exactly one word: Yes or No."
+      - "At this moment, is Dana's toaster plugged into the socket? Answer with exactly one word: Yes or No."
+      - "Is the toaster in the cupboard currently plugged in? Answer with exactly one word: Yes or No."
+      - "Would you say the toaster is plugged in at this point? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Dana unplugged the toaster and put it away in a cupboard, so it is not plugged in."
+    difficulty: basic
+  - id: ni-018
+    setup: >
+      The parking lot behind the library was emptied this morning for
+      resurfacing. Not one car remains on the lot, and the entrance is
+      blocked with cones.
+    question: "Is the parking lot free of cars? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Right now, is the lot behind the library without any cars? Answer with exactly one word: Yes or No."
+      - "At this moment, is the parking lot clear of cars? Answer with exactly one word: Yes or No."
+      - "Is the library's parking lot currently free of cars? Answer with exactly one word: Yes or No."
+      - "Would you say the parking lot has no cars on it at this point? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Not one car remains on the lot, so it is free of cars."
+    difficulty: basic
+  - id: ni-019
+    setup: >
+      At lunch, Mia ate the last apple from the fruit bowl. Since lunch,
+      no one has added any fruit to the bowl.
+    question: "Are there any apples left in the bowl? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Does the fruit bowl still contain any apples? Answer with exactly one word: Yes or No."
+      - "Right now, is at least one apple in the bowl? Answer with exactly one word: Yes or No."
+      - "At this moment, does the bowl hold any apples? Answer with exactly one word: Yes or No."
+      - "Is there an apple remaining in the fruit bowl? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Mia ate the last apple and no fruit was added afterward, so no apples remain."
+    difficulty: basic
+  - id: ni-020
+    setup: >
+      It is not cold inside the mountain cabin; the wood stove has kept the
+      air pleasantly warm all evening. Snow is falling outside.
+    question: "Is it warm inside the cabin? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Right now, is the air inside the cabin warm? Answer with exactly one word: Yes or No."
+      - "At this moment, is the inside of the mountain cabin warm? Answer with exactly one word: Yes or No."
+      - "Is the cabin's interior currently warm? Answer with exactly one word: Yes or No."
+      - "Would you say it is warm inside the cabin at this point? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The setup states the stove has kept the air pleasantly warm, so it is warm inside despite the snow outside."
+    difficulty: basic
+  - id: ni-021
+    setup: >
+      The neighborhood pool was drained completely on Monday for repairs.
+      It has not been refilled, and it remains empty today while the
+      repairs continue.
+    question: "Is there any water in the pool today? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Does the neighborhood pool contain any water today? Answer with exactly one word: Yes or No."
+      - "Right now, is water in the pool? Answer with exactly one word: Yes or No."
+      - "At this moment, does the pool hold any water? Answer with exactly one word: Yes or No."
+      - "Is at least some water in the neighborhood pool today? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The pool was drained completely, was not refilled, and remains empty, so it holds no water."
+    difficulty: basic
+  - id: ni-022
+    setup: >
+      It is not the case that the oven was turned off after dinner; it is
+      still heating at a low temperature. The kitchen smells of bread even
+      though nobody is baking anymore.
+    question: "Is the oven on right now? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "At this moment, is the oven running? Answer with exactly one word: Yes or No."
+      - "Is the oven currently switched on? Answer with exactly one word: Yes or No."
+      - "Right now, is the oven in the kitchen on? Answer with exactly one word: Yes or No."
+      - "Would you say the oven is on at this point? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "It is not the case that the oven was turned off means it stayed on, and it is still heating."
+    difficulty: adversarial
+  - id: ni-023
+    setup: >
+      A sign by the pond says the ducks must not be fed. Iris reads the
+      sign, keeps her slice of bread inside her bag, and walks past the
+      pond without stopping.
+    question: "Did Iris feed the ducks? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Did Iris give any food to the ducks? Answer with exactly one word: Yes or No."
+      - "Did Iris feed the ducks at the pond? Answer with exactly one word: Yes or No."
+      - "Did Iris give the ducks any of her bread? Answer with exactly one word: Yes or No."
+      - "Did the ducks get fed by Iris? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Iris kept her bread in her bag and walked past without stopping, so she did not feed the ducks."
+    difficulty: adversarial
+  - id: ni-024
+    setup: >
+      It is false that nobody watered the office plants this week: Leo
+      watered every one of them on Tuesday. The watering can has a small
+      crack, so he had to make two trips to the tap.
+    question: "Were the office plants watered this week? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Did the office plants get watered this week? Answer with exactly one word: Yes or No."
+      - "This week, did anyone water the office plants? Answer with exactly one word: Yes or No."
+      - "Were the plants in the office given water this week? Answer with exactly one word: Yes or No."
+      - "Did someone water the office plants during this week? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "It is false that nobody watered the plants means someone did, and Leo watered every one of them on Tuesday."
+    difficulty: adversarial
+  - id: ni-025
+    setup: >
+      Sam checks the fuel gauge before a trip. The tank is not full, but it
+      is not empty either: about a quarter of a tank remains. The low-fuel
+      warning light is not on.
+    question: "Is the fuel tank full? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Right now, is the tank of fuel full? Answer with exactly one word: Yes or No."
+      - "At this moment, is Sam's fuel tank full? Answer with exactly one word: Yes or No."
+      - "Is the fuel tank completely full? Answer with exactly one word: Yes or No."
+      - "Would you say the tank is full at this point? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The setup states the tank is not full, with only about a quarter remaining."
+    difficulty: adversarial

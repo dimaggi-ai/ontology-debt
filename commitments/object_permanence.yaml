@@ -1,0 +1,469 @@
+id: object_permanence
+title: "Object Permanence"
+statement: >
+  Objects that become occluded, covered, enclosed, or otherwise unobserved
+  continue to exist and retain their properties (location, color, count,
+  identity) until something physically acts on them. A model must not treat
+  loss of visual access - a screen, a closed lid, darkness, a stacked or
+  nested container - as destruction or alteration of the hidden object, and
+  must not confuse actions performed on a different object with actions on
+  the hidden one.
+severity: high
+lineage: ["CoreCognition (2024)", "EWOK (2024)", "Piaget (1954)", "Baillargeon (1987)"]
+scenarios:
+  - id: op-001
+    setup: >
+      A red rubber ball rolls across the floor of a living room and passes
+      behind a wide wooden screen standing in the middle of the room. The
+      ball has not come out on either side of the screen, and nobody has
+      touched the screen or the ball since.
+    question: "Is the ball still behind the screen? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the red rubber ball behind the wooden screen right now? Answer with exactly one word: Yes or No."
+      - "Right now, does the screen still have the ball behind it? Answer with exactly one word: Yes or No."
+      - "At this moment, is the ball located behind the screen? Answer with exactly one word: Yes or No."
+      - "If someone walked around the screen right now, would they find the ball behind it? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The ball went behind the screen and has not exited or been moved, so it remains behind the screen."
+    difficulty: basic
+  - id: op-002
+    setup: >
+      A red rubber ball rolls across the floor of a living room and passes
+      behind a wide wooden screen standing in the middle of the room. The
+      ball has not come out on either side of the screen, and nobody has
+      touched the screen or the ball since.
+    question: "Did the ball stop existing when it rolled out of sight? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "When the ball went out of view behind the screen, did it cease to exist? Answer with exactly one word: Yes or No."
+      - "Did rolling out of sight make the ball stop existing? Answer with exactly one word: Yes or No."
+      - "Is it true that the ball no longer exists now that it cannot be seen? Answer with exactly one word: Yes or No."
+      - "Did the ball go out of existence at the moment it disappeared from view? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Passing out of view behind a screen does not destroy an object; the ball continues to exist."
+    difficulty: basic
+    links:
+      - relation: different_answer
+        target: op-001
+  - id: op-003
+    setup: >
+      A set of house keys lies on a hallway table. Someone drops a bath towel
+      over the keys, covering them completely. Nobody touches the towel, the
+      keys, or the table afterward.
+    question: "Are the keys still under the towel? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the set of house keys under the towel right now? Answer with exactly one word: Yes or No."
+      - "Right now, would lifting the towel reveal the keys? Answer with exactly one word: Yes or No."
+      - "At this moment, are the keys located underneath the towel? Answer with exactly one word: Yes or No."
+      - "Does the towel still have the keys underneath it? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Covering the keys with a towel hides them but does not move or remove them, so they remain under the towel."
+    difficulty: basic
+  - id: op-004
+    setup: >
+      A glass vase of flowers stands on a living-room table. At night, the
+      last person to leave switches off every light, and the room becomes
+      completely dark. Nobody moves anything in the room during the night.
+    question: "Did the vase stop existing when the room went dark? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "When the lights were switched off, did the vase cease to exist? Answer with exactly one word: Yes or No."
+      - "Did the darkness make the vase go out of existence? Answer with exactly one word: Yes or No."
+      - "Is it true that the vase no longer exists now that the room is dark? Answer with exactly one word: Yes or No."
+      - "Did switching off the lights put an end to the vase's existence? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Darkness only removes visibility; the vase continues to exist unchanged on the table."
+    difficulty: basic
+  - id: op-005
+    setup: >
+      A woman puts a green apple inside an opaque ceramic jar and sets the
+      lid on top. She then places the jar inside a kitchen cupboard and shuts
+      the cupboard door. Nobody opens the cupboard or the jar afterward.
+    question: "Is the apple still inside the jar? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the green apple inside the ceramic jar right now? Answer with exactly one word: Yes or No."
+      - "Right now, does the jar in the cupboard still contain the apple? Answer with exactly one word: Yes or No."
+      - "At this moment, is the apple located inside the jar? Answer with exactly one word: Yes or No."
+      - "If someone opened the cupboard and lifted the jar's lid right now, would they find the apple inside? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The apple was sealed in the jar and nothing has opened or moved it, so it remains inside."
+    difficulty: basic
+  - id: op-006
+    setup: >
+      A boy counts three marbles into an empty metal tin and presses the lid
+      on tightly. He puts the tin on a shelf, and nobody touches, opens, or
+      moves the tin after that.
+    question: "How many marbles are in the tin? Answer with a single number written in digits."
+    paraphrases:
+      - "What is the number of marbles inside the tin right now? Answer with a single number written in digits."
+      - "Right now, how many marbles does the tin contain? Answer with a single number written in digits."
+      - "If the boy opened the tin right now, how many marbles would he find inside? Answer with a single number written in digits."
+      - "At this moment, how many marbles are inside the closed tin? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "3"
+    rationale: "Three marbles were sealed inside and nothing has been added or removed, so the tin still holds 3."
+    difficulty: basic
+  - id: op-007
+    setup: >
+      A red ceramic mug sits on a kitchen counter. Someone places a large
+      cardboard box upside down over the mug so the mug is completely hidden.
+      Ten minutes later, a housemate lifts the box, paints the mug blue all
+      over, lets the paint dry, and sets the box back over it. Nobody touches
+      the box or the mug after that.
+    question: "Did the mug change color? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the mug a different color now than it was before the box first covered it? Answer with exactly one word: Yes or No."
+      - "Has the mug's color changed since it was first covered? Answer with exactly one word: Yes or No."
+      - "Did the mug end up a different color than it started out? Answer with exactly one word: Yes or No."
+      - "If the box were lifted right now, would the mug look a different color than the red it was at the start? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The housemate painted the mug blue while the box was lifted, so its color really did change from red to blue."
+    difficulty: basic
+  - id: op-008
+    setup: >
+      Before dinner, a boy slides his comic book under his bed. The bed skirt
+      hangs down to the floor, so the book cannot be seen at all. Since
+      then, nobody has entered the bedroom.
+    question: "Is the comic book still under the bed? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the boy's comic book underneath the bed right now? Answer with exactly one word: Yes or No."
+      - "Right now, would looking under the bed skirt reveal the comic book? Answer with exactly one word: Yes or No."
+      - "At this moment, is the comic book located under the bed? Answer with exactly one word: Yes or No."
+      - "Does the space under the bed still hold the comic book? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Nobody entered the room to move the book, so it remains where it was slid, under the bed."
+    difficulty: basic
+  - id: op-009
+    setup: >
+      A steel spoon is dropped into a tall opaque pitcher full of orange
+      juice. The spoon sinks below the surface and disappears from view.
+      Nobody pours out the juice or reaches into the pitcher.
+    question: "Did the spoon cease to exist when it sank out of sight? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "When the spoon disappeared below the surface of the juice, did it stop existing? Answer with exactly one word: Yes or No."
+      - "Did sinking out of view put an end to the spoon's existence? Answer with exactly one word: Yes or No."
+      - "Is it true that the spoon no longer exists now that it cannot be seen in the juice? Answer with exactly one word: Yes or No."
+      - "Did the spoon go out of existence once the orange juice hid it? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Sinking out of view in an opaque liquid does not destroy an object; the spoon still exists at the bottom of the pitcher."
+    difficulty: basic
+  - id: op-010
+    setup: >
+      A girl places a coin flat on the kitchen table and turns a solid
+      ceramic cup upside down over it. The cup completely hides the coin.
+      Nobody lifts the cup, slides it, or bumps the table afterward.
+    question: "Is the coin still under the cup? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the coin underneath the upside-down cup right now? Answer with exactly one word: Yes or No."
+      - "Right now, would lifting the cup reveal the coin? Answer with exactly one word: Yes or No."
+      - "At this moment, is the coin located under the ceramic cup? Answer with exactly one word: Yes or No."
+      - "Does the cup still have the coin underneath it? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The coin was covered in place and nothing has disturbed the cup, so the coin remains under it."
+    difficulty: basic
+  - id: op-011
+    setup: >
+      A freight train enters a mountain tunnel that has exactly two openings.
+      A watcher on a hillside can see both openings clearly the whole time.
+      A few minutes later, the whole train emerges from the far opening and
+      continues down the valley, moving away from the tunnel.
+    question: "Is the train still inside the tunnel? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the freight train inside the mountain tunnel right now? Answer with exactly one word: Yes or No."
+      - "Right now, does the tunnel still contain the train? Answer with exactly one word: Yes or No."
+      - "At this moment, is the train located within the tunnel? Answer with exactly one word: Yes or No."
+      - "Given that it came out of the far opening and moved on, is the train currently in the tunnel? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The train came out of the far opening and moved away down the valley, so it is no longer inside the tunnel."
+    difficulty: basic
+  - id: op-012
+    setup: >
+      A man folds a wool sock, places it in an empty dresser drawer, and
+      pushes the drawer shut. A little later he reopens the drawer, takes
+      the sock out to wear it, and pushes the drawer shut again. Nobody
+      touches the dresser after that.
+    question: "Is the drawer empty now? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Right now, is there nothing inside the drawer? Answer with exactly one word: Yes or No."
+      - "Is the closed dresser drawer empty at this moment? Answer with exactly one word: Yes or No."
+      - "If the man opened the drawer right now, would he find it empty? Answer with exactly one word: Yes or No."
+      - "Does the drawer currently contain nothing at all? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The man took the sock back out before shutting the drawer again, so the drawer is empty."
+    difficulty: basic
+  - id: op-013
+    setup: >
+      A man folds a wool sock, places it in an empty dresser drawer, and
+      pushes the drawer shut. A little later he reopens the drawer, takes
+      the sock out to wear it, and pushes the drawer shut again. Nobody
+      touches the dresser after that.
+    question: "Is the sock still inside the drawer? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the wool sock in the dresser drawer right now? Answer with exactly one word: Yes or No."
+      - "Right now, does the closed drawer still hold the sock? Answer with exactly one word: Yes or No."
+      - "At this moment, is the sock located inside the drawer? Answer with exactly one word: Yes or No."
+      - "If the man opened the drawer right now, would he find the sock inside? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The man removed the sock when he reopened the drawer, so it is no longer inside."
+    difficulty: basic
+    links:
+      - relation: different_answer
+        target: op-012
+  - id: op-014
+    setup: >
+      A woman slides a photograph into a paper envelope, seals the envelope,
+      and puts it in a desk drawer. She closes the drawer and leaves the
+      house. Nobody else is in the house while she is away, and she is
+      still away.
+    question: "Is the envelope empty? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Right now, is there nothing inside the sealed envelope? Answer with exactly one word: Yes or No."
+      - "Is the envelope in the drawer empty at this moment? Answer with exactly one word: Yes or No."
+      - "Does the envelope currently contain nothing? Answer with exactly one word: Yes or No."
+      - "If the envelope were opened right now, would it turn out to hold nothing? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The photograph was sealed inside and nobody has touched the envelope, so it still contains the photograph."
+    difficulty: basic
+  - id: op-015
+    setup: >
+      A small plastic dinosaur is placed inside a small box, and the small
+      box is closed. The small box is then placed inside a larger box, which
+      is also closed and set on a closet shelf. Nobody opens either box
+      afterward.
+    question: "Is the plastic dinosaur still inside the small box? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the toy dinosaur inside the small box right now? Answer with exactly one word: Yes or No."
+      - "Right now, does the small box inside the larger box still contain the dinosaur? Answer with exactly one word: Yes or No."
+      - "At this moment, is the plastic dinosaur located in the small box? Answer with exactly one word: Yes or No."
+      - "If both boxes were opened right now, would the dinosaur be found inside the small one? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Nesting the closed small box inside a larger box does not remove its contents, so the dinosaur remains inside."
+    difficulty: basic
+  - id: op-016
+    setup: >
+      Two paper cups, cup A and cup B, sit upside down on a kitchen table. A
+      coin is placed under cup A. Cup B, which has nothing under it, is then
+      crushed flat and thrown into the trash. Cup A has not been moved or
+      touched.
+    question: "Has the coin been destroyed? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was the coin destroyed at any point? Answer with exactly one word: Yes or No."
+      - "Did the coin get crushed or ruined? Answer with exactly one word: Yes or No."
+      - "Is it true that the coin no longer exists? Answer with exactly one word: Yes or No."
+      - "Did anything destroy the coin? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Only the empty cup B was crushed; the coin under untouched cup A was never acted on."
+    difficulty: adversarial
+  - id: op-017
+    setup: >
+      Two paper cups, cup A and cup B, sit upside down on a kitchen table. A
+      coin is placed under cup A. Cup B, which has nothing under it, is then
+      crushed flat and thrown into the trash. Cup A has not been moved or
+      touched.
+    question: "Is the coin still under cup A? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the coin underneath cup A right now? Answer with exactly one word: Yes or No."
+      - "Right now, would lifting cup A reveal the coin? Answer with exactly one word: Yes or No."
+      - "At this moment, is the coin located under cup A? Answer with exactly one word: Yes or No."
+      - "Does cup A still have the coin underneath it? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Cup A was never moved, so the coin placed under it is still there; only the other, empty cup was discarded."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: op-016
+  - id: op-018
+    setup: >
+      A magician sets a white ball on a solid wooden table on stage and
+      drapes a cloth over it. He waves his wand and announces to the audience
+      that the ball has vanished. The cloth has not been lifted, the table
+      has no openings or hidden compartments, and nothing has touched the
+      ball since it was covered.
+    question: "Has the ball stopped existing? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Did the ball actually go out of existence? Answer with exactly one word: Yes or No."
+      - "Is it true that the ball no longer exists under the cloth? Answer with exactly one word: Yes or No."
+      - "Despite the magician's announcement, has the ball gone out of existence? Answer with exactly one word: Yes or No."
+      - "Has the white ball truly vanished from existence? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Words and a wand wave do not destroy objects; with no physical access to the ball, it still exists under the cloth."
+    difficulty: adversarial
+  - id: op-019
+    setup: >
+      A metal desk lamp stands on a desk in a bedroom. In the evening, the
+      ceiling light and the desk lamp are both switched off, and the room
+      becomes completely dark. Nobody enters or leaves the room after that.
+      The same evening, a neighbor across the street throws her own broken
+      lamp into a dumpster.
+    question: "Is the metal desk lamp still on the desk? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the metal lamp on the desk in the dark bedroom right now? Answer with exactly one word: Yes or No."
+      - "Right now, does the desk still hold the metal lamp? Answer with exactly one word: Yes or No."
+      - "At this moment, is the desk lamp located on the desk? Answer with exactly one word: Yes or No."
+      - "If the lights were switched back on right now, would the metal lamp be seen on the desk? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Darkness does not move objects, and the discarded lamp belonged to the neighbor; the desk lamp remains in place."
+    difficulty: adversarial
+  - id: op-020
+    setup: >
+      A woman puts a gray pebble into a small wooden box and closes the lid.
+      Since that moment, there has been no time at which the lid was not on
+      the box, and it is not the case that anyone removed the pebble.
+    question: "Is the box empty? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Right now, is there nothing inside the wooden box? Answer with exactly one word: Yes or No."
+      - "Is the closed box empty at this moment? Answer with exactly one word: Yes or No."
+      - "Does the box currently contain nothing at all? Answer with exactly one word: Yes or No."
+      - "If the lid were lifted right now, would the box turn out to hold nothing? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The lid was never off and the pebble was never removed, so the pebble is still inside and the box is not empty."
+    difficulty: adversarial
+  - id: op-021
+    setup: >
+      A tennis ball rolls behind a tall folding screen in a playroom. The
+      front of the screen has a large, dramatic picture of an explosion
+      painted on it. The ball has not come out from behind the screen on
+      either side, and nobody has touched the screen or the ball.
+    question: "Is the ball still behind the screen? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the tennis ball behind the folding screen right now? Answer with exactly one word: Yes or No."
+      - "Right now, does the screen still have the ball behind it? Answer with exactly one word: Yes or No."
+      - "At this moment, is the ball located behind the painted screen? Answer with exactly one word: Yes or No."
+      - "If someone looked behind the screen right now, would they find the ball there? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "A picture painted on the screen has no physical effect; the ball went behind, never came out, and is still there."
+    difficulty: adversarial
+    links:
+      - relation: same_answer
+        target: op-001
+  - id: op-022
+    setup: >
+      A blue marble is dropped into a cloth bag, and the bag is placed inside
+      a dark closet with the door shut. Outside the closet, on a sunny
+      windowsill, a child paints a different marble, a red one, with green
+      paint. Nobody opens the closet or touches the bag.
+    question: "Did the blue marble inside the bag change color? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the marble in the bag a different color now than when it was put in? Answer with exactly one word: Yes or No."
+      - "While it sat in the bag in the closet, did the blue marble's color change? Answer with exactly one word: Yes or No."
+      - "Did the blue marble stop being blue while it was inside the bag? Answer with exactly one word: Yes or No."
+      - "Has the color of the marble inside the bag been altered? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Only the red marble outside the closet was painted; nothing touched the blue marble, so it is still blue."
+    difficulty: adversarial
+  - id: op-023
+    setup: >
+      A coin is sealed inside a matchbox, the matchbox is placed inside a
+      shoebox, and the shoebox is covered with a thick blanket. Later that
+      day, a different matchbox, an empty one from the same kitchen, is
+      burned in the fireplace. Nobody touches the blanket, the shoebox, or
+      the matchbox with the coin.
+    question: "Does the coin inside the matchbox still exist? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the coin in the matchbox under the blanket still in existence? Answer with exactly one word: Yes or No."
+      - "Right now, does the coin sealed in the matchbox still exist? Answer with exactly one word: Yes or No."
+      - "Is it true that the coin inside the covered shoebox still exists? Answer with exactly one word: Yes or No."
+      - "Right now, does the coin under the blanket, sealed inside the matchbox, exist? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The burned matchbox was a different, empty one; the coin's matchbox was never touched, so the coin still exists."
+    difficulty: adversarial
+  - id: op-024
+    setup: >
+      A woman wheels her bicycle into a small windowless shed that was empty
+      before, and she locks the door. For a whole week, nobody looks inside
+      the shed, nobody thinks about the bicycle, and nothing enters or leaves
+      the shed.
+    question: "Is the shed empty? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Right now, is there nothing inside the locked shed? Answer with exactly one word: Yes or No."
+      - "After the week has passed, is the shed empty? Answer with exactly one word: Yes or No."
+      - "Does the shed currently contain nothing at all? Answer with exactly one word: Yes or No."
+      - "If the door were unlocked and opened right now, would the shed turn out to be empty? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Being unseen and unthought-of for a week does not remove the bicycle; it is still inside, so the shed is not empty."
+    difficulty: adversarial
+  - id: op-025
+    setup: >
+      Five apples are placed in a wicker basket, and an opaque cloth is
+      tucked over the top so the apples cannot be seen. Nobody touches the
+      basket after that. Later, a neighbor eats two apples from her own fruit
+      bowl in a different house.
+    question: "How many apples are in the basket? Answer with a single number written in digits."
+    paraphrases:
+      - "What is the number of apples inside the covered basket right now? Answer with a single number written in digits."
+      - "Right now, how many apples does the wicker basket contain? Answer with a single number written in digits."
+      - "If the cloth were lifted right now, how many apples would be found in the basket? Answer with a single number written in digits."
+      - "At this moment, how many apples are under the cloth in the basket? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "5"
+    rationale: "The neighbor ate apples from her own bowl elsewhere; the untouched basket still holds all 5 apples."
+    difficulty: adversarial

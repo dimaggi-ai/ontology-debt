@@ -1,0 +1,459 @@
+id: quantity_conservation
+title: "Quantity Conservation"
+statement: >
+  Counts and amounts are conserved unless something is explicitly added or
+  removed. Rearranging objects - spreading them out, stacking them, splitting
+  them across containers or rooms - does not change how many there are.
+  Pouring a liquid into a differently shaped container conserves its volume,
+  and cutting or breaking a portion of food into more pieces does not create
+  more food. A model must not infer a change in quantity from a change in
+  appearance, and must register a change in quantity when an addition or
+  removal is explicitly stated.
+severity: medium
+lineage: ["Piagetian conservation tasks", "CoreCognition (2024)"]
+scenarios:
+  - id: qc-001
+    setup: >
+      Ava arranges 12 marbles in a tight bunch in the middle of a table.
+      Then she spreads the same marbles into a long line that stretches from
+      one edge of the table to the other. She does not add or take away any
+      marbles.
+    question: "How many marbles are on the table now? Answer with a single number written in digits."
+    paraphrases:
+      - "What is the number of marbles on the table at this point? Answer with a single number written in digits."
+      - "After Ava spreads them into the line, how many marbles does the table hold? Answer with a single number written in digits."
+      - "Count the marbles on the table now: how many are there? Answer with a single number written in digits."
+      - "Once the marbles are laid out in the long line, how many marbles are on the table? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "12"
+    rationale: "Spreading marbles into a line rearranges them without adding or removing any, so the count stays 12."
+    difficulty: basic
+  - id: qc-002
+    setup: >
+      Tom fills a short, wide glass with water. He pours all of the water
+      into a tall, thin glass without spilling a drop.
+    question: "Is there more water in the tall glass than there was in the short glass? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Does the tall glass now contain more water than the short glass contained? Answer with exactly one word: Yes or No."
+      - "Compared with what was in the short glass, is the water in the tall glass a greater amount? Answer with exactly one word: Yes or No."
+      - "After the pour, does the tall glass hold a larger quantity of water than the short glass held? Answer with exactly one word: Yes or No."
+      - "Is the amount of water in the tall glass greater than the amount that was in the short glass? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Pouring water into a differently shaped glass without spilling changes its shape, not its amount."
+    difficulty: basic
+    links:
+      - relation: different_answer
+        target: qc-003
+  - id: qc-003
+    setup: >
+      Tom fills a short, wide glass with water. He pours all of the water
+      into a tall, thin glass without spilling a drop.
+    question: "Is the amount of water in the tall glass the same as the amount that was in the short glass? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Does the tall glass hold exactly as much water as the short glass held? Answer with exactly one word: Yes or No."
+      - "After the pour, is the quantity of water unchanged from what was in the short glass? Answer with exactly one word: Yes or No."
+      - "Is the water in the tall glass equal in amount to the water that was in the short glass? Answer with exactly one word: Yes or No."
+      - "Does the amount of water stay the same after being poured into the tall glass? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "No water was added or lost in the pour, so the amount is exactly the same."
+    difficulty: basic
+    links:
+      - relation: different_answer
+        target: qc-002
+  - id: qc-004
+    setup: >
+      Ten children are playing together in the living room of an apartment.
+      Four of them go into the kitchen, and the other six stay in the living
+      room. No child leaves the apartment and nobody else arrives.
+    question: "How many children are in the apartment now? Answer with a single number written in digits."
+    paraphrases:
+      - "What is the total number of children in the apartment at this point? Answer with a single number written in digits."
+      - "Counting both rooms together, how many children are in the apartment? Answer with a single number written in digits."
+      - "After the four move to the kitchen, how many children does the apartment contain in total? Answer with a single number written in digits."
+      - "How many children are inside the apartment altogether now? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "10"
+    rationale: "Splitting the group between two rooms moves children around without changing the total of 10 in the apartment."
+    difficulty: basic
+  - id: qc-005
+    setup: >
+      A round pizza is cut into 4 equal slices. Before anyone eats anything,
+      the cook cuts each of those slices in half, so there are now 8 slices
+      in total.
+    question: "Is there more pizza to eat now than there was before the second round of cutting? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Did the second round of cutting increase the amount of pizza available to eat? Answer with exactly one word: Yes or No."
+      - "Compared with before the extra cuts, is there now a greater amount of pizza to eat? Answer with exactly one word: Yes or No."
+      - "After the slices are halved, is the total amount of pizza to eat larger than before? Answer with exactly one word: Yes or No."
+      - "Does cutting the slices in half leave more pizza to eat than there was beforehand? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Cutting a pizza into more slices changes the number of pieces, not the total amount of pizza."
+    difficulty: basic
+  - id: qc-006
+    setup: >
+      Fifteen coins lie scattered across a desk. Jae gathers all of them and
+      stacks them into a single neat tower on the same desk. No coin is added
+      and none is taken away.
+    question: "Are there still 15 coins on the desk? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Does the desk still hold 15 coins after the stacking? Answer with exactly one word: Yes or No."
+      - "Once the coins are stacked into the tower, are there 15 coins on the desk? Answer with exactly one word: Yes or No."
+      - "Is the number of coins on the desk still 15? Answer with exactly one word: Yes or No."
+      - "After Jae builds the tower, do 15 coins remain on the desk? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Stacking scattered coins rearranges them without changing their number, so 15 remain."
+    difficulty: basic
+  - id: qc-007
+    setup: >
+      Sam rolls a piece of clay into a round ball. Then he presses the same
+      ball flat into a wide pancake shape, without tearing off any clay and
+      without adding any.
+    question: "Is the amount of clay the same as it was before he flattened it? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Does the flattened pancake contain the same amount of clay as the ball did? Answer with exactly one word: Yes or No."
+      - "After the flattening, is the quantity of clay unchanged? Answer with exactly one word: Yes or No."
+      - "Is there just as much clay in the pancake shape as there was in the ball? Answer with exactly one word: Yes or No."
+      - "Following the reshaping, does Sam have the same amount of clay as before? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Reshaping clay without adding or removing any conserves the amount of clay."
+    difficulty: basic
+  - id: qc-008
+    setup: >
+      A carton holds 12 eggs. Omar takes every egg out of the carton and
+      places them all in a large bowl. None of the eggs breaks and none is
+      left behind in the carton.
+    question: "How many eggs are in the bowl? Answer with a single number written in digits."
+    paraphrases:
+      - "What is the number of eggs now sitting in the bowl? Answer with a single number written in digits."
+      - "After Omar finishes moving them, how many eggs does the bowl contain? Answer with a single number written in digits."
+      - "Count the eggs in the bowl: how many are there? Answer with a single number written in digits."
+      - "Once all the eggs are transferred, how many eggs are in the bowl? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "12"
+    rationale: "Moving all 12 eggs from carton to bowl with none lost or broken leaves 12 eggs in the bowl."
+    difficulty: basic
+  - id: qc-009
+    setup: >
+      Twenty beads are arranged in a small circle on a table. Lily rearranges
+      the same beads into one long straight row that looks much longer than
+      the circle was wide. She adds no beads and removes none.
+    question: "Are there more beads in the row than there were in the circle? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Does the long row contain a greater number of beads than the circle did? Answer with exactly one word: Yes or No."
+      - "Compared with the circle, does the row have more beads? Answer with exactly one word: Yes or No."
+      - "After the rearrangement, is the number of beads in the row larger than it was in the circle? Answer with exactly one word: Yes or No."
+      - "Is the bead count higher now that they form a long row? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "A longer-looking arrangement of the same 20 beads does not contain more beads."
+    difficulty: basic
+  - id: qc-010
+    setup: >
+      A bottle is full of orange juice. Dana pours all of it into three small
+      cups, emptying the bottle completely and spilling nothing.
+    question: "Do the three cups together hold the same amount of juice that the bottle held? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Taken together, do the three cups contain exactly as much juice as the bottle contained? Answer with exactly one word: Yes or No."
+      - "Is the combined juice in the three cups equal to the amount that was in the bottle? Answer with exactly one word: Yes or No."
+      - "After the pour, does the total juice across the cups match what the bottle held? Answer with exactly one word: Yes or No."
+      - "Adding up all three cups, is the amount of juice the same as it was in the bottle? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Dividing the juice among three cups with no spillage conserves the total amount."
+    difficulty: basic
+    links:
+      - relation: different_answer
+        target: qc-018
+  - id: qc-011
+    setup: >
+      A bucket is filled with dry sand. Leo pours all of the sand from the
+      bucket into a wide, flat tray, where it spreads out into a thin layer.
+      Not a single grain is lost along the way.
+    question: "Is the amount of sand in the tray equal to the amount that was in the bucket? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Does the tray now hold just as much sand as the bucket held? Answer with exactly one word: Yes or No."
+      - "Is the quantity of sand unchanged after being poured into the tray? Answer with exactly one word: Yes or No."
+      - "After the pour, does the sand in the tray amount to the same as what was in the bucket? Answer with exactly one word: Yes or No."
+      - "Is there exactly as much sand in the tray as there was in the bucket? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Pouring the sand into a wider container spreads it thinner but does not change its amount."
+    difficulty: basic
+  - id: qc-012
+    setup: >
+      A farmer has 20 sheep grazing in a single field. She moves 9 of them
+      into the north field and leaves the rest in the south field. No sheep
+      is sold, born, or lost during the move.
+    question: "How many sheep does the farmer have in total across the two fields? Answer with a single number written in digits."
+    paraphrases:
+      - "Counting both fields together, how many sheep does the farmer have? Answer with a single number written in digits."
+      - "What is the farmer's total number of sheep across the north and south fields? Answer with a single number written in digits."
+      - "After the move, how many sheep does the farmer own in total? Answer with a single number written in digits."
+      - "Adding the sheep in both fields, how many are there altogether? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "20"
+    rationale: "Splitting the flock between two fields relocates sheep without changing the total of 20."
+    difficulty: basic
+  - id: qc-013
+    setup: >
+      Nina unwraps a chocolate bar and breaks it into 10 small pieces on a
+      plate. She does not eat any of it and not a crumb is lost.
+    question: "Is the total amount of chocolate on the plate the same as in the unbroken bar? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Do the 10 pieces together contain just as much chocolate as the whole bar did? Answer with exactly one word: Yes or No."
+      - "After the breaking, is the quantity of chocolate on the plate unchanged from the intact bar? Answer with exactly one word: Yes or No."
+      - "Taken together, do the pieces add up to the same amount of chocolate as the original bar? Answer with exactly one word: Yes or No."
+      - "Is there exactly as much chocolate on the plate as there was in the bar before it was broken? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Breaking the bar into pieces changes its form, not the total amount of chocolate."
+    difficulty: basic
+  - id: qc-014
+    setup: >
+      Priya has 18 books on a single shelf. She moves 7 of them to a second
+      shelf and leaves the rest where they are. She neither adds any books
+      nor gives any away.
+    question: "How many books does Priya have on the two shelves combined? Answer with a single number written in digits."
+    paraphrases:
+      - "Counting both shelves together, how many books does Priya have? Answer with a single number written in digits."
+      - "What is the total number of books across the two shelves? Answer with a single number written in digits."
+      - "After the move, how many books does Priya have in all? Answer with a single number written in digits."
+      - "Adding the books on both shelves, how many are there altogether? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "18"
+    rationale: "Redistributing books between shelves does not change the total count of 18."
+    difficulty: basic
+  - id: qc-015
+    setup: >
+      A large blanket is spread flat across a bed. Ken folds the same blanket
+      in half twice, leaving a small, thick square at the foot of the bed.
+    question: "Is there less blanket fabric now than when it was spread flat? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Does the folded square contain a smaller amount of fabric than the spread-out blanket did? Answer with exactly one word: Yes or No."
+      - "After the folding, is the quantity of blanket fabric reduced? Answer with exactly one word: Yes or No."
+      - "Compared with when it lay flat, is there now less fabric in the blanket? Answer with exactly one word: Yes or No."
+      - "Did folding the blanket leave it with less fabric than before? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Folding compacts the blanket's shape but removes no fabric, so the amount is unchanged."
+    difficulty: basic
+  - id: qc-016
+    setup: >
+      Mia's milk is in a short, wide glass, where it reaches only a low
+      level. She pours every drop of it into a tall, narrow glass. In the
+      narrow glass the milk climbs impressively high, far above the level it
+      reached in the wide glass, and to Mia it looks like much more milk.
+    question: "Does the tall glass hold more milk than the short glass held? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is there a greater amount of milk in the tall glass than there was in the short glass? Answer with exactly one word: Yes or No."
+      - "After the pour, does the tall narrow glass contain more milk than the short wide glass contained? Answer with exactly one word: Yes or No."
+      - "Compared with what was in the short glass, is the milk in the tall glass a larger quantity? Answer with exactly one word: Yes or No."
+      - "Did the amount of milk become greater once it was in the tall glass? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The higher milk level reflects the narrower glass shape; with nothing added or spilled the amount is unchanged."
+    difficulty: adversarial
+    links:
+      - relation: same_answer
+        target: qc-002
+  - id: qc-017
+    setup: >
+      Noah puts 12 marbles in a tight cluster at the center of a table. He
+      spreads them into a long line that reaches across the whole table,
+      making the group look much bigger than before. Then he picks up 3 of
+      the marbles and puts them in his pocket.
+    question: "How many marbles are on the table now? Answer with a single number written in digits."
+    paraphrases:
+      - "What is the number of marbles left on the table at this point? Answer with a single number written in digits."
+      - "After Noah pockets the 3 marbles, how many remain on the table? Answer with a single number written in digits."
+      - "Count the marbles still on the table: how many are there? Answer with a single number written in digits."
+      - "Once the 3 marbles are in his pocket, how many marbles does the table hold? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "9"
+    rationale: "Spreading the marbles changes nothing, but explicitly removing 3 of the 12 leaves 9 on the table."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: qc-001
+  - id: qc-018
+    setup: >
+      A jug is full of lemonade. Anna pours it into a tall glass, and while
+      she pours, a small splash of lemonade lands on the counter instead of
+      in the glass.
+    question: "Does the glass hold the same amount of lemonade that the jug held? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the lemonade in the glass equal in amount to what was in the jug? Answer with exactly one word: Yes or No."
+      - "After the pour, does the glass contain exactly as much lemonade as the jug contained? Answer with exactly one word: Yes or No."
+      - "Is the quantity of lemonade in the glass the same as the jug's original amount? Answer with exactly one word: Yes or No."
+      - "Does the amount now in the glass match the amount that was in the jug? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Some lemonade was explicitly lost to the counter, so the glass holds less than the jug did."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: qc-010
+  - id: qc-019
+    setup: >
+      Rosa keeps 20 marbles in a jar. Eight of her friends each borrowed one
+      marble from the jar to play a game. When the game ended, not one of the
+      friends failed to put their borrowed marble back in the jar.
+    question: "How many marbles are in the jar now? Answer with a single number written in digits."
+    paraphrases:
+      - "After the game, what is the number of marbles in Rosa's jar? Answer with a single number written in digits."
+      - "Once all the borrowing is settled, how many marbles does the jar contain? Answer with a single number written in digits."
+      - "Count the marbles in the jar at this point: how many are there? Answer with a single number written in digits."
+      - "Now that the game is over, how many marbles are in the jar? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "20"
+    rationale: "Every borrowed marble was returned, so the jar again holds all 20 marbles."
+    difficulty: adversarial
+  - id: qc-020
+    setup: >
+      Ben moves 16 grapes from a small blue bowl onto a large white platter.
+      On the wide platter the grapes sit far apart, and the arrangement looks
+      sparse, almost empty. Outside, rain is starting to fall, and Ben's cat
+      watches him from the windowsill. Every grape made it onto the platter.
+    question: "Are there fewer grapes on the platter than there were in the bowl? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Does the platter hold a smaller number of grapes than the bowl held? Answer with exactly one word: Yes or No."
+      - "Is the grape count on the platter lower than it was in the bowl? Answer with exactly one word: Yes or No."
+      - "Compared with the bowl, does the platter contain fewer grapes? Answer with exactly one word: Yes or No."
+      - "After the move, is the number of grapes on the platter smaller than before? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "All 16 grapes were moved, so the sparse-looking platter holds exactly as many grapes as the bowl did."
+    difficulty: adversarial
+  - id: qc-021
+    setup: >
+      A birthday cake was going to be cut into 8 equal pieces for 8 guests,
+      one piece each. Instead, the host cuts the same cake into 16 equal
+      pieces and gives each guest 2 of them. One guest cheers that everyone
+      is getting more cake this way.
+    question: "Does each guest receive more cake this way than they would have with one of the 8 large pieces? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the amount of cake each guest gets from 2 small pieces greater than from 1 of the large pieces? Answer with exactly one word: Yes or No."
+      - "With the 16-piece cutting, does every guest end up with a larger amount of cake than under the 8-piece plan? Answer with exactly one word: Yes or No."
+      - "Compared with receiving one of the 8 big pieces, does a guest get more cake from two of the small pieces? Answer with exactly one word: Yes or No."
+      - "Does the two-small-pieces serving give each guest a greater quantity of cake than one big piece would have? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Two sixteenths of the cake equal one eighth, so each guest's share of cake is exactly the same."
+    difficulty: adversarial
+    links:
+      - relation: same_answer
+        target: qc-005
+  - id: qc-022
+    setup: >
+      Lena pours the water from a short, wide glass into a tall, narrow
+      glass, where it rises to a strikingly high level and looks like far
+      more water. Then she pours it all back into the short glass. Nothing
+      spills at any point.
+    question: "Does the short glass now hold the same amount of water it held at the very start? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "After the round trip, is the water in the short glass equal to its original amount? Answer with exactly one word: Yes or No."
+      - "Is the quantity of water back in the short glass the same as before any pouring happened? Answer with exactly one word: Yes or No."
+      - "Once the water is returned, does the short glass contain just as much as it did at the beginning? Answer with exactly one word: Yes or No."
+      - "Following both pours, is the amount of water in the short glass unchanged from the start? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "No water was added or spilled during either pour, so the original amount returns to the short glass."
+    difficulty: adversarial
+    links:
+      - relation: same_answer
+        target: qc-003
+  - id: qc-023
+    setup: >
+      A tray holds 24 cookies on one large plate. Maria redistributes them
+      onto three smaller plates so the table looks fuller, and while she
+      works she eats 6 of the cookies herself.
+    question: "How many cookies are on the plates now? Answer with a single number written in digits."
+    paraphrases:
+      - "Counting all three plates together, how many cookies remain? Answer with a single number written in digits."
+      - "After Maria finishes, what is the total number of cookies on the plates? Answer with a single number written in digits."
+      - "How many cookies are left on the plates once Maria is done? Answer with a single number written in digits."
+      - "Adding up the cookies across the three plates, how many are there? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "18"
+    rationale: "Redistribution changes nothing, but eating 6 of the 24 cookies explicitly removes them, leaving 18."
+    difficulty: adversarial
+  - id: qc-024
+    setup: >
+      For an assembly, 30 students are packed shoulder to shoulder into a
+      small auditorium. Afterward, teachers split them across three
+      classrooms, 10 students in each. Every classroom feels far emptier and
+      quieter than the crowded auditorium did. No student leaves the building
+      and no new student arrives.
+    question: "Is the total number of students in the building still the same as during the assembly? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Counting all three classrooms, does the building hold just as many students as it did during the assembly? Answer with exactly one word: Yes or No."
+      - "After the split into classrooms, is the building's student count unchanged from assembly time? Answer with exactly one word: Yes or No."
+      - "Is the number of students in the building now equal to the number there during the assembly? Answer with exactly one word: Yes or No."
+      - "Does the building contain the same total of students as it did when they were all in the auditorium? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Splitting 30 students across rooms redistributes them; with no arrivals or departures the building total is unchanged."
+    difficulty: adversarial
+  - id: qc-025
+    setup: >
+      A baker divides one lump of dough into 5 small balls and spaces them
+      out across a baking tray. Spread out this way, the dough seems to cover
+      far more of the tray than the single lump did. Nothing is added to the
+      dough and none is thrown away.
+    question: "Is there more dough on the tray than there was in the single lump? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Do the 5 balls together amount to more dough than the original lump? Answer with exactly one word: Yes or No."
+      - "After the dividing, is the total quantity of dough on the tray greater than before? Answer with exactly one word: Yes or No."
+      - "Compared with the single lump, do the spaced-out balls contain a larger amount of dough? Answer with exactly one word: Yes or No."
+      - "Has the amount of dough increased now that it sits in 5 separate balls? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Dividing the lump into 5 balls spreads the same dough out; covering more tray does not mean more dough."
+    difficulty: adversarial

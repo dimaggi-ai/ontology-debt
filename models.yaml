@@ -1,0 +1,40 @@
+# Model registry. Pricing is per million tokens - VERIFY against current
+# provider pricing pages before trusting cost estimates.
+#
+# Note on sampling: current-generation Anthropic models (Sonnet 5, Opus 4.7+)
+# reject `temperature`/`top_p`/`top_k`; OpenAI reasoning-family models reject
+# `temperature` too. We therefore pass no sampling params by default and
+# document run-to-run variance instead of pretending temperature=0 buys
+# determinism. `params` is passed through to the provider verbatim.
+
+models:
+  - name: claude-sonnet-5
+    provider: anthropic
+    model_id: claude-sonnet-5
+    max_tokens: 100
+    params:
+      thinking: { type: disabled }   # measure the base model, keep probes cheap
+    input_price_per_mtok: 3.00
+    output_price_per_mtok: 15.00
+
+  - name: claude-haiku-4-5
+    provider: anthropic
+    model_id: claude-haiku-4-5
+    max_tokens: 100
+    input_price_per_mtok: 1.00
+    output_price_per_mtok: 5.00
+
+  - name: gpt-5.1
+    provider: openai
+    model_id: gpt-5.1
+    max_tokens: 2000            # reasoning models spend hidden tokens before answering
+    params:
+      reasoning_effort: low
+    input_price_per_mtok: 1.25
+    output_price_per_mtok: 10.00
+
+  - name: mock
+    provider: mock
+    model_id: mock-v0
+    params:
+      failure_rate: 0.08

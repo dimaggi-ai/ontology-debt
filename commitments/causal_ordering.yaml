@@ -1,0 +1,489 @@
+id: causal_ordering
+title: "Causal Ordering"
+statement: >
+  Causes precede their effects: an effect cannot occur before the event that
+  produces it. When a necessary cause is absent, the effect does not occur.
+  Two events happening together or in sequence does not by itself make one
+  the cause of the other, and an event that arrives after the effect has
+  already occurred did not produce it. A model must keep this ordering and
+  dependence straight even when a story narrates the effect before the cause,
+  when coincident events invite a spurious causal reading, or when a
+  would-be cause is preempted by an earlier one.
+severity: high
+lineage: ["EWOK (2024)", "COPA (2011)", "CRASS (2022)"]
+scenarios:
+  - id: co-001
+    setup: >
+      Maya lines up ten dominoes in a straight row on a steady table. She tips
+      the first domino with her finger, each falling domino knocks over the
+      next one, and after a moment the tenth domino falls.
+    question: "Did Maya tip the first domino before the tenth domino fell? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Did the tenth domino fall only after Maya had tipped the first one? Answer with exactly one word: Yes or No."
+      - "Was Maya's tip of the first domino earlier in time than the fall of the tenth domino? Answer with exactly one word: Yes or No."
+      - "By the time the tenth domino fell, had Maya already tipped the first domino? Answer with exactly one word: Yes or No."
+      - "Did Maya's finger touch the first domino at some point before the tenth domino went down? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The tenth domino fell through a chain started by Maya's tip, so the tip necessarily came first."
+    difficulty: basic
+
+  - id: co-002
+    setup: >
+      Maya lines up ten dominoes in a straight row on a steady table. All day,
+      nobody touches the dominoes, nothing bumps the table, and there is no
+      wind or vibration in the room.
+    question: "By the end of the day, has the tenth domino fallen over? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the tenth domino lying flat when the day ends? Answer with exactly one word: Yes or No."
+      - "At the close of the day, has the tenth domino tipped over? Answer with exactly one word: Yes or No."
+      - "Does the tenth domino end the day fallen over? Answer with exactly one word: Yes or No."
+      - "When the day is over, has the tenth domino toppled? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Nothing ever disturbs the row, so with no cause present the dominoes remain standing."
+    difficulty: basic
+
+  - id: co-003
+    setup: >
+      The only light in Ben's basement is a bulb controlled by a single wall
+      switch, and the wiring works perfectly. The bulb is off. Ben flips the
+      switch to the on position, and the bulb lights up right away.
+    question: "Did Ben flip the switch before the bulb lit up? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Did the bulb light up only after Ben had flipped the switch? Answer with exactly one word: Yes or No."
+      - "Was Ben's flip of the switch earlier than the moment the bulb lit? Answer with exactly one word: Yes or No."
+      - "By the time the bulb was shining, had Ben already flipped the switch? Answer with exactly one word: Yes or No."
+      - "Did the switch get flipped by Ben at some point before the bulb came on? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The bulb lit in response to the flip, so the flip came first."
+    difficulty: basic
+
+  - id: co-004
+    setup: >
+      A windowless closet contains one bulb controlled by a single working
+      switch, and there is no other light source in the closet. The switch
+      stays in the off position all evening, and nobody touches it.
+    question: "Is the bulb lit at any point during the evening? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Does the bulb shine at any moment that evening? Answer with exactly one word: Yes or No."
+      - "At any time during the evening, is the closet bulb glowing? Answer with exactly one word: Yes or No."
+      - "During that evening, does the bulb ever come on? Answer with exactly one word: Yes or No."
+      - "Is there any moment in the evening when the bulb is on? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The only thing that can light the bulb is the switch, and the switch is never turned on."
+    difficulty: basic
+
+  - id: co-005
+    setup: >
+      Rosa's balcony plant gets water only when Rosa pours it; rain never
+      reaches that covered balcony. Each morning this week Rosa watered the
+      plant, and each time the soil turned dark and damp right after the pour.
+    question: "Each morning, did Rosa pour the water before the soil turned damp? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "On each of those mornings, did Rosa's pouring come before the soil became damp? Answer with exactly one word: Yes or No."
+      - "Every morning that week, was the pour earlier than the moment the soil turned damp? Answer with exactly one word: Yes or No."
+      - "Did Rosa water the plant first, with the soil turning damp afterward, on each morning? Answer with exactly one word: Yes or No."
+      - "Was the water already poured by Rosa by the time the soil turned damp each morning? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The soil turned damp right after each pour, so the pour preceded the dampness every time."
+    difficulty: basic
+
+  - id: co-006
+    setup: >
+      A potted cactus sits on an indoor shelf where rain and splashes cannot
+      reach it. Its soil is completely dry in the morning. Nobody waters it
+      that day, and no other liquid touches the pot.
+    question: "Is the soil wet at the end of the day? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "When the day ends, is the cactus soil wet? Answer with exactly one word: Yes or No."
+      - "At the end of that day, is there moisture in the soil? Answer with exactly one word: Yes or No."
+      - "Does the soil finish the day wet? Answer with exactly one word: Yes or No."
+      - "By day's end, has the soil become wet? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "No water ever reaches the pot, so the dry soil has no cause to become wet."
+    difficulty: basic
+
+  - id: co-007
+    setup: >
+      Children are playing soccer in a backyard. The kitchen window has been
+      intact all day. A kicked ball flies into the window, and the glass
+      breaks at the exact moment the ball hits it.
+    question: "Was the window intact just before the ball hit it? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Right before the ball struck it, was the window still in one piece? Answer with exactly one word: Yes or No."
+      - "Immediately before the ball's impact, was the kitchen window unbroken? Answer with exactly one word: Yes or No."
+      - "In the moment just before the ball reached the window, was the glass whole? Answer with exactly one word: Yes or No."
+      - "Just prior to the ball hitting the window, was the window still intact? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The window was intact all day and only broke at the moment of impact, so it was whole just before the hit."
+    difficulty: basic
+    links:
+      - relation: different_answer
+        target: co-008
+
+  - id: co-008
+    setup: >
+      Children are playing soccer in a backyard. The kitchen window has been
+      intact all day. A kicked ball flies into the window, and the glass
+      breaks at the exact moment the ball hits it.
+    question: "Was the window already broken before the ball hit it? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Before the ball struck the window, was the glass already broken? Answer with exactly one word: Yes or No."
+      - "Had the window broken at some point before the ball's impact? Answer with exactly one word: Yes or No."
+      - "Prior to the ball hitting it, was the kitchen window already in pieces? Answer with exactly one word: Yes or No."
+      - "Was the glass broken at any moment before the ball reached the window? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The break happened at the moment of impact, so the window cannot have been broken beforehand."
+    difficulty: basic
+    links:
+      - relation: different_answer
+        target: co-007
+
+  - id: co-009
+    setup: >
+      Leo's toy train runs only while its single battery is inside it. The
+      train is running around its track. Leo picks the train up and pulls the
+      battery out.
+    question: "Does the train stop running once the battery is out? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "After Leo removes the battery, does the train stop? Answer with exactly one word: Yes or No."
+      - "With the battery pulled out, does the train quit running? Answer with exactly one word: Yes or No."
+      - "Once the battery has been taken out by Leo, does the train come to a stop? Answer with exactly one word: Yes or No."
+      - "Does removing the battery bring the train's running to an end? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The battery is stated to be necessary for the train to run, so removing it stops the train."
+    difficulty: basic
+
+  - id: co-010
+    setup: >
+      An ice cube sits in a metal pan on the stove. Tom turns on the burner
+      under the pan, the pan heats up, and after two minutes of that heating
+      the cube has melted completely into water.
+    question: "Was the burner turned on before the cube finished melting? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Did Tom turn on the burner at some point before the ice cube had fully melted? Answer with exactly one word: Yes or No."
+      - "By the time the cube was entirely water, had the burner already been switched on? Answer with exactly one word: Yes or No."
+      - "Was the turning-on of the burner earlier than the moment the cube finished melting? Answer with exactly one word: Yes or No."
+      - "Did the cube finish melting only after the burner had been turned on? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The melting was produced by two minutes of heating that began when the burner was turned on, so the burner came first."
+    difficulty: basic
+
+  - id: co-011
+    setup: >
+      A candle on the table burns with a steady flame. Amir leans over and
+      blows on the flame, and it goes out the instant his breath reaches it.
+    question: "Had the flame already gone out before Amir blew on it? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was the flame out at any point before Amir's breath reached it? Answer with exactly one word: Yes or No."
+      - "Before Amir blew on the candle, had its flame already gone out? Answer with exactly one word: Yes or No."
+      - "Did the flame go out at some moment earlier than Amir's blowing? Answer with exactly one word: Yes or No."
+      - "Prior to Amir blowing on it, was the candle already out? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The flame burned steadily until the instant the breath reached it, so it was not out beforehand."
+    difficulty: basic
+
+  - id: co-012
+    setup: >
+      Nadia fills a kettle with water, sets it on the stove, and turns on the
+      burner. The burner heats the water, and once the water boils the kettle
+      whistles.
+    question: "Was the burner turned on before the kettle whistled? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Did Nadia turn on the burner at some point before the kettle whistled? Answer with exactly one word: Yes or No."
+      - "By the time the kettle whistled, had the burner already been switched on? Answer with exactly one word: Yes or No."
+      - "Did the kettle's whistle come only after the burner had been turned on? Answer with exactly one word: Yes or No."
+      - "Was the moment the burner went on earlier than the moment the kettle whistled? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The whistle came from boiling produced by the burner's heat, so the burner was on before the whistle."
+    difficulty: basic
+
+  - id: co-013
+    setup: >
+      A hallway has a left bulb and a right bulb. The left bulb is controlled
+      only by the left switch, and the right bulb is controlled only by the
+      right switch; all the wiring works. Both bulbs are off, and Dana flips
+      only the right switch to on.
+    question: "Does the left bulb turn on? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Does the bulb on the left light up? Answer with exactly one word: Yes or No."
+      - "After Dana's flip of the right switch, does the left bulb come on? Answer with exactly one word: Yes or No."
+      - "Is the left bulb shining after Dana flips the right switch? Answer with exactly one word: Yes or No."
+      - "Does Dana's action leave the left bulb lit? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Only the left switch controls the left bulb, and that switch was never flipped."
+    difficulty: basic
+
+  - id: co-014
+    setup: >
+      Rosa's balcony plant gets water only when Rosa pours it; rain never
+      reaches that covered balcony. Each morning this week Rosa watered the
+      plant, and each time the soil turned dark and damp right after the pour.
+    question: "Each morning, did the soil turn damp after Rosa poured the water? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "On each of those mornings, did the dampness of the soil come after Rosa's pour? Answer with exactly one word: Yes or No."
+      - "Every morning that week, did the soil become damp following the watering? Answer with exactly one word: Yes or No."
+      - "Did the soil's turning damp happen after the pour on each morning? Answer with exactly one word: Yes or No."
+      - "Was the soil's dampness later in time than Rosa's pouring each morning? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The setup states the soil turned damp right after each pour, so the dampness followed the watering."
+    difficulty: basic
+    links:
+      - relation: same_answer
+        target: co-005
+
+  - id: co-015
+    setup: >
+      Sam is carrying an undamaged drinking glass across the kitchen. It slips
+      from his hand, falls, and shatters at the exact moment it hits the tile
+      floor.
+    question: "Was the glass already shattered before it reached the floor? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Before the glass hit the tiles, was it already in pieces? Answer with exactly one word: Yes or No."
+      - "Had the glass shattered at any point before it touched the floor? Answer with exactly one word: Yes or No."
+      - "While it was still falling, was the glass already broken? Answer with exactly one word: Yes or No."
+      - "Prior to hitting the floor, was the drinking glass already shattered? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The glass was undamaged and only shattered at the moment of impact, so it was whole while falling."
+    difficulty: basic
+
+  - id: co-016
+    setup: >
+      By noon, all ten dominoes in Priya's straight row lay flat on the table.
+      Earlier that morning, Priya had tipped the first domino with her finger,
+      and each falling domino had knocked over the next one until the tenth
+      domino fell.
+    question: "Did Priya tip the first domino before the tenth domino fell? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Did the tenth domino fall only after Priya had tipped the first one? Answer with exactly one word: Yes or No."
+      - "Was Priya's tip of the first domino earlier in time than the fall of the tenth? Answer with exactly one word: Yes or No."
+      - "By the time the tenth domino went down, had Priya already tipped the first domino? Answer with exactly one word: Yes or No."
+      - "Did Priya's finger touch the first domino at some point before the tenth domino fell? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Although the story mentions the outcome first, the tip started the chain that ended with the tenth domino falling, so the tip came first."
+    difficulty: adversarial
+
+  - id: co-017
+    setup: >
+      Every morning on a farm, the rooster crows a few minutes before the sun
+      rises. One morning the rooster is sick and makes no sound at all, and
+      the sun rises at its usual time anyway.
+    question: "Does the rooster's crowing make the sun rise? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the rooster's crow what causes the sun to rise? Answer with exactly one word: Yes or No."
+      - "Does the sun rise because the rooster crows? Answer with exactly one word: Yes or No."
+      - "Is the crowing of the rooster the cause of the sunrise? Answer with exactly one word: Yes or No."
+      - "Does the sunrise depend on the rooster crowing first? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The sun rose on schedule even on the morning with no crowing, so the crow merely precedes the sunrise without causing it."
+    difficulty: adversarial
+
+  - id: co-018
+    setup: >
+      At the exact moment Tia sneezes in her apartment, the streetlight
+      outside her window goes dark. The streetlight is controlled only by an
+      automatic timer, and the timer switched it off at its scheduled time.
+    question: "Did Tia's sneeze cause the streetlight to go dark? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was the sneeze the reason the streetlight went dark? Answer with exactly one word: Yes or No."
+      - "Did the streetlight go dark because Tia sneezed? Answer with exactly one word: Yes or No."
+      - "Is Tia's sneeze what switched the streetlight off? Answer with exactly one word: Yes or No."
+      - "Did sneezing on Tia's part turn off the streetlight? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The light is controlled only by the timer, which switched it off on schedule; the sneeze merely happened at the same moment."
+    difficulty: adversarial
+
+  - id: co-019
+    setup: >
+      Omar and Ravi each throw a rock at an empty bottle standing on a fence
+      post. Omar's rock arrives first, hits the bottle, and shatters it.
+      Ravi's rock arrives a second later and sails through the empty space
+      where the bottle had stood, touching nothing.
+    question: "Did Omar's rock break the bottle? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was it Omar's rock that shattered the bottle? Answer with exactly one word: Yes or No."
+      - "Did the bottle break because Omar's rock hit it? Answer with exactly one word: Yes or No."
+      - "Is Omar's rock the one that smashed the bottle? Answer with exactly one word: Yes or No."
+      - "Did the rock thrown by Omar shatter the bottle? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Omar's rock arrived first and is stated to have hit and shattered the bottle."
+    difficulty: adversarial
+
+  - id: co-020
+    setup: >
+      Omar and Ravi each throw a rock at an empty bottle standing on a fence
+      post. Omar's rock arrives first, hits the bottle, and shatters it.
+      Ravi's rock arrives a second later and sails through the empty space
+      where the bottle had stood, touching nothing.
+    question: "Did Ravi's rock break the bottle? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was it Ravi's rock that shattered the bottle? Answer with exactly one word: Yes or No."
+      - "Did the bottle break because Ravi's rock hit it? Answer with exactly one word: Yes or No."
+      - "Is Ravi's rock the one that smashed the bottle? Answer with exactly one word: Yes or No."
+      - "Did the rock thrown by Ravi shatter the bottle? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The bottle was already shattered before Ravi's rock arrived, and his rock touched nothing."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: co-019
+
+  - id: co-021
+    setup: >
+      A stage light is wired to two working switches, and flipping either
+      switch to on is enough by itself to light it. The light starts off. Ana
+      flips switch A, and the light comes on at that moment. A minute later,
+      while the light is already shining, Bo flips switch B, and the light
+      simply stays on.
+    question: "Did Bo's flip turn the light on? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was it Bo's flip of switch B that made the light come on? Answer with exactly one word: Yes or No."
+      - "Did the light come on because Bo flipped switch B? Answer with exactly one word: Yes or No."
+      - "Is Bo's flipping of switch B what switched the light from off to on? Answer with exactly one word: Yes or No."
+      - "Did flipping switch B, as Bo did, bring the light from dark to lit? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The light was already on a full minute before Bo's flip, and his flip changed nothing."
+    difficulty: adversarial
+
+  - id: co-022
+    setup: >
+      A stage light is wired to two working switches, and flipping either
+      switch to on is enough by itself to light it. The light starts off. Ana
+      flips switch A, and the light comes on at that moment. A minute later,
+      while the light is already shining, Bo flips switch B, and the light
+      simply stays on.
+    question: "Did Ana's flip turn the light on? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was it Ana's flip of switch A that made the light come on? Answer with exactly one word: Yes or No."
+      - "Did the light come on because Ana flipped switch A? Answer with exactly one word: Yes or No."
+      - "Is Ana's flipping of switch A what switched the light from off to on? Answer with exactly one word: Yes or No."
+      - "Did flipping switch A, as Ana did, bring the light from dark to lit? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The light came on at the very moment Ana flipped switch A, while it was still off before her flip."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: co-021
+
+  - id: co-023
+    setup: >
+      Marta's fern sits indoors where rain cannot reach it, and its soil had
+      been dry all weekend. It is not true that the fern went unwatered on
+      Monday: Marta soaked the soil that morning, and the soil turned damp
+      right after the soaking.
+    question: "Was the soil already damp before Marta watered the fern on Monday? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Before Marta soaked the soil on Monday morning, was it already damp? Answer with exactly one word: Yes or No."
+      - "Was the fern's soil damp at any point before Marta's Monday watering? Answer with exactly one word: Yes or No."
+      - "Prior to the soaking Marta gave it on Monday, was the soil damp? Answer with exactly one word: Yes or No."
+      - "Had the soil become damp before Marta poured water on it that Monday? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The soil was dry all weekend and only turned damp right after Monday's soaking, so it was not damp beforehand."
+    difficulty: adversarial
+
+  - id: co-024
+    setup: >
+      On Friday the seedling on Amira's windowsill stood tall and green. Back
+      on Monday it had been wilting badly. Every day from Monday to Friday,
+      Amira watered it, and the seedling recovered because of that daily
+      watering; her cat sat nearby each day but never touched the plant, the
+      pot, or the water.
+    question: "Did Amira's watering start before the seedling recovered? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Did the seedling's recovery come after Amira had begun watering it? Answer with exactly one word: Yes or No."
+      - "Was the start of Amira's daily watering earlier than the seedling's recovery? Answer with exactly one word: Yes or No."
+      - "By the time the seedling had recovered, had Amira already begun watering it? Answer with exactly one word: Yes or No."
+      - "Did Amira begin the watering at some point before the seedling got better? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The recovery was caused by the daily watering that began on Monday, so the watering started before the recovery."
+    difficulty: adversarial
+
+  - id: co-025
+    setup: >
+      At six in the evening, shards of glass covered Dev's porch floor.
+      Earlier, at four o'clock, a large hailstone had struck the porch window
+      and broken it at the moment of impact; until that strike, the window had
+      been whole all day.
+    question: "Was the porch window still whole at three o'clock that afternoon? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "At three o'clock that day, was the porch window still in one piece? Answer with exactly one word: Yes or No."
+      - "Was the window unbroken at three in the afternoon? Answer with exactly one word: Yes or No."
+      - "Thinking back to three o'clock that afternoon, was the porch window whole at that time? Answer with exactly one word: Yes or No."
+      - "Was Dev's porch window intact at three o'clock that afternoon? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The window stayed whole until the four o'clock hailstone strike, so it was intact at three even though the story mentions the shards first."
+    difficulty: adversarial

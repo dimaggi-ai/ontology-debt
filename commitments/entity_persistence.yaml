@@ -1,0 +1,476 @@
+id: entity_persistence
+title: "Entity Persistence"
+statement: >
+  An entity keeps its identity through renaming, relabeling, movement, and
+  superficial change such as repainting, cleaning, grooming, or the repair of
+  a part - and it does NOT keep its identity through total replacement. A model
+  must track that one object called by two names is still one object, that a
+  moved or repainted object is the same object, and that a destroyed or lost
+  object replaced by a lookalike is a different object. Likewise, two distinct
+  entities that happen to share a name remain two distinct entities.
+severity: medium
+lineage: ["BeliefBank (2021)", "Winograd Schema Challenge (2012)"]
+scenarios:
+  - id: ep-001
+    setup: >
+      The Nguyen family has exactly one pet cat, named Biscuit. The grandfather
+      always calls the cat "Fluff", while the youngest daughter calls the same
+      animal "Bibi". Every evening the grandfather feeds Fluff, and every
+      morning the daughter brushes Bibi.
+    question: "Is the cat the grandfather feeds the same cat the daughter brushes? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the animal that gets fed by the grandfather each evening the very same cat the daughter brushes each morning? Answer with exactly one word: Yes or No."
+      - "The grandfather feeds Fluff and the daughter brushes Bibi. Are they tending to one and the same cat? Answer with exactly one word: Yes or No."
+      - "Does the daughter brush the same cat that the grandfather feeds? Answer with exactly one word: Yes or No."
+      - "Are Fluff and Bibi the same single cat? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The family has exactly one cat, so both nicknames refer to the same animal."
+    difficulty: basic
+    links:
+      - relation: different_answer
+        target: ep-016
+      - relation: same_answer
+        target: ep-022
+  - id: ep-002
+    setup: >
+      Maya has owned one bicycle for three years. Last weekend she sanded it
+      down and painted it bright red; before that it was blue. Nothing else
+      about the bicycle was changed, and it stayed in her garage the whole
+      time.
+    question: "Is the red bicycle in the garage the same bicycle Maya owned before the painting? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "After the repainting, is the bicycle in Maya's garage still the bicycle she has owned for three years? Answer with exactly one word: Yes or No."
+      - "Is the bicycle that is now red the same one that used to be blue? Answer with exactly one word: Yes or No."
+      - "Does Maya's garage hold the very same bicycle she owned before last weekend? Answer with exactly one word: Yes or No."
+      - "Is the freshly painted red bike identical in identity to the blue bike Maya had before? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "A new coat of paint is a superficial change that does not make an object a different object."
+    difficulty: basic
+  - id: ep-003
+    setup: >
+      Tom's favorite mug slipped from his hand and shattered into many pieces,
+      which he swept up and threw away. The next day he bought a brand-new mug
+      of the exact same design from the same shop.
+    question: "Is the mug Tom bought the same mug that shattered? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the newly bought mug the very mug that broke on the floor? Answer with exactly one word: Yes or No."
+      - "Did Tom end up with the same mug he had before it shattered? Answer with exactly one word: Yes or No."
+      - "Is the mug from the shop identical in identity to the one that smashed into pieces? Answer with exactly one word: Yes or No."
+      - "Is the mug Tom now owns the one that slipped from his hand and broke? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The original mug was destroyed and discarded; the purchased mug is a different object that merely shares its design."
+    difficulty: basic
+    links:
+      - relation: different_answer
+        target: ep-018
+  - id: ep-004
+    setup: >
+      A school has two students named Sara Lopez. One Sara is in the third
+      grade and was born in April; the other Sara is in the fifth grade and
+      was born in November. They met for the first time at a school assembly.
+    question: "Is Sara Lopez the third grader the same person as Sara Lopez the fifth grader? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the April-born Sara Lopez the same person as the November-born Sara Lopez? Answer with exactly one word: Yes or No."
+      - "Do the two names on the school roster, both reading Sara Lopez, belong to one single person? Answer with exactly one word: Yes or No."
+      - "Are the Sara born in April and the Sara born in November one and the same student? Answer with exactly one word: Yes or No."
+      - "Is there really just one person behind the two Sara Lopez entries at the school? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Sharing a name does not merge two people; the setup describes two distinct students who even met each other."
+    difficulty: basic
+  - id: ep-005
+    setup: >
+      The Ortiz family owns an old piano. On Saturday, movers carried the
+      piano from the family's living room to a storage unit across town. The
+      piano was not taken apart or damaged during the move.
+    question: "Is the piano in the storage unit the same piano that was in the living room? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "After the move, does the storage unit contain the very piano the family kept in their living room? Answer with exactly one word: Yes or No."
+      - "Is the instrument now sitting across town the same piano the Ortiz family had at home? Answer with exactly one word: Yes or No."
+      - "Did the piano that left the living room remain the same piano upon arriving at the storage unit? Answer with exactly one word: Yes or No."
+      - "Is the piano the movers delivered to storage identical in identity to the one they picked up? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Moving an object to a new location does not change which object it is."
+    difficulty: basic
+  - id: ep-006
+    setup: >
+      Omar has driven the same car for eight years. This month a mechanic
+      replaced its four worn tires and its old battery with new ones. The rest
+      of the car was untouched, and Omar drove it home the same day.
+    question: "Is the car Omar drove home the same car he has owned for eight years? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "After the tires and battery were swapped, is the car still the one Omar has driven for eight years? Answer with exactly one word: Yes or No."
+      - "Is the vehicle Omar drove back from the mechanic the very car he brought in? Answer with exactly one word: Yes or No."
+      - "Did Omar's car remain the same car after getting new tires and a new battery? Answer with exactly one word: Yes or No."
+      - "Is the car with the fresh tires and battery identical in identity to Omar's eight-year-old car? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Replacing a few worn parts is routine maintenance; the car itself persists."
+    difficulty: basic
+  - id: ep-007
+    setup: >
+      Leo lost his pen on the bus, and it was never found. At a stationery
+      shop he later bought another pen of the exact same model and color, and
+      he keeps it in the same jacket pocket where the old one used to be.
+    question: "Is the pen in Leo's pocket the same pen he lost on the bus? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the pen Leo carries now the very pen that disappeared on the bus? Answer with exactly one word: Yes or No."
+      - "Did Leo get back the same pen he lost, in the form of the one now in his pocket? Answer with exactly one word: Yes or No."
+      - "Is the pen from the stationery shop identical in identity to the pen left behind on the bus? Answer with exactly one word: Yes or No."
+      - "Does Leo's jacket pocket hold the pen that went missing on the bus? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The lost pen was never recovered; the pen in the pocket is a different object of the same model."
+    difficulty: basic
+  - id: ep-008
+    setup: >
+      Rex is a shaggy dog with long brown fur. At the groomer, nearly all of
+      his fur was clipped short, and now he looks so different that some
+      neighbors do not recognize him when he walks past.
+    question: "Is the short-haired dog that came home from the groomer the same dog as Rex before the haircut? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "After the grooming, is the dog walking past the neighbors still Rex? Answer with exactly one word: Yes or No."
+      - "Is the clipped, short-haired dog the very same animal that went into the groomer with long fur? Answer with exactly one word: Yes or No."
+      - "Did Rex remain the same dog after nearly all his fur was cut short? Answer with exactly one word: Yes or No."
+      - "Is the dog the neighbors fail to recognize identical in identity to the shaggy Rex they knew? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "A haircut changes appearance only; the animal is the same dog."
+    difficulty: basic
+  - id: ep-009
+    setup: >
+      For fifty years a street in town was called Mill Road. Last year the
+      town council officially renamed it Harbor Way and put up new street
+      signs. The pavement, the houses, and the trees along it were not
+      changed.
+    question: "Is Harbor Way the same street that used to be called Mill Road? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the street now signposted as Harbor Way the very street formerly known as Mill Road? Answer with exactly one word: Yes or No."
+      - "Did the street stay the same street after the council gave it the new name? Answer with exactly one word: Yes or No."
+      - "Are Mill Road and Harbor Way one and the same street? Answer with exactly one word: Yes or No."
+      - "Does the name Harbor Way now refer to the street that carried the name Mill Road for fifty years? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Renaming changes the label, not the street; the physical street is unchanged."
+    difficulty: basic
+  - id: ep-010
+    setup: >
+      A boy's goldfish died while he was away at camp. His parents buried the
+      goldfish in the garden and quietly bought a nearly identical goldfish,
+      placing it in the same bowl before the boy returned.
+    question: "Is the goldfish in the bowl now the same goldfish the boy had before camp? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the fish swimming in the bowl the very goldfish the boy owned before he left for camp? Answer with exactly one word: Yes or No."
+      - "Did the boy come home to the same goldfish he had when he departed? Answer with exactly one word: Yes or No."
+      - "Is the goldfish the parents placed in the bowl identical in identity to the one that died? Answer with exactly one word: Yes or No."
+      - "Is the fish in the bowl today the goldfish the boy knew before camp? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The original fish died and was buried; the fish in the bowl is a different, lookalike animal."
+    difficulty: basic
+  - id: ep-011
+    setup: >
+      A small cafe closed down for good, and its owner sold off all the
+      tables, machines, and dishes. A year later, a different person opened a
+      brand-new cafe with a new name, new furniture, and new staff in the same
+      building.
+    question: "Is the new cafe the same cafe that closed a year earlier? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the cafe now operating in the building the very cafe that shut down a year before? Answer with exactly one word: Yes or No."
+      - "Did the old cafe simply continue as the cafe that opened later in the same building? Answer with exactly one word: Yes or No."
+      - "Are the closed cafe and the newly opened cafe one and the same business? Answer with exactly one word: Yes or No."
+      - "Is the cafe run by the new owner identical in identity to the cafe that closed for good? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The original cafe ended and everything about the new one - owner, name, furnishings, staff - is different; only the building is shared."
+    difficulty: basic
+  - id: ep-012
+    setup: >
+      A storm ruined Ana's wooden fence. Workers pulled out every post and
+      plank and hauled all of it to the dump. Then they built a completely new
+      fence out of freshly bought wood along the same line where the old fence
+      stood.
+    question: "Is the fence standing now the same fence that stood before the storm? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the fence along Ana's yard today the very fence that was there before the storm hit? Answer with exactly one word: Yes or No."
+      - "Did the pre-storm fence survive as the fence that stands there now? Answer with exactly one word: Yes or No."
+      - "Is the newly built fence identical in identity to the one the storm ruined? Answer with exactly one word: Yes or No."
+      - "Are the old fence and the fence standing today one and the same fence? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Every piece of the old fence was removed and discarded; the current fence is a wholly new object in the same location."
+    difficulty: basic
+  - id: ep-013
+    setup: >
+      Lena's teddy bear lost one of its button eyes, and a seam on its arm
+      ripped open. Her mother sewed the arm shut and stitched on one new
+      button eye. The bear then went straight back to its usual spot on Lena's
+      bed.
+    question: "Is the bear on Lena's bed the same teddy bear she had before the repair? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "After the mending, is the teddy bear on the bed still Lena's original bear? Answer with exactly one word: Yes or No."
+      - "Is the bear with the new button eye the very teddy bear Lena owned before? Answer with exactly one word: Yes or No."
+      - "Did Lena's teddy bear remain the same bear after its arm was sewn and one eye was replaced? Answer with exactly one word: Yes or No."
+      - "Is the repaired bear identical in identity to the bear that lost its eye? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Mending a seam and replacing one small part is a repair; the toy remains the same object."
+    difficulty: basic
+  - id: ep-014
+    setup: >
+      A library owned one copy of a certain novel, but a borrower lost it and
+      it was never returned. The library then bought another copy of the same
+      novel, with the same cover, and put it on the same shelf.
+    question: "Is the copy on the shelf now the same physical book that was lost? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the book sitting on the shelf the very copy the borrower lost? Answer with exactly one word: Yes or No."
+      - "Did the lost copy find its way back as the book now on the shelf? Answer with exactly one word: Yes or No."
+      - "Is the newly purchased copy identical in identity to the copy that was never returned? Answer with exactly one word: Yes or No."
+      - "Does the shelf hold the same physical object that the borrower failed to bring back? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The lost copy is still missing; the shelf holds a different physical copy of the same title."
+    difficulty: basic
+  - id: ep-015
+    setup: >
+      After getting married, Elena Petrova legally changed her last name to
+      Elena Marsh and moved from her hometown to a city overseas. Her
+      childhood friends still remember her as Elena Petrova.
+    question: "Is Elena Marsh the same person her friends knew as Elena Petrova? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the woman now called Elena Marsh the very person who grew up as Elena Petrova? Answer with exactly one word: Yes or No."
+      - "Did Elena remain the same person after changing her name and moving overseas? Answer with exactly one word: Yes or No."
+      - "Are Elena Petrova and Elena Marsh one and the same individual? Answer with exactly one word: Yes or No."
+      - "Does the name Elena Marsh now belong to the person her childhood friends knew as Elena Petrova? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "A legal name change and a move do not create a new person; identity persists."
+    difficulty: basic
+  - id: ep-016
+    setup: >
+      The Ito family has exactly one pet cat. The father calls the cat "Momo"
+      and the son calls the same animal "Chief". The family next door also has
+      a cat that looks similar and sometimes wanders into the yard.
+    question: "Are Momo and Chief two different cats? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Do the names Momo and Chief refer to two separate cats? Answer with exactly one word: Yes or No."
+      - "Is the cat the father calls Momo a different animal from the cat the son calls Chief? Answer with exactly one word: Yes or No."
+      - "Are there two distinct cats behind the names Momo and Chief? Answer with exactly one word: Yes or No."
+      - "Is Chief some other cat rather than the one known as Momo? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The family has exactly one cat, so both names name that one animal; the neighbor's lookalike cat is irrelevant."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: ep-001
+  - id: ep-017
+    setup: >
+      Marco owned a fishing boat with the name "Sea Star" painted on its hull.
+      He sold that boat to a scrapyard, where it was crushed. A month later he
+      bought a different, newer boat and painted the name "Sea Star" on it in
+      the same lettering.
+    question: "Is the boat Marco owns now the same boat he sold to the scrapyard? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the newer boat bearing the name Sea Star the very boat that was crushed at the scrapyard? Answer with exactly one word: Yes or No."
+      - "Did Marco's original boat survive as the boat he owns today? Answer with exactly one word: Yes or No."
+      - "Is the vessel now painted Sea Star identical in identity to the vessel Marco sold for scrap? Answer with exactly one word: Yes or No."
+      - "Does Marco currently own the same boat that went to the scrapyard? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The original boat was destroyed; painting the old name on a different boat does not transfer identity."
+    difficulty: adversarial
+  - id: ep-018
+    setup: >
+      Nina's favorite mug slipped off the table and shattered into pieces,
+      which she threw away. The next day she bought a brand-new mug of the
+      exact same design from the same shop and put it in her cupboard.
+    question: "Is the mug in Nina's cupboard a different object from the mug that shattered? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the newly bought mug a separate object from the one that broke on the floor? Answer with exactly one word: Yes or No."
+      - "Are the shattered mug and the mug now in the cupboard two distinct mugs? Answer with exactly one word: Yes or No."
+      - "Is the mug Nina placed in her cupboard something other than the mug that smashed? Answer with exactly one word: Yes or No."
+      - "Do the broken mug and the cupboard mug count as two different objects? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The shattered mug was destroyed and discarded, so the newly purchased mug is necessarily a different object."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: ep-003
+  - id: ep-019
+    setup: >
+      At a birthday party there are two guests who are both named Jordan
+      Reyes. One Jordan arrived early by bus and wore a green jacket; the
+      other Jordan arrived late by car and wore a gray coat. The host
+      introduced the two of them to each other.
+    question: "Is the Jordan who arrived by bus the same person as the Jordan who arrived by car? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Are the green-jacketed Jordan and the gray-coated Jordan one and the same guest? Answer with exactly one word: Yes or No."
+      - "Is the early-arriving Jordan Reyes the very person who arrived late by car? Answer with exactly one word: Yes or No."
+      - "Do the bus-riding Jordan and the driving Jordan turn out to be a single person? Answer with exactly one word: Yes or No."
+      - "Could the Jordan in the green jacket and the Jordan in the gray coat actually be a single person? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Two guests who arrived separately and were introduced to each other are two people, despite the shared name."
+    difficulty: adversarial
+    links:
+      - relation: same_answer
+        target: ep-004
+  - id: ep-020
+    setup: >
+      A bronze statue stood in the town park for decades and had turned dark
+      and green with age. It was moved into the town museum, where cleaners
+      polished it until it shone, and it was placed on a taller base with a
+      new nameplate. Some visitors say it looks like a brand-new statue.
+    question: "Is the statue in the museum the same statue that stood in the park? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the polished statue on the taller base the very statue that spent decades in the park? Answer with exactly one word: Yes or No."
+      - "After the move and the cleaning, is the museum displaying the same statue the park once held? Answer with exactly one word: Yes or No."
+      - "Is the shining statue behind the new nameplate identical in identity to the dark green statue from the park? Answer with exactly one word: Yes or No."
+      - "Did the park statue remain the same statue once it was cleaned and placed in the museum? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Moving, cleaning, and remounting are superficial changes; the statue is the same object no matter how new it looks."
+    difficulty: adversarial
+  - id: ep-021
+    setup: >
+      Sam told his neighbors he was "fixing up" his garden shed. In fact, the
+      workers tore the old shed down completely and carried every board and
+      nail away, then built an entirely new shed from all-new materials on the
+      same spot. Sam hung his old metal house-number plaque on the new door.
+    question: "Is the shed in Sam's garden now the same shed that stood there before the work? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the shed standing in the garden today the very shed that was there before the workers came? Answer with exactly one word: Yes or No."
+      - "Did the original shed survive the work as the shed now on that spot? Answer with exactly one word: Yes or No."
+      - "Is the structure carrying the old plaque identical in identity to the shed that was torn down? Answer with exactly one word: Yes or No."
+      - "Are the pre-work shed and the current shed one and the same shed? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The old shed was demolished entirely and hauled away; calling the rebuild a fix-up and reusing a plaque does not make the new shed the old one."
+    difficulty: adversarial
+  - id: ep-022
+    setup: >
+      A parrot named Kiwi lived in a cage in the kitchen. The family moved the
+      bird to a bigger cage in the living room, taught it a new whistle, and
+      began calling it "Captain" instead of Kiwi. A pet shop down the road
+      sells parrots that look exactly like it.
+    question: "Is Captain the same bird that was called Kiwi? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the parrot now known as Captain the very bird the family used to call Kiwi? Answer with exactly one word: Yes or No."
+      - "Did the bird stay the same parrot after the new cage, the new whistle, and the new name? Answer with exactly one word: Yes or No."
+      - "Are Kiwi and Captain one and the same parrot? Answer with exactly one word: Yes or No."
+      - "Does the name Captain now refer to the bird that lived in the kitchen as Kiwi? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "A new cage, a new trick, and a new name do not change which bird it is; the lookalike parrots at the shop are irrelevant."
+    difficulty: adversarial
+  - id: ep-023
+    setup: >
+      On Monday the children built a snowman with a carrot nose, a red scarf,
+      and coal buttons. Overnight it melted away completely, leaving only the
+      carrot, the scarf, and the coal lying on the wet grass. On Tuesday the
+      children packed fresh snow into a new figure on the same spot and put
+      the same carrot, scarf, and coal on it.
+    question: "Is the snowman standing on Tuesday the same snowman the children built on Monday? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is Tuesday's snowman the very snowman that stood there on Monday? Answer with exactly one word: Yes or No."
+      - "Did Monday's snowman survive as the figure standing on Tuesday? Answer with exactly one word: Yes or No."
+      - "Are the Monday snowman and the Tuesday snowman one and the same snowman? Answer with exactly one word: Yes or No."
+      - "Is the figure wearing the carrot, scarf, and coal on Tuesday identical in identity to the snowman built on Monday? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Monday's snowman melted away completely; Tuesday's figure is a new snowman made of fresh snow, even though the decorations were reused."
+    difficulty: adversarial
+    links:
+      - relation: same_answer
+        target: ep-010
+  - id: ep-024
+    setup: >
+      Ben left his guitar at a repair shop to have its worn strings replaced
+      and a new strap fitted. It is not true that the shop failed to hand back
+      the very instrument Ben dropped off: he watched the whole repair through
+      the window, and the guitar never left the workbench.
+    question: "Is the guitar Ben took home the same guitar he brought to the shop? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the guitar with the new strings and strap the very guitar Ben handed over that morning? Answer with exactly one word: Yes or No."
+      - "Did Ben leave the shop with the same guitar he arrived with? Answer with exactly one word: Yes or No."
+      - "Is the instrument Ben carried home identical in identity to the one he left for repair? Answer with exactly one word: Yes or No."
+      - "After the string and strap work, is Ben's guitar still the guitar he dropped off? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "New strings and a new strap are minor part replacements on an instrument that verifiably never left the bench."
+    difficulty: adversarial
+  - id: ep-025
+    setup: >
+      On a road trip, Divya first drove through a small northern town called
+      Fairview, sitting beside a lake. Days later and hundreds of miles away,
+      she drove through another town that is also called Fairview, surrounded
+      by desert. Each town has its own separate town hall.
+    question: "Is the northern Fairview the same town as the desert Fairview? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the lakeside Fairview the very same town as the desert Fairview? Answer with exactly one word: Yes or No."
+      - "Are the Fairview beside the lake and the Fairview Divya reached days later a single town? Answer with exactly one word: Yes or No."
+      - "Did Divya pass through a single town both times she saw the name Fairview? Answer with exactly one word: Yes or No."
+      - "Is the Fairview by the lake identical in identity to the Fairview in the desert? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Two towns hundreds of miles apart with separate town halls are two distinct places that merely share a name."
+    difficulty: adversarial
+    links:
+      - relation: same_answer
+        target: ep-019
