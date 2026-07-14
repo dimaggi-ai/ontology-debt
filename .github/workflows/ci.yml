@@ -19,3 +19,4 @@ jobs:
       - run: python -m pytest -q
       - run: ontodebt validate
       - run: ontodebt run --models mock --limit 3 --results /tmp/smoke
+      - run: ontodebt audit-agent --transcripts tests/fixtures --rules agent_commitments --results /tmp/agent-smoke

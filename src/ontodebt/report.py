@@ -5,8 +5,10 @@ snapshots."""
 
 from __future__ import annotations
 
+from collections import Counter
 from datetime import datetime, timezone
 
+from .agent_audit import AgentVerdict, RuleFinding, RulePack, Transcript
 from .analysis import CommitmentStats
 from .ledger import Ledger
 from .providers import ModelConfig
@@ -147,5 +149,94 @@ def render_report(
         "(>= 2 answered variants). Link checks use the strict majority answer of each cluster; "
         "ties and under-answered clusters are excluded as indeterminate, and symmetric link "
         "declarations are deduplicated. Full transcripts are recorded alongside this report.*"
+    )
+    return "\n".join(lines) + "\n"
+
+
+def render_agent_report(
+    agent_name: str,
+    run_id: str,
+    packs: list[RulePack],
+    transcripts: list[Transcript],
+    findings: list[RuleFinding],
+    ledger: Ledger | None = None,
+) -> str:
+    """Markdown report for an offline agent-transcript audit."""
+    lines: list[str] = []
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    lines.append("# ontodebt agent audit report")
+    lines.append("")
+    lines.append(f"Generated: {now}")
+    lines.append("")
+
+    verdict_counts = Counter(f.verdict for f in findings)
+    n_rules = sum(len(p.rules) for p in packs)
+    lines.append(f"## {agent_name}")
+    lines.append("")
+    lines.append(f"- Run: `{run_id}`")
+    lines.append(
+        f"- Transcripts: {len(transcripts)} "
+        f"({', '.join('`' + t.id + '`' for t in sorted(transcripts, key=lambda t: t.id))})"
+    )
+    lines.append(f"- Rules: {n_rules} across {len(packs)} pack(s)")
+    lines.append(
+        f"- Checks: {len(findings)} — "
+        f"**{verdict_counts[AgentVerdict.VIOLATION.value]} violations**, "
+        f"**{verdict_counts[AgentVerdict.CONTRADICTION.value]} contradictions**, "
+        f"{verdict_counts[AgentVerdict.PASS.value]} passes, "
+        f"{verdict_counts[AgentVerdict.NOT_APPLICABLE.value]} not applicable"
+    )
+    if ledger:
+        lines.append(f"- Open agent debt (weighted): **{ledger.total_debt(agent_name)}**")
+    lines.append("")
+
+    by_key: dict[tuple[str, str], list[RuleFinding]] = {}
+    for f in findings:
+        by_key.setdefault((f.pack_id, f.rule_id), []).append(f)
+
+    for pack in packs:
+        lines.append(f"### {pack.title} (`{pack.id}`)")
+        lines.append("")
+        lines.append("| Rule | Type | Sev | Pass | Violation | Contradiction | N/A |")
+        lines.append("|---|---|---|---|---|---|---|")
+        for rule in pack.rules:
+            counts = Counter(f.verdict for f in by_key.get((pack.id, rule.id), []))
+            lines.append(
+                f"| {rule.id}: {rule.title} | {rule.type} | {rule.severity} "
+                f"| {counts[AgentVerdict.PASS.value]} "
+                f"| {counts[AgentVerdict.VIOLATION.value]} "
+                f"| {counts[AgentVerdict.CONTRADICTION.value]} "
+                f"| {counts[AgentVerdict.NOT_APPLICABLE.value]} |"
+            )
+        lines.append("")
+
+    failures = [
+        f for f in findings
+        if f.verdict in (AgentVerdict.VIOLATION.value, AgentVerdict.CONTRADICTION.value)
+    ]
+    lines.append("### Findings")
+    lines.append("")
+    if not failures:
+        lines.append("No violations or contradictions.")
+    else:
+        for f in sorted(failures, key=lambda f: (f.pack_id, f.rule_id, f.transcript_id)):
+            lines.append(
+                f"- **{f.rule_id}@{f.transcript_id}** — {f.verdict} ({f.severity}): {f.rule_title}"
+            )
+            for ev in f.evidence:
+                lines.append(
+                    f"  - turn {ev['turn']} ({ev['role']}): \"{ev['excerpt']}\" — {ev['note']}"
+                )
+    lines.append("")
+
+    lines.append("---")
+    lines.append(
+        "*Methodology: deterministic regex rules over recorded agent transcripts — no LLM "
+        "judge, no live agent, fully reproducible given transcript + rules. Violations "
+        "(transcript contradicts a declared behavioral commitment) and contradictions (the "
+        "agent contradicts itself) are counted separately. A rule whose precondition never "
+        "fired is not applicable: it neither accrues debt nor pays it down. Assertion "
+        "stability requires >= 2 captured values, mirroring the chat harness's checkable-"
+        "cluster rule. File order is the temporal order; `turn` is display metadata.*"
     )
     return "\n".join(lines) + "\n"

@@ -5,6 +5,7 @@
     ontodebt run --models m1,m2           # execute the audit
     ontodebt report                       # render markdown from saved runs
     ontodebt ledger                       # show open debt
+    ontodebt audit-agent --transcripts t/ # audit recorded agent transcripts
 """
 
 from __future__ import annotations
@@ -12,19 +13,29 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from dataclasses import asdict
+from datetime import datetime, timezone
 from pathlib import Path
 
 from . import __version__
+from .agent_audit import (
+    AgentVerdict,
+    audit_transcripts,
+    findings_to_stats,
+    load_rule_packs,
+    load_transcripts,
+)
 from .analysis import analyze
 from .ledger import load_ledger, save_ledger
 from .providers import load_model_configs, preflight
-from .report import estimate_cost, render_report
+from .report import estimate_cost, render_agent_report, render_report
 from .runner import load_run, run_probes, save_run
 from .schema import build_probes, load_commitments
 
 DEFAULT_COMMITMENTS = Path("commitments")
 DEFAULT_MODELS = Path("models.yaml")
 DEFAULT_RESULTS = Path("results")
+DEFAULT_AGENT_RULES = Path("agent_commitments")
 
 
 def _load_env_file(path: Path = Path(".env")) -> None:
@@ -178,6 +189,64 @@ def cmd_report(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_audit_agent(args: argparse.Namespace) -> int:
+    try:
+        packs = load_rule_packs(args.rules)
+        transcripts = load_transcripts(args.transcripts)
+    except (FileNotFoundError, ValueError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+    n_rules = sum(len(p.rules) for p in packs)
+    print(
+        f"Auditing {len(transcripts)} transcript(s) against {n_rules} rules "
+        f"from {len(packs)} pack(s) as '{args.agent_name}' ..."
+    )
+    findings = audit_transcripts(packs, transcripts)
+
+    started = datetime.now(timezone.utc)
+    run_id = (
+        f"{args.agent_name}-agent-{started.strftime('%Y%m%dT%H%M%S')}"
+        f"{started.microsecond // 1000:03d}Z"
+    )
+    args.results.mkdir(parents=True, exist_ok=True)
+
+    ledger_path = args.results / "ledger.json"
+    ledger = load_ledger(ledger_path)
+    stats = findings_to_stats(packs, findings)
+    changes = ledger.update(args.agent_name, run_id, stats)
+    save_ledger(ledger, ledger_path)
+
+    run_path = args.results / f"agent-run-{run_id}.json"
+    run_path.write_text(
+        json.dumps(
+            {
+                "run_id": run_id,
+                "agent_name": args.agent_name,
+                "started_at": started.isoformat(),
+                "transcripts": sorted(t.id for t in transcripts),
+                "findings": [asdict(f) for f in findings],
+            },
+            indent=1,
+            ensure_ascii=False,
+        )
+    )
+
+    report = render_agent_report(args.agent_name, run_id, packs, transcripts, findings, ledger)
+    report_path = args.results / "agent-report.md"
+    report_path.write_text(report)
+
+    n_viol = sum(1 for f in findings if f.verdict == AgentVerdict.VIOLATION.value)
+    n_contra = sum(1 for f in findings if f.verdict == AgentVerdict.CONTRADICTION.value)
+    print(
+        f"  done. {len(findings)} checks: {n_viol} violations, {n_contra} contradictions | "
+        f"debt accrued {changes['accrued']}, paid {changes['paid']}, renewed {changes['renewed']}"
+    )
+    print(f"\nReport written to {report_path}")
+    print(f"Findings written to {run_path}")
+    print(f"Ledger written to {ledger_path}")
+    return 0
+
+
 def cmd_ledger(args: argparse.Namespace) -> int:
     ledger = load_ledger(args.results / "ledger.json")
     items = ledger.open_items(args.model)
@@ -225,6 +294,22 @@ def main(argv: list[str] | None = None) -> int:
     common(p)
     p.add_argument("--model", default=None)
     p.set_defaults(func=cmd_ledger)
+
+    p = sub.add_parser(
+        "audit-agent",
+        help="audit recorded agent transcripts (JSONL) against behavioral rule packs",
+    )
+    p.add_argument(
+        "--transcripts", type=Path, required=True,
+        help="a transcript .jsonl file, or a directory of them",
+    )
+    p.add_argument("--rules", type=Path, default=DEFAULT_AGENT_RULES)
+    p.add_argument("--results", type=Path, default=DEFAULT_RESULTS)
+    p.add_argument(
+        "--agent-name", default="agent",
+        help="ledger name for the agent under audit (default: agent)",
+    )
+    p.set_defaults(func=cmd_audit_agent)
 
     args = parser.parse_args(argv)
     try:

@@ -105,15 +105,18 @@ class Ledger:
         counters = {"accrued": 0, "paid": 0, "renewed": 0}
         for cid, cs in stats.items():
             for sid, outcome in cs.scenario_outcomes.items():
+                # Chat commitments have one severity per pack; agent rules
+                # carry their own, surfaced via scenario_severities.
+                severity = cs.scenario_severities.get(sid, cs.severity)
                 self._reconcile(
                     model_name=model_name, run_id=run_id, cid=cid, sid=sid,
-                    kind="violation", severity=cs.severity,
+                    kind="violation", severity=severity,
                     present=outcome.violated, payable=bool(outcome.answers),
                     counters=counters,
                 )
                 self._reconcile(
                     model_name=model_name, run_id=run_id, cid=cid, sid=sid,
-                    kind="contradiction", severity=cs.severity,
+                    kind="contradiction", severity=severity,
                     present=outcome.inconsistent, payable=outcome.checkable,
                     counters=counters,
                 )
