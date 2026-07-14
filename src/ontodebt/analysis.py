@@ -13,6 +13,7 @@ wrong, or inconsistently right — conflating them hides both):
 from __future__ import annotations
 
 import math
+import random
 from collections import defaultdict
 from dataclasses import dataclass, field
 
@@ -21,7 +22,7 @@ from .schema import Commitment, LinkRelation, Verdict
 
 
 def wilson_interval(successes: int, n: int, z: float = 1.96) -> tuple[float, float]:
-    """Wilson score interval for a binomial proportion."""
+    """Wilson score interval for a binomial proportion of INDEPENDENT trials."""
     if n == 0:
         return (0.0, 0.0)
     p = successes / n
@@ -29,6 +30,41 @@ def wilson_interval(successes: int, n: int, z: float = 1.96) -> tuple[float, flo
     center = (p + z**2 / (2 * n)) / denom
     margin = (z * math.sqrt(p * (1 - p) / n + z**2 / (4 * n**2))) / denom
     return (max(0.0, center - margin), min(1.0, center + margin))
+
+
+def cluster_bootstrap_ci(
+    clusters: list[tuple[int, int]],
+    iters: int = 2000,
+    seed: int = 0,
+    alpha: float = 0.05,
+) -> tuple[float, float] | None:
+    """Percentile CI for a pooled ratio sum(k)/sum(n), resampling whole
+    (k, n) clusters with replacement.
+
+    The probes for one scenario are paraphrases of a single question - they
+    are NOT independent Bernoulli trials, so a probe-level Wilson interval on
+    the violation rate is optimistically narrow. Resampling at the scenario
+    (cluster) level accounts for that within-scenario dependence. Deterministic
+    given `seed`, so a report is reproducible. Returns None when fewer than two
+    clusters carry observations (between-cluster variance is then unestimable).
+    """
+    usable = [(k, n) for (k, n) in clusters if n > 0]
+    if len(usable) < 2:
+        return None
+    rng = random.Random(seed)
+    m = len(usable)
+    rates: list[float] = []
+    for _ in range(iters):
+        num = den = 0
+        for _ in range(m):
+            k, n = usable[rng.randrange(m)]
+            num += k
+            den += n
+        rates.append(num / den if den else 0.0)
+    rates.sort()
+    lo = rates[int((alpha / 2) * iters)]
+    hi = rates[min(iters - 1, int((1 - alpha / 2) * iters))]
+    return (lo, hi)
 
 
 @dataclass
@@ -90,8 +126,14 @@ class CommitmentStats:
         return self.n_violations / self.n_answered if self.n_answered else 0.0
 
     @property
-    def violation_ci(self) -> tuple[float, float]:
-        return wilson_interval(self.n_violations, self.n_answered)
+    def violation_ci(self) -> tuple[float, float] | None:
+        """Scenario-cluster bootstrap CI (paraphrases within a scenario are
+        dependent, so a probe-level Wilson interval understates the width)."""
+        clusters = [
+            (sum(1 for v in o.verdicts if v == Verdict.VIOLATION.value), len(o.answers))
+            for o in self.scenario_outcomes.values()
+        ]
+        return cluster_bootstrap_ci(clusters)
 
     @property
     def contradiction_rate(self) -> float:

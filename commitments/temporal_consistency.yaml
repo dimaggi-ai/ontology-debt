@@ -313,9 +313,10 @@ scenarios:
   - id: tc-018
     setup: >
       The harbor festival took place on March 1 of a certain year. Lily was
-      born on August 4 of that same year, five months after the festival.
-      Her grandfather has told her such vivid stories about the festival
-      that she can describe every stall and every song from it.
+      born the following year, and she had not yet been conceived when the
+      festival took place. Her grandfather has told her such vivid stories
+      about the festival that she can describe every stall and every song
+      from it.
     question: "Could Lily have attended the harbor festival herself? Answer with exactly one word: Yes or No."
     paraphrases:
       - "Is it possible that Lily was personally present at the harbor festival? Answer with exactly one word: Yes or No."
@@ -326,7 +327,7 @@ scenarios:
       type: choice
       values: ["Yes", "No"]
       value: "No"
-    rationale: "Lily was born five months after the festival, so she could not have attended it, however vivid the stories."
+    rationale: "Lily had not yet been conceived when the festival took place, so she could not have attended it, however vivid the stories."
     difficulty: adversarial
   - id: tc-019
     setup: >

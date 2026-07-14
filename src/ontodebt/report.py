@@ -17,7 +17,9 @@ def _pct(x: float) -> str:
     return f"{100 * x:.1f}%"
 
 
-def _ci(ci: tuple[float, float]) -> str:
+def _ci(ci: tuple[float, float] | None) -> str:
+    if ci is None:
+        return "(CI n/a: <2 clusters)"
     return f"[{_pct(ci[0])}, {_pct(ci[1])}]"
 
 
@@ -139,13 +141,19 @@ def render_report(
 
     lines.append("---")
     lines.append(
-        "*Methodology: constrained-format probes, deterministic verdicts (no LLM judge), "
-        "Wilson 95% intervals. Violations (wrong vs. declared commitment) and contradictions "
-        "(model disagreeing with itself across paraphrases or linked scenarios) are counted "
-        "separately. Violation rates condition on answered probes (the pessimistic bound above "
-        "counts nonconformance as failure); contradiction rates condition on checkable clusters "
-        "(>= 2 answered variants). Link checks use the strict majority answer of each cluster; "
-        "ties and under-answered clusters are excluded as indeterminate, and symmetric link "
-        "declarations are deduplicated. Full transcripts are recorded alongside this report.*"
+        "*Methodology: constrained-format probes, deterministic verdicts (no LLM judge). "
+        "Violations (wrong vs. declared commitment) and contradictions (model disagreeing with "
+        "itself across paraphrases or linked scenarios) are counted separately. **Violation-rate "
+        "CIs are scenario-cluster bootstraps** (2000 resamples, seed 0): paraphrases within a "
+        "scenario are dependent, so a probe-level Wilson interval would be optimistically narrow. "
+        "Contradiction-rate CIs are Wilson intervals at the scenario level (the cluster unit). "
+        "Violation rates condition on answered probes and are read alongside the pessimistic "
+        "bound (nonconformance counted as failure) and the nonconformant count - three-way "
+        "answered-correct / answered-wrong / nonconformant, not one privileged rate. Contradiction "
+        "rates condition on checkable clusters (>= 2 answered variants). Link checks use the strict "
+        "majority answer of each cluster; ties and under-answered clusters are excluded as "
+        "indeterminate, and symmetric link declarations are deduplicated. The weighted debt total "
+        "is an ordinal prioritization heuristic, not an interval-scale measurement. Full transcripts "
+        "are recorded alongside this report.*"
     )
     return "\n".join(lines) + "\n"

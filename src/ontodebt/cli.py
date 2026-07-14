@@ -114,7 +114,9 @@ def cmd_run(args: argparse.Namespace) -> int:
             probes,
             cfg,
             max_workers=args.workers,
-            transcript_path=args.results / f"transcript-{name}.jsonl",
+            transcript_path=(
+                None if args.no_transcript else args.results / f"transcript-{name}.jsonl"
+            ),
         )
         save_run(record, args.results / f"run-{record.run_id}.json")
         stats = analyze(record, commitments)
@@ -215,6 +217,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--only", default="", help="comma-separated commitment ids")
     p.add_argument("--limit", type=int, default=None, help="limit scenarios per commitment (smoke test)")
     p.add_argument("--workers", type=int, default=8)
+    p.add_argument("--no-transcript", action="store_true",
+                   help="do not write full prompt/response transcripts (privacy for sensitive packs)")
     p.set_defaults(func=cmd_run)
 
     p = sub.add_parser("report", help="render markdown report from saved runs")

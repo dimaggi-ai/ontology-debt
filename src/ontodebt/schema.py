@@ -175,6 +175,23 @@ SYSTEM_PROMPT = (
 )
 
 
+# Best-effort catastrophic-backtracking guard for user-supplied regex packs.
+# Python's `re` has no timeout, so we reject the classic nested-quantifier
+# shapes (e.g. (a+)+, (a*)*) at load time rather than risk a ReDoS hang at run
+# time. Not exhaustive - a note in SECURITY.md tells users to review third-
+# party packs - but it stops the textbook cases.
+_REDOS_RE = re.compile(r"\([^)]*[+*][^)]*\)\s*[+*]")
+
+
+def _check_redos(pattern: str, ctx: str) -> None:
+    if _REDOS_RE.search(pattern):
+        raise ValueError(
+            f"{ctx}: regex {pattern!r} contains nested quantifiers that risk "
+            f"catastrophic backtracking (ReDoS); rewrite without a quantified "
+            f"group inside another quantifier."
+        )
+
+
 def _parse_expected(raw: dict) -> Expected:
     etype = raw.get("type", "exact")
     return Expected(
@@ -219,8 +236,12 @@ def _validate_scenario(s: Scenario, commitment_id: str) -> None:
             raise ValueError(f"{ctx}: expected.value must be one of expected.values")
         if len(norm) != len(s.expected.values):
             raise ValueError(f"{ctx}: expected.values collide after normalization")
-    if s.expected.type == "regex" and not s.expected.pattern:
-        raise ValueError(f"{ctx}: regex expected requires pattern")
+    if s.expected.type == "regex":
+        if not s.expected.pattern:
+            raise ValueError(f"{ctx}: regex expected requires pattern")
+        _check_redos(s.expected.pattern, ctx)
+        if s.expected.conformance:
+            _check_redos(s.expected.conformance, ctx)
     if s.difficulty not in ("basic", "adversarial"):
         raise ValueError(f"{ctx}: difficulty must be basic|adversarial")
 

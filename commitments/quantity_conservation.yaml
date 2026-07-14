@@ -32,7 +32,8 @@ scenarios:
   - id: qc-002
     setup: >
       Tom fills a short, wide glass with water. He pours all of the water
-      into a tall, thin glass without spilling a drop.
+      into a tall, thin glass without spilling a drop, and no water is left
+      behind clinging to either glass.
     question: "Is there more water in the tall glass than there was in the short glass? Answer with exactly one word: Yes or No."
     paraphrases:
       - "Does the tall glass now contain more water than the short glass contained? Answer with exactly one word: Yes or No."
@@ -51,7 +52,8 @@ scenarios:
   - id: qc-003
     setup: >
       Tom fills a short, wide glass with water. He pours all of the water
-      into a tall, thin glass without spilling a drop.
+      into a tall, thin glass without spilling a drop, and no water is left
+      behind clinging to either glass.
     question: "Is the amount of water in the tall glass the same as the amount that was in the short glass? Answer with exactly one word: Yes or No."
     paraphrases:
       - "Does the tall glass hold exactly as much water as the short glass held? Answer with exactly one word: Yes or No."
@@ -388,7 +390,7 @@ scenarios:
       Lena pours the water from a short, wide glass into a tall, narrow
       glass, where it rises to a strikingly high level and looks like far
       more water. Then she pours it all back into the short glass. Nothing
-      spills at any point.
+      spills and no water is left clinging to either glass at any point.
     question: "Does the short glass now hold the same amount of water it held at the very start? Answer with exactly one word: Yes or No."
     paraphrases:
       - "After the round trip, is the water in the short glass equal to its original amount? Answer with exactly one word: Yes or No."

@@ -133,9 +133,10 @@ scenarios:
         target: ni-005
   - id: ni-007
     setup: >
-      When Priya left her apartment this morning, it is not the case that
-      the front door was left unlocked. Nobody has touched the door since
-      she left.
+      When Priya pulled her front door fully shut this morning, it is not
+      the case that she left it unlocked. The door is either locked or
+      unlocked - it was not left standing open - and nobody has touched it
+      since she left.
     question: "Is the front door locked? Answer with exactly one word: Yes or No."
     paraphrases:
       - "Right now, is Priya's front door locked? Answer with exactly one word: Yes or No."
@@ -153,9 +154,10 @@ scenarios:
         target: ni-008
   - id: ni-008
     setup: >
-      When Priya left her apartment this morning, it is not the case that
-      the front door was left unlocked. Nobody has touched the door since
-      she left.
+      When Priya pulled her front door fully shut this morning, it is not
+      the case that she left it unlocked. The door is either locked or
+      unlocked - it was not left standing open - and nobody has touched it
+      since she left.
     question: "Is the front door unlocked? Answer with exactly one word: Yes or No."
     paraphrases:
       - "Right now, is Priya's front door unlocked? Answer with exactly one word: Yes or No."

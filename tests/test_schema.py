@@ -96,6 +96,27 @@ def test_load_and_probes(commitment):
     assert "ball rolls behind" in probes[0].prompt
 
 
+def test_redos_pattern_rejected(tmp_path: Path):
+    bad = YAML.replace(
+        'expected: { type: choice, values: ["Yes", "No"], value: "Yes" }\n    links',
+        'expected: { type: regex, pattern: "(a+)+" }\n    links',
+    )
+    path = tmp_path / "redos.yaml"
+    path.write_text(bad)
+    with pytest.raises(ValueError, match="catastrophic backtracking"):
+        load_commitment(path)
+
+
+def test_safe_regex_accepted(tmp_path: Path):
+    ok = YAML.replace(
+        'expected: { type: choice, values: ["Yes", "No"], value: "Yes" }\n    links',
+        'expected: { type: regex, pattern: "[0-9]+" }\n    links',
+    )
+    path = tmp_path / "okre.yaml"
+    path.write_text(ok)
+    load_commitment(path)  # must not raise
+
+
 def test_bad_link_target(tmp_path: Path):
     bad = YAML.replace("target: d-002", "target: d-999")
     path = tmp_path / "bad.yaml"

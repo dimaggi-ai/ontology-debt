@@ -1,6 +1,23 @@
 import pytest
 
-from ontodebt.analysis import analyze, wilson_interval
+from ontodebt.analysis import analyze, cluster_bootstrap_ci, wilson_interval
+
+
+def test_cluster_bootstrap_ci():
+    # Fewer than 2 usable clusters -> unestimable -> None.
+    assert cluster_bootstrap_ci([]) is None
+    assert cluster_bootstrap_ci([(1, 5)]) is None
+    assert cluster_bootstrap_ci([(0, 0), (1, 5)]) is None  # only one non-empty
+    # Deterministic given the seed.
+    clusters = [(1, 5), (0, 5), (2, 5), (0, 5), (1, 5)]
+    assert cluster_bootstrap_ci(clusters) == cluster_bootstrap_ci(clusters)
+    lo, hi = cluster_bootstrap_ci(clusters)
+    point = sum(k for k, _ in clusters) / sum(n for _, n in clusters)  # 4/25 = 0.16
+    assert 0.0 <= lo <= point <= hi <= 1.0
+    # All-clean clusters -> interval pinned at 0.
+    assert cluster_bootstrap_ci([(0, 5), (0, 5), (0, 5)]) == (0.0, 0.0)
+    # All-violation clusters -> pinned at 1.
+    assert cluster_bootstrap_ci([(5, 5), (5, 5), (5, 5)]) == (1.0, 1.0)
 from ontodebt.runner import ProbeResult, RunRecord
 from ontodebt.schema import Commitment, Expected, Link, LinkRelation, Scenario
 
