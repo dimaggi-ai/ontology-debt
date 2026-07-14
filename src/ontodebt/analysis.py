@@ -120,6 +120,10 @@ class CommitmentStats:
     link_results: dict[tuple[str, str, str], bool] = field(default_factory=dict)  # canonical link -> broken
     variant_accuracy: dict[int, float] = field(default_factory=dict)  # variant position -> accuracy
     scenario_outcomes: dict[str, ScenarioOutcome] = field(default_factory=dict)
+    # Per-scenario severity overrides. Chat commitments carry one severity for
+    # the whole pack (this stays empty); agent behavioral rules carry their
+    # own severity per rule, which the ledger must honor per item.
+    scenario_severities: dict[str, str] = field(default_factory=dict)
 
     @property
     def violation_rate(self) -> float:
