@@ -1,5 +1,9 @@
 # Ontology Debt
 
+[![ci](https://github.com/dimaggi-ai/ontology-debt/actions/workflows/ci.yml/badge.svg)](https://github.com/dimaggi-ai/ontology-debt/actions/workflows/ci.yml)
+[![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
+
 **Audit the world-model of a chat LLM (Anthropic- or OpenAI-compatible APIs) against ontological commitments *you* declare — and track the debt.**
 
 > Package: `pip install ontology-debt` · Command: `ontodebt` · A [DIMAGGI AI](https://dimaggi.ai) open-source project.
