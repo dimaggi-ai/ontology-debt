@@ -10,6 +10,7 @@ OpenAI reasoning models do too).
 from __future__ import annotations
 
 import hashlib
+import json
 import os
 import time
 from dataclasses import dataclass, field
@@ -102,15 +103,65 @@ class OpenAIProvider(Provider):
         )
 
 
-class MockProvider(Provider):
-    """Deterministic offline provider for tests and dry runs.
+class ClaudeCLIProvider(Provider):
+    """Uses the local `claude -p` CLI (Claude Code authentication) as the model
+    under test - no API key required. Exercises the full provider path against
+    a live Claude model; handy for validating a run, or for auditing when you
+    have a Claude Code subscription but no raw API key.
+    """
 
-    Answers "Yes" to everything unless `answer_book` overrides a prompt;
-    `failure_rate` deterministically flips a fraction of answers (keyed by
-    prompt hash, so runs are reproducible). Its numbers are fabricated by
-    construction - it demonstrates the pipeline, never a finding.
-    `raise_error` makes every call fail with that message (for testing the
-    harness's error handling).
+    def __init__(self, config: ModelConfig):
+        import shutil
+
+        if shutil.which("claude") is None:
+            raise RuntimeError(
+                "the `claude` CLI is not on PATH; install Claude Code or use an API provider"
+            )
+        self._config = config
+        self._cli_model = config.params.get("cli_model")  # optional --model override
+
+    def complete(self, system: str, prompt: str) -> Completion:
+        import subprocess
+
+        cmd = ["claude", "-p", f"{system}\n\n{prompt}", "--output-format", "json"]
+        if self._cli_model:
+            cmd += ["--model", self._cli_model]
+        start = time.monotonic()
+        try:
+            proc = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+        except subprocess.TimeoutExpired:
+            return Completion("", 0, 0, time.monotonic() - start, error="claude -p timed out")
+        elapsed = time.monotonic() - start
+        if proc.returncode != 0:
+            return Completion("", 0, 0, elapsed, error=f"claude -p exit {proc.returncode}: {proc.stderr[:200]}")
+        try:
+            payload = json.loads(proc.stdout)
+        except json.JSONDecodeError as exc:
+            return Completion("", 0, 0, elapsed, error=f"claude -p returned non-JSON: {exc}")
+        if payload.get("is_error"):
+            return Completion("", 0, 0, elapsed, error=str(payload.get("result", "cli error"))[:200])
+        usage = payload.get("usage") or {}
+        return Completion(
+            text=str(payload.get("result", "")),
+            input_tokens=int(usage.get("input_tokens", 0) or 0),
+            output_tokens=int(usage.get("output_tokens", 0) or 0),
+            latency_s=elapsed,
+        )
+
+
+class MockProvider(Provider):
+    """Deterministic offline provider for tests, dry runs, and replay.
+
+    Default: answers "Yes" to everything unless `answer_book` overrides a
+    prompt; `failure_rate` deterministically flips a fraction (keyed by prompt
+    hash). Its numbers are fabricated by construction - it demonstrates the
+    pipeline, never a finding. `raise_error` makes every call fail (to test
+    the harness's error handling).
+
+    REPLAY mode (`answer_book_path`): loads a `{prompt: recorded_response}`
+    JSON and replays it - a prompt with no recorded answer errors rather than
+    fabricating "Yes". This is how a committed set of real model responses is
+    re-scored deterministically by anyone, with no API access.
     """
 
     def __init__(self, config: ModelConfig):
@@ -119,10 +170,21 @@ class MockProvider(Provider):
         self._failure_rate = float(p.get("failure_rate", 0.0))
         self._answer_book: dict[str, str] = dict(p.get("answer_book", {}))
         self._raise_error = str(p.get("raise_error", ""))
+        self._replay = False
+        path = p.get("answer_book_path")
+        if path:
+            with open(path) as f:
+                self._answer_book.update(json.load(f))
+            self._replay = True
 
     def complete(self, system: str, prompt: str) -> Completion:
         if self._raise_error:
             return Completion("", 0, 0, 0.0, error=self._raise_error)
+        if self._replay:
+            if prompt not in self._answer_book:
+                return Completion("", 0, 0, 0.0, error="no recorded answer for this prompt")
+            resp = self._answer_book[prompt]
+            return Completion(text=resp, input_tokens=len(prompt) // 4, output_tokens=2, latency_s=0.0)
         digest = int(hashlib.sha256(prompt.encode()).hexdigest(), 16)
         fail = (digest % 10_000) / 10_000 < self._failure_rate
         answer = self._answer_book.get(prompt, "Yes")
@@ -138,6 +200,8 @@ def make_provider(config: ModelConfig) -> Provider:
     if config.provider == "openai":
         _require_env("OPENAI_API_KEY")
         return OpenAIProvider(config)
+    if config.provider == "claude_cli":
+        return ClaudeCLIProvider(config)  # uses Claude Code auth, no API key
     if config.provider == "mock":
         return MockProvider(config)
     raise ValueError(f"unknown provider: {config.provider}")

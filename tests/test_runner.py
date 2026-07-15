@@ -50,6 +50,56 @@ def test_report_banner_on_high_error_rate():
     assert "RUN UNRELIABLE" in report
 
 
+def test_claude_cli_provider(monkeypatch):
+    """The claude -p provider parses the CLI's JSON and surfaces errors."""
+    import json as _json
+    import shutil
+    import subprocess
+
+    from ontodebt.providers import ClaudeCLIProvider
+
+    monkeypatch.setattr(shutil, "which", lambda name: "/usr/bin/claude")
+
+    def fake_ok(*a, **k):
+        return subprocess.CompletedProcess(
+            a, 0,
+            stdout=_json.dumps({"result": "Yes", "is_error": False,
+                                "usage": {"input_tokens": 10, "output_tokens": 2}}),
+            stderr="",
+        )
+
+    monkeypatch.setattr(subprocess, "run", fake_ok)
+    prov = ClaudeCLIProvider(ModelConfig(name="cli", provider="claude_cli", model_id="x"))
+    c = prov.complete("sys", "prompt")
+    assert c.text == "Yes" and c.input_tokens == 10 and not c.error
+
+    def fake_blocked(*a, **k):
+        return subprocess.CompletedProcess(
+            a, 0, stdout=_json.dumps({"result": "blocked", "is_error": True}), stderr="")
+
+    monkeypatch.setattr(subprocess, "run", fake_blocked)
+    c2 = prov.complete("sys", "prompt")
+    assert c2.error and c2.text == ""
+
+
+def test_replay_provider(tmp_path: Path):
+    """Replay mode returns recorded answers and errors on unrecorded prompts."""
+    import json as _json
+
+    from ontodebt.providers import make_provider
+    from ontodebt.schema import SYSTEM_PROMPT
+
+    book = tmp_path / "answers.json"
+    book.write_text(_json.dumps({"the sky?": "Yes"}))
+    cfg = ModelConfig(name="replay", provider="mock", model_id="rec",
+                      params={"answer_book_path": str(book)})
+    prov = make_provider(cfg)
+    hit = prov.complete(SYSTEM_PROMPT, "the sky?")
+    assert hit.text == "Yes" and not hit.error
+    miss = prov.complete(SYSTEM_PROMPT, "unrecorded")
+    assert miss.error and miss.text == ""  # never fabricates an answer
+
+
 def test_mock_run_end_to_end(tmp_path: Path):
     config = ModelConfig(name="mock", provider="mock", model_id="mock-v0", params={"failure_rate": 0.0})
     probes = list(build_probes([make_commitment()]))

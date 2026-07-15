@@ -34,6 +34,18 @@ models:
     output_price_per_mtok: 10.00
     est_output_tokens_per_probe: 400   # hidden reasoning tokens are billed as output
 
+  # Audits via the local `claude -p` CLI using your Claude Code auth - no API
+  # key. Exercises the tool's real provider path against a live Claude model.
+  - name: claude-cli
+    provider: claude_cli
+    model_id: claude-code-cli
+    max_tokens: 100
+
+  # Re-scores a committed set of recorded model responses deterministically,
+  # with no API access (point answer_book_path at a committed answers file).
+  #   provider: mock
+  #   params: { answer_book_path: examples/<run>/answers.json }
+
   - name: mock
     provider: mock
     model_id: mock-v0
