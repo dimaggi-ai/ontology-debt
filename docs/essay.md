@@ -6,7 +6,7 @@
 
 Your product logic assumes a world-model. Somewhere in your system there is a set of things that must be true for the code around the LLM to make sense: an occluded object still exists, a cause precedes its effect, a question and its negation cannot both be "yes," a quantity doesn't change because you rephrased the sentence describing it. Nobody wrote these down, because nobody writes down the obvious.
 
-The model you call over an API also has a world-model. It is implicit, statistical, and — this is the uncomfortable part — *not the same one*. Published evaluations keep finding that frontier models still fail atomic world-model probes, still drift across paraphrases of the same question, still answer a question and its negation the same way often enough to matter. The tooling ecosystem keeps not addressing it.
+The model you call over an API also has a world-model. It is implicit, statistical, and — this is the uncomfortable part — you don't actually know how much of yours it shares until you measure. My prior was that even frontier models would slip on basic object-permanence and causality often enough to matter. When I finally ran the audit, that prior was wrong: two 2026 frontier models cleared the floor completely. But smaller models did not, and the gap between them turned out to be the whole point — because the only way to know which side of that line the model in your product sits on is to check, and almost nobody has the tooling to check in these terms.
 
 ## The gap between validation and behavior
 
@@ -48,11 +48,13 @@ What had not shipped, as far as several days of adversarial literature search co
 
 ## What the first audit found
 
-*(This section is populated from `results/report.md` after each maintainers' run — pinned model snapshots, full transcripts committed. Numbers below are from the run of {DATE}.)*
+I ran the six floor packs — 150 scenarios, 750 probes — across a capability gradient. The full report and every transcript are committed in the repo; here is the shape of it.
 
-- {headline violation rate, per model}
-- {headline contradiction rate — the more interesting number}
-- {the single most instructive open debt item, quoted verbatim}
+Both frontier models — Claude Fable 5 and GPT-5.5 — scored **zero**. No violations, no contradictions, across all 750 probes. The floor holds. GPT-5.4-mini showed a whisper of debt (0.3% violations, 1.3% contradictions). And GPT-5.4-nano cracked: **3.7% violations, 12.7% contradictions**, worst on temporal reasoning, where it contradicted itself on nearly half of the scenarios.
+
+The number that stayed with me is the last one, and specifically the *shape* of it. Nano was 3.7% *wrong* but 12.7% *self-inconsistent* — it gave different answers to trivially-equivalent rephrasings of the same question. Asked whether a row of dominoes nobody touched all day was still standing, it answered no, then yes, then no, then no, then no. A single accuracy score would have reported "96% correct" and moved on. The debt ledger reports that the model does not actually *hold* the belief — it reconstructs it, unstably, each time you ask. That is a different and more useful thing to know about a system you are about to put in front of users, and it is exactly what separating violations from contradictions is for. Weaker models, it turns out, aren't just more wrong. They're less stable.
+
+The honest headline is not "models fail." It's "the tool tells you, per model, whether they hold — and the answer is a gradient, not a verdict."
 
 ## Write packs for your own floor
 

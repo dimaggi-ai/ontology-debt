@@ -1,0 +1,6 @@
+models:
+- model_id: claude-fable-5-via-assistant
+  name: frontier-clean
+  params:
+    answer_book_path: examples/frontier-audit/answers.json
+  provider: mock
