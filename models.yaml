@@ -62,6 +62,14 @@ models:
     model_id: claude-code-cli
     max_tokens: 100
 
+  # Claude Fable 5 floor answers (recorded via the Claude Code assistant,
+  # answering cold), replayed deterministically for the capability gradient.
+  - name: claude-fable5
+    provider: mock
+    model_id: claude-fable-5-via-assistant
+    params:
+      answer_book_path: examples/gradient/answers-claude-fable5.json
+
   # Re-scores a committed set of recorded model responses deterministically,
   # with no API access (point answer_book_path at a committed answers file).
   #   provider: mock
