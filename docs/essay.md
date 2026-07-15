@@ -51,13 +51,47 @@ What had not shipped, as far as several days of adversarial literature search co
 
 ## What the first audit found
 
-I ran the six floor packs — 150 scenarios, 750 probes — across a capability gradient. The full report and every transcript are committed in the repo; here is the shape of it.
+I ran the six floor packs — 150 scenarios, 750 probes — across a capability gradient, then wrote a second, harder tier and ran that too. The full reports and every transcript are committed in the repo (`examples/gradient/` and `examples/gradient-frontier/`); here is the shape of it.
 
-Both frontier models — Claude Fable 5 and GPT-5.5 — scored **zero**. No violations, no contradictions, across all 750 probes. The floor holds. GPT-5.4-mini showed a whisper of debt (0.3% violations, 1.3% contradictions). And GPT-5.4-nano cracked: **3.7% violations, 12.7% contradictions**, worst on temporal reasoning, where it contradicted itself on nearly half of the scenarios.
+On the floor, both frontier models — Claude Fable 5 and GPT-5.5 — scored **zero**: no violations, no contradictions on any probe they answered. The floor holds. Below them the debt accrues cleanly and close to monotonically with capability:
+
+| Model | Violations | Contradictions |
+|---|---|---|
+| Claude Fable 5 | 0.0% | 0.0% |
+| GPT-5.5 | 0.0% | 0.0% |
+| GPT-5.4 | 0.3% | 1.3% |
+| GPT-5.4-mini | 0.3% | 1.3% |
+| GPT-5-mini | 0.5% | 2.7% |
+| GPT-5-nano | 1.2% | 5.3% |
+| GPT-4.1-mini | 1.9% | 5.3% |
+| GPT-4o-mini | 3.6% | 6.0% |
+| GPT-5.4-nano | 3.7% | 12.7% |
 
 The number that stayed with me is the last one, and specifically the *shape* of it. Nano was 3.7% *wrong* but 12.7% *self-inconsistent* — it gave different answers to trivially-equivalent rephrasings of the same question. Asked whether a row of dominoes nobody touched all day was still standing, it answered no, then yes, then no, then no, then no. A single accuracy score would have reported "96% correct" and moved on. The debt ledger reports that the model does not actually *hold* the belief — it reconstructs it, unstably, each time you ask. That is a different and more useful thing to know about a system you are about to put in front of users, and it is exactly what separating violations from contradictions is for. Weaker models, it turns out, aren't just more wrong. They're less stable.
 
-The honest headline is not "models fail." It's "the tool tells you, per model, whether they hold — and the answer is a gradient, not a verdict."
+### The floor is deliberately easy, so I raised it
+
+A fair objection to a clean frontier sweep is that the floor is trivial. It is, on purpose. So the second tier makes the reasoning compositional: causal chains with preemption and overdetermination, multi-hop temporal arithmetic, nested and scoped negation, and stacked conservation (add, remove, double, halve, then ask the net). Four packs, 300 probes, the same deterministic scoring.
+
+The current frontier does not care. Claude Fable 5, GPT-5.5, GPT-5.4, and GPT-5-mini all posted a clean **0% / 0%** on the hard tier. What the added difficulty exposed was everything below that line:
+
+| Model | Hard-tier violations | Hard-tier contradictions |
+|---|---|---|
+| Claude Fable 5 | 0.0% | 0.0% |
+| GPT-5.5 | 0.0% | 0.0% |
+| GPT-5.4 | 0.0% | 0.0% |
+| GPT-5-mini | 0.0% | 0.0% |
+| GPT-5.4-mini | 0.3% | 1.7% |
+| GPT-5-nano | 0.3% | 1.7% |
+| GPT-5.4-nano | 3.3% | 10.0% |
+| GPT-4.1-mini | 29.3% | 31.7% |
+| GPT-4o-mini | 35.5% | 36.7% |
+
+Compare the two tables row by row and the point of the tool arrives on its own. GPT-4o-mini carries 3.6% violations on the floor and **35.5%** on the hard tier — nearly a tenfold jump, on the same model, from nothing but harder scenarios. On stacked conservation in isolation it violates the commitment **86.7%** of the time, and its accuracy across paraphrases never rises above 13%. The floor said "mostly fine." The hard tier said "do not put this anywhere near a running total you care about." Both were true; only one was worth knowing.
+
+That is the whole argument for user-authored packs. A benchmark someone else made easy will tell you a cheap model is fine. A floor *you* wrote — the invariants of your claims process, your compliance rules, your domain glossary — is where a model that looks clean on generic evals gets exposed. The gradient also settles the "smaller is simply worse" reflex: GPT-5-mini holds the hard tier at zero while the newer GPT-5.4-nano cracks it. The instrument is reading capability on the packs *you* chose, not parameter count.
+
+The honest headline is not "models fail." It's "the tool tells you, per model and per difficulty, whether they hold — and the answer is a gradient, not a verdict."
 
 ## Write packs for your own floor
 

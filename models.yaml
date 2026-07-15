@@ -55,6 +55,54 @@ models:
     output_price_per_mtok: 0.40
     est_output_tokens_per_probe: 350
 
+  # Wider cross-generation gradient (added for the extensive run).
+  - name: gpt-5.4
+    provider: openai
+    model_id: gpt-5.4-2026-03-05
+    max_tokens: 3000
+    params: { reasoning_effort: low }
+    input_price_per_mtok: 1.25
+    output_price_per_mtok: 10.00
+    est_output_tokens_per_probe: 350
+  - name: gpt-5-mini
+    provider: openai
+    model_id: gpt-5-mini-2025-08-07
+    max_tokens: 3000
+    params: { reasoning_effort: low }
+    input_price_per_mtok: 0.25
+    output_price_per_mtok: 2.00
+    est_output_tokens_per_probe: 350
+  - name: gpt-5-nano
+    provider: openai
+    model_id: gpt-5-nano-2025-08-07
+    max_tokens: 3000
+    params: { reasoning_effort: low }
+    input_price_per_mtok: 0.05
+    output_price_per_mtok: 0.40
+    est_output_tokens_per_probe: 350
+  # Non-reasoning older-generation models (no reasoning_effort param).
+  - name: gpt-4.1-mini
+    provider: openai
+    model_id: gpt-4.1-mini-2025-04-14
+    max_tokens: 100
+    input_price_per_mtok: 0.40
+    output_price_per_mtok: 1.60
+    est_output_tokens_per_probe: 6
+  - name: gpt-4o-mini
+    provider: openai
+    model_id: gpt-4o-mini-2024-07-18
+    max_tokens: 100
+    input_price_per_mtok: 0.15
+    output_price_per_mtok: 0.60
+    est_output_tokens_per_probe: 6
+
+  # Claude Fable 5 frontier-tier answers, replayed (for the frontier gradient).
+  - name: claude-fable5-frontier
+    provider: mock
+    model_id: claude-fable-5-via-assistant
+    params:
+      answer_book_path: examples/frontier-audit/answers.json
+
   # Audits via the local `claude -p` CLI using your Claude Code auth - no API
   # key. Exercises the tool's real provider path against a live Claude model.
   - name: claude-cli

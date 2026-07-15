@@ -90,16 +90,19 @@ Six packs ship with the repo (150 scenarios, 750 probes per model): `object_perm
 
 ## Results — a capability gradient
 
-The six floor packs (750 probes) audited across four models. Full report, ledger, and transcripts in [`examples/gradient/`](examples/gradient/); reproduce with `ontodebt run --models claude-fable5,gpt-frontier,gpt-mini,gpt-nano`.
+Two tiers, nine models each. The six **floor** packs (150 scenarios, 750 probes) cover the commonsense floor; a four-pack **hard tier** (300 probes) raises the difficulty to compositional causality, multi-hop temporal arithmetic, nested negation, and stacked conservation. Full reports, ledgers, and every transcript live in [`examples/gradient/`](examples/gradient/) and [`examples/gradient-frontier/`](examples/gradient-frontier/).
 
-| Model | Violations | Contradictions |
+| Model | Floor (viol. / contra.) | Hard tier (viol. / contra.) |
 |---|---|---|
-| Claude Fable 5 (frontier) | **0.0%** | **0.0%** |
-| GPT-5.5 (frontier) | **0.0%** | **0.0%** |
-| GPT-5.4-mini | 0.3% | 1.3% |
-| GPT-5.4-nano | **3.7%** | **12.7%** |
+| Claude Fable 5 (frontier) | **0.0% / 0.0%** | **0.0% / 0.0%** |
+| GPT-5.5 (frontier) | **0.0% / 0.0%** | **0.0% / 0.0%** |
+| GPT-5-mini | 0.5% / 2.7% | **0.0% / 0.0%** |
+| GPT-5.4-nano | 3.7% / 12.7% | 3.3% / 10.0% |
+| GPT-4o-mini | 3.6% / 6.0% | **35.5% / 36.7%** |
 
-Both frontier models hold the commonsense floor completely; debt accrues cleanly as the model shrinks. The interesting line is nano's: 3.7% *wrong* but 12.7% *self-inconsistent* — it gives different answers to trivially-equivalent rephrasings, which a single accuracy score would hide. That gap is why violations and contradictions never share a column. The floor is *supposed* to be easy — its value is this gradient across the models you ship, and packs you write for your own domain. (Total GPT API cost for the run: ~$0.01.)
+The current frontier holds both tiers completely; the tool's value is everything below that line. Read GPT-4o-mini across the two columns: nearly clean on the floor (3.6% violations), broken in half on the hard tier (35.5%, and **86.7%** on stacked conservation alone) — same model, same deterministic scoring, only the difficulty changed. That is the case for writing packs for your *own* floor rather than trusting a benchmark someone made easy. The gradient reads capability, not size: GPT-5-mini holds the hard tier at zero while the newer GPT-5.4-nano cracks it. And nano's floor line is why violations and contradictions never share a column — 3.7% *wrong* but 12.7% *self-inconsistent*, a gap a single accuracy score would hide. The full nine-model tables (adding gpt-5.4, gpt-5-nano, gpt-4.1-mini, gpt-5.4-mini) are in the reports.
+
+Reproduce the floor with `ontodebt run --models claude-fable5,gpt-frontier,gpt-mini,gpt-nano` and the hard tier with `ontodebt run --commitments commitments-frontier --results examples/gradient-frontier --models gpt-frontier,gpt-mini,gpt-nano`. (The cheap models cost cents to probe; the full two-tier sweep across all nine ran to a couple of dollars.)
 
 ## Related work — what this is not
 
