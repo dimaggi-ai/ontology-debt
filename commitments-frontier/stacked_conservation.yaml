@@ -1,0 +1,361 @@
+id: stacked_conservation
+title: "Stacked Conservation"
+statement: >
+  A quantity - a count of objects or an amount of a substance - changes only
+  by exactly the additions and removals that are explicitly stated, and by
+  nothing else. Through a long chain of transfers, splits, recombinations,
+  doublings, halvings, and even distributions, the model must track the net
+  effect of every stated operation and report the true final quantity, or
+  correctly judge whether two final states are equal. Rearranging, pouring,
+  cutting, or spreading a quantity out never changes how much there is; only
+  a stated add or remove does. The model must not be swayed by how much
+  "more" or "less" a rearranged quantity looks, must ignore decoy operations
+  on containers it is not asked about, and must not lose track of state
+  across the length of the chain.
+severity: high
+lineage: ["Piagetian conservation tasks", "CoreCognition (2024)", "multi-step state-tracking (2024-2025)"]
+scenarios:
+  - id: sc-001
+    setup: >
+      A bag holds 48 marbles, while a box and a jar beside it both start empty.
+      Nadia takes 12 marbles out of the bag and drops them into the box. She
+      then puts 17 new marbles into the bag. Next she moves 20 marbles from the
+      bag into the box. She doubles the number of marbles now in the box by
+      adding fresh marbles to the box. She then takes 8 marbles out of the box
+      and returns them to the bag. She moves 15 marbles from the bag into the
+      jar. She removes 5 marbles from the jar and gives them away. She then puts
+      9 more new marbles into the bag, and finally takes 6 marbles out of the
+      bag and sets them aside. Nothing else is added to or removed from the bag.
+    question: "How many marbles are in the bag now? Answer with a single number written in digits."
+    paraphrases:
+      - "After all of Nadia's moves, what is the number of marbles in the bag? Answer with a single number written in digits."
+      - "Count the marbles left in the bag at the end. Answer with a single number written in digits."
+      - "How many marbles does the bag contain once Nadia has finished? Answer with a single number written in digits."
+      - "At the end of the sequence, how many marbles are in the bag? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "29"
+    rationale: "The bag goes 48, 36 (-12), 53 (+17), 33 (-20), 41 (+8 back), 26 (-15 to jar), 35 (+9), 29 (-6). Doubling the box and removing from the jar never touch the bag."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: sc-012
+  - id: sc-002
+    setup: >
+      Three towers of blocks stand on a table, and no blocks are ever moved
+      between towers. Tower X starts with 84 blocks; then 30 blocks are removed
+      from it, then 26 blocks are added to it, then 8 blocks are removed from it.
+      Tower Y starts with 30 blocks; then 18 blocks are added to it, then 12
+      blocks are removed from it, and finally the number of blocks in Tower Y is
+      doubled by stacking on an equal number of new blocks. Tower Z starts with
+      50 blocks and then loses 10 blocks.
+    question: "After these changes, does Tower X contain the same number of blocks as Tower Y? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Once the changes are done, is the block count of Tower X equal to the block count of Tower Y? Answer with exactly one word: Yes or No."
+      - "Do Tower X and Tower Y end up holding an equal number of blocks? Answer with exactly one word: Yes or No."
+      - "At the end, is the number of blocks in Tower X the same as the number in Tower Y? Answer with exactly one word: Yes or No."
+      - "After all the additions and removals, does Tower X match Tower Y in block count? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Tower X becomes 84, 54, 80, 72; Tower Y becomes 30, 48, 36, then 72 when doubled; both end at 72, so they are equal. Tower Z is a decoy."
+    difficulty: adversarial
+    links:
+      - relation: same_answer
+        target: sc-008
+  - id: sc-003
+    setup: >
+      A pitcher holds 900 milliliters of juice; a bowl, a cup, a glass, and a
+      carafe all start empty. All 900 milliliters are poured from the pitcher
+      into the bowl. Then 350 milliliters are poured from the bowl into the cup.
+      Then 200 milliliters are poured from the bowl into the glass. Then all of
+      the glass's juice is poured into the carafe. Then 250 milliliters are
+      poured from the cup into the bowl. Finally 150 milliliters are poured from
+      the bowl into the cup. Nothing is spilled and nothing clings to the
+      containers.
+    question: "How many milliliters of juice are in the bowl now? Answer with a single number written in digits."
+    paraphrases:
+      - "At the end, how many milliliters of juice does the bowl hold? Answer with a single number written in digits."
+      - "After all the pouring, what is the amount of juice in the bowl, in milliliters? Answer with a single number written in digits."
+      - "Count the milliliters of juice left in the bowl. Answer with a single number written in digits."
+      - "Once every pour is complete, how many milliliters are in the bowl? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "450"
+    rationale: "The bowl goes 900, 550 (-350), 350 (-200), then 600 (+250 from the cup), then 450 (-150), ending at 450. The glass-to-carafe pour never touches the bowl."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: sc-009
+  - id: sc-004
+    setup: >
+      There are three chocolate bars, each scored into 12 squares, for 36
+      squares in total. Priya snaps every square apart and spreads all 36 loose
+      squares across a wide tray, where they look like a big heap of chocolate.
+      She eats 10 of the squares. A friend then brings one more bar of 12
+      squares, snaps it into singles, and adds all of them to the tray. Priya
+      eats 4 more squares. Next, 6 squares brought by a second friend are added
+      to the tray. Finally, 10 squares are moved from the tray into a separate
+      bowl. No squares are lost or dropped.
+    question: "How many chocolate squares are on the tray now? Answer with a single number written in digits."
+    paraphrases:
+      - "At the end, how many chocolate squares does the tray hold? Answer with a single number written in digits."
+      - "Count the chocolate squares on the tray after everything is done. Answer with a single number written in digits."
+      - "Once every step is finished, how many squares are on the tray? Answer with a single number written in digits."
+      - "What is the final number of chocolate squares on the tray? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "30"
+    rationale: "Snapping and spreading only rearranges the squares. The tray goes 36, 26 (-10), 38 (+12), 34 (-4), 40 (+6), 30 (-10 to the bowl). The heap looking large does not change the count."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: sc-010
+  - id: sc-005
+    setup: >
+      A jar holds 48 candies. All 48 are handed out evenly to 6 children, so
+      each child receives the same number of candies and the jar is left empty.
+      Each child then eats 3 of their candies. After that, every child puts all
+      of their remaining candies back into the jar. Then 10 fresh candies are
+      dropped into the jar. Finally, 6 candies are taken out of the jar and
+      given away.
+    question: "Does the jar now hold the same number of candies as it held at the start? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the number of candies now in the jar equal to the number it started with? Answer with exactly one word: Yes or No."
+      - "After everything, does the jar contain as many candies as it did at the beginning? Answer with exactly one word: Yes or No."
+      - "Has the jar returned to its original candy count? Answer with exactly one word: Yes or No."
+      - "Is the final candy count in the jar the same as the starting count? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Each child gets 8, eats 3, and returns 5, so 30 come back into the empty jar; adding 10 gives 40, and removing 6 leaves 34, which is not the original 48."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: sc-015
+  - id: sc-006
+    setup: >
+      A pencil case holds 90 pencils, and a drawer beside it holds 12 pencils.
+      All 90 pencils are handed out evenly to 6 students, so each student gets
+      the same number, and the case is now empty. Each student then returns 6
+      pencils to the case. After that, 10 pencils are taken from the case and
+      given away outside the class. Then the 12 pencils in the drawer are
+      sharpened. Then 5 pencils found on the floor are added to the case.
+      Finally, 9 pencils are removed from the case and packed into a bag.
+    question: "How many pencils are in the case now? Answer with a single number written in digits."
+    paraphrases:
+      - "At the end, what is the number of pencils in the case? Answer with a single number written in digits."
+      - "Count the pencils left in the case after all the steps. Answer with a single number written in digits."
+      - "Once the found pencils and the last removal are done, how many pencils does the case hold? Answer with a single number written in digits."
+      - "How many pencils remain in the case at the end? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "22"
+    rationale: "Each student gets 15 and returns 6, so 36 pencils enter the empty case; removing 10 leaves 26, adding 5 gives 31, and removing 9 leaves 22. Sharpening the drawer pencils is a decoy."
+    difficulty: adversarial
+  - id: sc-007
+    setup: >
+      A bucket contains 18 liters of water. First 6 liters are added. Then the
+      amount of water in the bucket is doubled by adding more water. Then 10
+      liters are poured out. Then the amount of water remaining in the bucket is
+      halved by removing water. Then 6 more liters are poured out. Finally 4
+      liters are added. No water is lost except where stated.
+    question: "How many liters of water are in the bucket now? Answer with a single number written in digits."
+    paraphrases:
+      - "At the end, how many liters does the bucket hold? Answer with a single number written in digits."
+      - "After every step in the sequence has been carried out, what is the final water amount in liters? Answer with a single number written in digits."
+      - "Count the liters of water left in the bucket. Answer with a single number written in digits."
+      - "Once every step is done, how many liters are in the bucket? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "17"
+    rationale: "The bucket goes 18, 24 (+6), 48 (doubled), 38 (-10), 19 (halved), 13 (-6), 17 (+4)."
+    difficulty: adversarial
+  - id: sc-008
+    setup: >
+      Basket A holds 50 eggs and Basket B holds 45 eggs. From Basket A, 30 eggs
+      are moved into a crate, while the other 20 eggs stay in Basket A. In the
+      crate, 8 eggs break and are thrown out. All of the unbroken crate eggs are
+      then put back into Basket A. Before those crate eggs are returned, 3 eggs
+      are removed from Basket A and cooked. After the crate eggs are back, 5 more
+      eggs are added to Basket A, and then 3 eggs are removed from it. Separately,
+      Basket B has 6 eggs removed, then 7 eggs added, then 5 eggs removed. No
+      other eggs are added or removed.
+    question: "Does Basket A now hold the same number of eggs as Basket B? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "At the end, is the egg count of Basket A equal to the egg count of Basket B? Answer with exactly one word: Yes or No."
+      - "Do the two baskets end up with an equal number of eggs? Answer with exactly one word: Yes or No."
+      - "Is the number of eggs in Basket A the same as the number in Basket B? Answer with exactly one word: Yes or No."
+      - "After all the moves, does Basket A match Basket B in egg count? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Basket A keeps 20, loses 3 to cooking (17), gains the 22 unbroken crate eggs (39), gains 5 (44), and loses 3 (41). Basket B goes 45, 39, 46, 41. Both end at 41."
+    difficulty: adversarial
+    links:
+      - relation: same_answer
+        target: sc-002
+  - id: sc-009
+    setup: >
+      There are four empty cups and a jug holding 840 milliliters of water. The
+      water is poured out evenly so that each cup receives the same amount and
+      the jug is left empty. Then all of cup 1's water is poured into cup 2. Then
+      100 milliliters are poured from cup 2 into cup 3. Then all of cup 4's water
+      is poured into cup 2. Then 60 milliliters are poured from cup 3 into cup 1.
+      Finally, 180 milliliters are drunk from cup 2. Nothing is spilled.
+    question: "How many milliliters of water are in cup 2 now? Answer with a single number written in digits."
+    paraphrases:
+      - "At the end, how many milliliters does cup 2 hold? Answer with a single number written in digits."
+      - "After all the pouring and drinking, what is the amount of water in cup 2, in milliliters? Answer with a single number written in digits."
+      - "Count the milliliters of water left in cup 2. Answer with a single number written in digits."
+      - "Once every step is complete, how many milliliters are in cup 2? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "350"
+    rationale: "Each cup starts with 210. Cup 2 goes 210, 420 (cup 1 in), 320 (-100 to cup 3), 530 (cup 4 in), 350 (-180 drunk). The cup 3 to cup 1 pour never touches cup 2."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: sc-003
+  - id: sc-010
+    setup: >
+      A shelf holds 120 books, and a nearby cart holds 20 books. First, 40 books
+      are removed from the shelf to be repaired. Then 15 of those repaired books
+      are returned to the shelf. Then 18 books are taken off the shelf and
+      carried to a different room. Then 30 donated books are added to the shelf.
+      Then the 20 books on the cart are rearranged into two neat piles. Then 7
+      books are removed from the shelf and thrown away. Finally, 8 books are
+      removed from the shelf and lent out. No other books are moved on or off the
+      shelf.
+    question: "How many books are on the shelf now? Answer with a single number written in digits."
+    paraphrases:
+      - "At the end, what is the number of books on the shelf? Answer with a single number written in digits."
+      - "Count the books left on the shelf after all the moves. Answer with a single number written in digits."
+      - "Once every step is done, how many books does the shelf hold? Answer with a single number written in digits."
+      - "How many books remain on the shelf at the end? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "92"
+    rationale: "The shelf goes 120, 80 (-40), 95 (+15), 77 (-18), 107 (+30), 100 (-7), 92 (-8). Rearranging the cart's books is a decoy."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: sc-004
+  - id: sc-011
+    setup: >
+      Two plates sit side by side, and every piece mentioned is exactly one
+      eighth of a sandwich, with all pieces the same size. On the left plate,
+      one whole sandwich is cut into 8 equal pieces and spread out to cover the
+      entire plate, so the left plate looks piled high with food. Then 3 of
+      those pieces are eaten from the left plate. Then a second whole sandwich is
+      cut into 8 equal pieces and all 8 are added to the left plate. Then 5
+      pieces are eaten from the left plate. On the right plate, one whole
+      sandwich is placed uncut, and then a second whole sandwich is placed beside
+      it, also uncut. Then the equivalent of 4 pieces is eaten from the right
+      plate. Nothing else is eaten or added.
+    question: "Is there more food on the left plate than on the right plate? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Does the left plate hold more sandwich than the right plate? Answer with exactly one word: Yes or No."
+      - "Compared with the right plate, is there a greater amount of food on the left plate? Answer with exactly one word: Yes or No."
+      - "Is the amount of food on the left plate larger than the amount on the right plate? Answer with exactly one word: Yes or No."
+      - "After all the eating, does the left plate have more food than the right plate? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Measured in equal eighth-sandwich pieces, the left plate ends with 8 pieces (8, then 5 after eating 3, then 13 after adding 8, then 8 after eating 5) and the right plate ends with 12 pieces (16 eighths from two whole sandwiches, minus the 4 eaten). Cutting and spreading the left plate only changes its appearance; 8 is not more than 12, so the left plate does not have more food."
+    difficulty: adversarial
+    links:
+      - relation: same_answer
+        target: sc-013
+  - id: sc-012
+    setup: >
+      A wallet contains 80 dollars, and a piggy bank on the shelf holds 15
+      dollars. First, 30 dollars are spent from the wallet. Then 26 dollars are
+      received and put in the wallet. Then exactly half of the money now in the
+      wallet is spent. Meanwhile the 15 dollars in the piggy bank are doubled by
+      an added deposit. Then 42 dollars are received and added to the wallet.
+      Then 30 dollars are spent from the wallet. No other money enters or leaves
+      the wallet.
+    question: "How many dollars are in the wallet now? Answer with a single number written in digits."
+    paraphrases:
+      - "At the end, how many dollars does the wallet hold? Answer with a single number written in digits."
+      - "After all the spending and receiving, what is the amount in the wallet, in dollars? Answer with a single number written in digits."
+      - "Count the dollars left in the wallet. Answer with a single number written in digits."
+      - "Once every step is done, how many dollars are in the wallet? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "50"
+    rationale: "The wallet goes 80, 50 (-30), 76 (+26), 38 (half of 76 spent), 80 (+42), 50 (-30). Doubling the piggy bank never touches the wallet."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: sc-001
+  - id: sc-013
+    setup: >
+      Sam and Lee each have a stack of poker chips, and no chips ever pass
+      between the two players. Sam starts with 44 chips; then he loses 12 chips,
+      then he wins 8 chips, then his stack is doubled, and then he loses 6 chips.
+      Lee starts with 30 chips; then he wins 14 chips, then he loses 9 chips,
+      then he loses 5 more chips, and then he wins 3 chips.
+    question: "Do Sam and Lee now have the same number of chips? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "At the end, is Sam's chip count equal to Lee's chip count? Answer with exactly one word: Yes or No."
+      - "Do the two players end up holding an equal number of chips? Answer with exactly one word: Yes or No."
+      - "Is the number of chips Sam has the same as the number Lee has? Answer with exactly one word: Yes or No."
+      - "After all the wins and losses, does Sam match Lee in chip count? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Sam goes 44, 32, 40, then 80 when doubled, then 74. Lee goes 30, 44, 35, 30, 33. 74 does not equal 33, so they are not the same."
+    difficulty: adversarial
+    links:
+      - relation: same_answer
+        target: sc-011
+  - id: sc-014
+    setup: >
+      A farmer has 96 tomatoes in one crate, and a basket nearby holds 20
+      tomatoes. He divides the 96 tomatoes equally into 4 crates, so each crate
+      holds the same number. From the first crate he sells 10 tomatoes. Into the
+      second crate he adds 6 tomatoes he had in his pocket. The third crate is
+      left untouched. From the fourth crate he removes 12 tomatoes to feed his
+      goats. The basket of 20 tomatoes is carried indoors. He then tips all four
+      crates into one big bin. No tomatoes are lost except where stated.
+    question: "How many tomatoes are in the big bin now? Answer with a single number written in digits."
+    paraphrases:
+      - "At the end, how many tomatoes does the big bin hold? Answer with a single number written in digits."
+      - "After combining all four crates, what is the number of tomatoes in the bin? Answer with a single number written in digits."
+      - "Count the tomatoes in the big bin. Answer with a single number written in digits."
+      - "Once all four crates are tipped in, how many tomatoes are in the bin? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "80"
+    rationale: "Each crate holds 24; they become 14, 30, 24, and 12, which sum to 80 (equivalently 96 minus 10 plus 6 minus 12). The basket is never tipped in."
+    difficulty: adversarial
+  - id: sc-015
+    setup: >
+      A tank holds 500 liters of water. The following happens in order: 140
+      liters are removed, then 85 liters are added, then the amount of water now
+      in the tank is doubled by adding water, then the amount now in the tank is
+      halved by removing water, then 30 liters are removed, then 70 liters are
+      added, then 45 liters are removed, then 60 liters are added. No water
+      enters or leaves except as stated.
+    question: "Is the tank now back to exactly 500 liters? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "At the end, does the tank hold exactly 500 liters again? Answer with exactly one word: Yes or No."
+      - "After all the additions and removals, is the water level back at exactly 500 liters? Answer with exactly one word: Yes or No."
+      - "Has the tank returned to precisely 500 liters? Answer with exactly one word: Yes or No."
+      - "Is the final amount of water in the tank exactly 500 liters? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The tank goes 500, 360 (-140), 445 (+85), 890 (doubled), 445 (halved), 415 (-30), 485 (+70), 440 (-45), 500 (+60). The double and the halve cancel, and the remaining adds (85+70+60=215) equal the remaining removes (140+30+45=215), so the tank is back to 500."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: sc-005

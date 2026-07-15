@@ -1,0 +1,402 @@
+id: compositional_causality
+title: "Compositional Causality: Chains, Preemption, and Overdetermination"
+statement: >
+  Given a situation in which every causal law is explicitly stipulated, a model
+  must compute downstream effects by composing those laws faithfully: it must
+  recognize that blocking or removing a middle link in a chain stops every effect
+  downstream of the break (and only downstream of it); that under preemption the
+  event which actually did the work first is THE cause and a later, preempted
+  backup is not; that an overdetermined outcome still occurs when only one of
+  several independently sufficient causes is removed; and that two effects of a
+  common cause do not cause each other. It must never confuse a common cause with
+  a direct cause, and never let a broken branch propagate to an unrelated branch.
+severity: high
+lineage:
+  - "causal reasoning evals (2024-2026)"
+  - "EWOK agent-action (2024)"
+  - "preemption/overdetermination causal-judgment benchmarks (2024-2026)"
+scenarios:
+  - id: cc-001
+    setup: >
+      Consider four gears numbered 1, 2, 3, 4 sitting in a row. The machine's
+      wiring guarantees exactly these couplings and nothing else: whenever gear 1
+      turns, gear 2 turns; whenever gear 2 turns, gear 3 turns; whenever gear 3
+      turns, gear 4 turns. Gear 4 turning is the only thing that can raise the
+      flag; nothing else raises it. A gear that has been lifted onto the bench
+      does not turn, and it cannot pass motion to any other gear. At 9:00 a
+      technician lifts gear 2 entirely off the machine and sets it on the bench,
+      so gear 1's teeth now spin freely against empty space. At 9:05 the operator
+      turns gear 1.
+    question: "After 9:05, is the flag raised? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Following the operator turning gear 1 at 9:05, has the flag gone up? Answer with exactly one word: Yes or No."
+      - "Given that gear 2 is on the bench, does turning gear 1 at 9:05 end up raising the flag? Answer with exactly one word: Yes or No."
+      - "Once gear 1 is turned at 9:05, is the flag in the raised position? Answer with exactly one word: Yes or No."
+      - "After the 9:05 turn of gear 1, would you find the flag raised? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: >
+      Gear 1 turns, but gear 2 is on the bench and cannot turn or pass motion, so
+      the chain breaks at the removed middle link; gears 3 and 4 never turn and,
+      since only gear 4 raises the flag, the flag stays down.
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: cc-004
+  - id: cc-002
+    setup: >
+      A ceiling lamp is wired so that it is lit whenever at least one of its two
+      switches, X or Y, is up; either switch being up on its own is enough to
+      light it, and the lamp is off only when both switches are down. Nothing else
+      affects the lamp. At 8:00 both X and Y are up and the lamp is lit. At 8:03
+      someone flips Y down and then immediately flips Y back up. At 8:07 someone
+      flips X down and leaves it down. At 8:09 someone jiggles X, but it stays
+      down. Y has not been touched since 8:03 and is up.
+    question: "At 8:15, is the lamp lit? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "As of 8:15, is the ceiling lamp on? Answer with exactly one word: Yes or No."
+      - "Checking the lamp at 8:15, do we find it lit? Answer with exactly one word: Yes or No."
+      - "At the 8:15 mark, is the lamp giving light? Answer with exactly one word: Yes or No."
+      - "By 8:15, is the lamp in its lit state? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: >
+      At 8:15 X is down but Y is up, and either switch alone suffices to light the
+      lamp; removing one of two independently sufficient causes leaves the other
+      still doing the work, so the lamp is lit.
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: cc-005
+      - relation: same_answer
+        target: cc-010
+  - id: cc-003
+    setup: >
+      A single glass pane fills a window frame. The pane shatters the instant any
+      solid object first strikes it, and once it has shattered the frame holds
+      only empty space; a pane can shatter only once, and an object passing
+      through an empty frame strikes nothing. Two stones are thrown at the pane.
+      Stone 1 reaches the frame at 12:00:03 and strikes the pane. Stone 2, thrown
+      a moment later, reaches the frame at 12:00:05.
+    question: "Which stone's impact caused the pane to shatter? Answer with a single number written in digits."
+    paraphrases:
+      - "The pane's shattering was caused by the impact of which stone? Answer with a single number written in digits."
+      - "Which numbered stone actually broke the pane? Answer with a single number written in digits."
+      - "Identify the stone whose strike shattered the pane. Answer with a single number written in digits."
+      - "Which of the two stones is the one that caused the pane to break? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "1"
+    rationale: >
+      Stone 1 strikes the intact pane first, at 12:00:03, and shatters it; by
+      12:00:05 the frame is empty, so stone 2 strikes nothing and merely passes
+      through. The first, actual cause did the work; the later stone is preempted.
+    difficulty: adversarial
+    links:
+      - relation: same_answer
+        target: cc-011
+  - id: cc-004
+    setup: >
+      Consider four gears numbered 1, 2, 3, 4 sitting in a row. The machine's
+      wiring guarantees exactly these couplings and nothing else: whenever gear 1
+      turns, gear 2 turns; whenever gear 2 turns, gear 3 turns; whenever gear 3
+      turns, gear 4 turns. Gear 4 turning is the only thing that can raise the
+      flag; nothing else raises it. All four gears are seated normally on the
+      machine and mesh with their neighbors. No gear has been removed. At 9:05 the
+      operator turns gear 1.
+    question: "After 9:05, is the flag raised? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Following the operator turning gear 1 at 9:05, has the flag gone up? Answer with exactly one word: Yes or No."
+      - "With all four gears seated, does turning gear 1 at 9:05 raise the flag? Answer with exactly one word: Yes or No."
+      - "Once gear 1 is turned at 9:05, is the flag in the raised position? Answer with exactly one word: Yes or No."
+      - "After the 9:05 turn of gear 1, would you find the flag raised? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: >
+      Every link is intact, so gear 1 turning drives gear 2, which drives gear 3,
+      which drives gear 4, and gear 4 turning raises the flag.
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: cc-001
+  - id: cc-005
+    setup: >
+      A ceiling lamp is wired so that it is lit whenever at least one of its two
+      switches, X or Y, is up; either switch being up on its own is enough to
+      light it, and the lamp is off only when both switches are down. Nothing else
+      affects the lamp. At 8:00 both X and Y are up and the lamp is lit. At 8:07
+      someone flips X down and leaves it down. At 8:11 someone flips Y down and
+      leaves it down. Neither switch is touched again.
+    question: "At 8:15, is the lamp lit? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "As of 8:15, is the ceiling lamp on? Answer with exactly one word: Yes or No."
+      - "Checking the lamp at 8:15, do we find it lit? Answer with exactly one word: Yes or No."
+      - "At the 8:15 mark, is the lamp giving light? Answer with exactly one word: Yes or No."
+      - "By 8:15, is the lamp in its lit state? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: >
+      By 8:11 both X and Y are down, and the lamp is off only when both switches
+      are down; with both independently sufficient causes now removed, nothing
+      lights it, so at 8:15 the lamp is off.
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: cc-002
+  - id: cc-006
+    setup: >
+      A single thermostat controls two devices, a fan and a pump. Whenever the
+      thermostat clicks, its click independently starts the fan through one wire
+      and, through a separate wire, starts the pump. The fan and the pump share no
+      wire with each other: neither can start or stop the other, and only the
+      thermostat's click can start either device. At 7:00 the thermostat clicks
+      and both the fan and the pump start. At 7:05 a worker reaches in and jams the
+      fan so that the fan stops. The pump is not touched, and the thermostat does
+      not click again.
+    question: "Just after 7:05, has the pump stopped? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Immediately after the worker jams the fan at 7:05, is the pump now stopped? Answer with exactly one word: Yes or No."
+      - "Following the 7:05 jamming of the fan, has the pump come to a stop? Answer with exactly one word: Yes or No."
+      - "After the fan is jammed at 7:05, does the pump stop running? Answer with exactly one word: Yes or No."
+      - "Right after 7:05, is the pump no longer running? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: >
+      The fan and pump are two effects of a common cause, the thermostat's click,
+      and by stipulation neither can affect the other; jamming the fan therefore
+      does nothing to the pump, which keeps running.
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: cc-013
+  - id: cc-007
+    setup: >
+      A stopwatch stops the instant its button is first pressed, and once stopped
+      it stays stopped; any later press of the button does nothing, because the
+      watch is already stopped. Two runners share the one button. Runner P presses
+      it at 3:00:10, and the watch stops. Runner Q presses the same button at
+      3:00:14.
+    question: "Did runner Q's press cause the stopwatch to stop? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was it runner Q's press that caused the stopwatch to stop? Answer with exactly one word: Yes or No."
+      - "Is runner Q's press the cause of the watch stopping? Answer with exactly one word: Yes or No."
+      - "Did the press by runner Q bring the stopwatch to a stop? Answer with exactly one word: Yes or No."
+      - "Should runner Q's press be counted as the cause of the watch stopping? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: >
+      Runner P's press at 3:00:10 stopped the watch first; by 3:00:14 the watch was
+      already stopped, so Q's press did nothing. Q's press is a preempted backup,
+      not the cause.
+    difficulty: adversarial
+  - id: cc-008
+    setup: >
+      Five pipe sections A, B, C, D, E are joined end to end in a line. Water moves
+      only by these rules: water in A flows into B; water in B flows into C; water
+      in C flows into D; water in D flows into E; water reaching E fills the
+      bucket. A shutoff valve sits on the joint between C and D. When that valve is
+      shut, water in C cannot pass into D, and nothing else can put water into D.
+      At 6:00 the valve between C and D is shut. At 6:10 a jug of water is poured
+      into A.
+    question: "After 6:10, does the bucket fill? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Following the 6:10 pour into A, does the bucket get filled? Answer with exactly one word: Yes or No."
+      - "With the C-D valve shut, does pouring water into A at 6:10 fill the bucket? Answer with exactly one word: Yes or No."
+      - "After water is poured into A at 6:10, is the bucket filled? Answer with exactly one word: Yes or No."
+      - "Once the 6:10 pour happens, does water reach the bucket and fill it? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: >
+      Water flows A to B to C, but the shut valve blocks the middle C-to-D link and
+      nothing else can fill D; so D and E never receive water and the bucket, which
+      fills only from E, stays empty.
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: cc-009
+  - id: cc-009
+    setup: >
+      A siren can be driven two ways, and only these rules apply. Path one: switch
+      1 being on turns on relay R, and relay R being on turns on the siren. Path
+      two: switch 2 being on turns on the siren directly, without using relay R.
+      The siren is on whenever relay R is on OR switch 2 is on. At 5:00 relay R is
+      unplugged and removed from the circuit, so from then on nothing can turn
+      relay R on. At 5:05 switch 1 is turned on, and at the very same moment switch
+      2 is turned on.
+    question: "After 5:05, is the siren on? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Following the 5:05 flips of switch 1 and switch 2, is the siren sounding? Answer with exactly one word: Yes or No."
+      - "With relay R removed, does turning on switches 1 and 2 at 5:05 leave the siren on? Answer with exactly one word: Yes or No."
+      - "After both switches are turned on at 5:05, is the siren active? Answer with exactly one word: Yes or No."
+      - "Once 5:05 passes, do we find the siren on? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: >
+      Path one is dead because relay R was removed and switch 1 can no longer reach
+      the siren, but path two is intact: switch 2 turns the siren on directly, and
+      the siren is on whenever switch 2 is on, so the siren sounds.
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: cc-008
+  - id: cc-010
+    setup: >
+      A boulder sits at the edge of a cliff and will go over the edge if it is
+      pushed hard enough. Two workers stand behind it and push at the same instant.
+      Each worker pushes hard enough that either one's push alone would be enough
+      to send the boulder over the edge. Both push, and the boulder goes over.
+      Now consider a hypothetical version of the same moment in which worker 1 does
+      not push at all, while worker 2 pushes exactly as hard as before.
+    question: "In that hypothetical, would the boulder still have gone over the edge? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "In the hypothetical where only worker 2 pushes, would the boulder have still gone over? Answer with exactly one word: Yes or No."
+      - "Had worker 1 not pushed while worker 2 pushed as before, would the boulder still go over the edge? Answer with exactly one word: Yes or No."
+      - "Considering that hypothetical, does the boulder go over the edge anyway? Answer with exactly one word: Yes or No."
+      - "If worker 1 had stayed still and only worker 2 pushed, would the boulder still have gone over? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: >
+      Worker 2's push alone is stipulated to be enough to send the boulder over;
+      removing only worker 1's push leaves that independently sufficient cause
+      intact, so the boulder still goes over.
+    difficulty: adversarial
+    links:
+      - relation: same_answer
+        target: cc-002
+  - id: cc-011
+    setup: >
+      A fuse box has one master fuse that blows the instant the current first rises
+      above its limit; once blown it stays blown and cuts off all current, so no
+      later surge can reach it or affect it in any way. Three surges arrive in
+      order, each one above the limit: surge 1 at 2:00:01, surge 2 at 2:00:04, and
+      surge 3 at 2:00:06.
+    question: "Which surge's arrival actually blew the fuse? Answer with a single number written in digits."
+    paraphrases:
+      - "The fuse was actually blown by the arrival of which numbered surge? Answer with a single number written in digits."
+      - "Which of the three surges is the one that blew the fuse? Answer with a single number written in digits."
+      - "Identify the surge whose arrival blew the master fuse. Answer with a single number written in digits."
+      - "Which surge is the cause of the fuse blowing? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "1"
+    rationale: >
+      Surge 1 arrives first, at 2:00:01, and is above the limit, so it blows the
+      fuse; once blown, current is cut off, so surges 2 and 3 never reach the fuse.
+      The first surge is the actual cause and the rest are preempted.
+    difficulty: adversarial
+    links:
+      - relation: same_answer
+        target: cc-003
+  - id: cc-012
+    setup: >
+      Four lights L1, L2, L3, L4 are chained so that, by these rules only, L1
+      lighting causes L2 to light, L2 lighting causes L3 to light, and L3 lighting
+      causes L4 to light. Nothing else can light any of them. At 4:00 a technician
+      disconnects the wire between L3 and L4, so L3 lighting can no longer light
+      L4, and nothing else can light L4. The wires among L1, L2, and L3 are left
+      fully intact. At 4:05 L1 is lit.
+    question: "After 4:05, is L2 lit? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Following L1 being lit at 4:05, is L2 lit? Answer with exactly one word: Yes or No."
+      - "With the L3-L4 wire cut, does lighting L1 at 4:05 result in L2 being lit? Answer with exactly one word: Yes or No."
+      - "After 4:05, do we find L2 in the lit state? Answer with exactly one word: Yes or No."
+      - "Once L1 is lit at 4:05, has L2 come on? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: >
+      The disconnected wire is between L3 and L4, downstream of L2; the link from
+      L1 to L2 is intact, so lighting L1 lights L2. A break affects only what lies
+      downstream of it, not upstream nodes like L2.
+    difficulty: adversarial
+  - id: cc-013
+    setup: >
+      Each dawn a single light sensor, when it detects daylight, does two things
+      through separate independent mechanisms: it opens the garage door, and it
+      turns on the porch lamp. The garage door and the porch lamp are connected to
+      each other in no way at all; nothing but the sensor detecting daylight can
+      open the door or light the lamp. One morning the porch lamp's bulb has burned
+      out, so the lamp cannot turn on, but the sensor detects daylight exactly as
+      usual.
+    question: "That morning, does the garage door open? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "On that morning with the dead bulb, does the garage door still open? Answer with exactly one word: Yes or No."
+      - "Given the burned-out porch bulb, does the garage door open as the sensor detects daylight? Answer with exactly one word: Yes or No."
+      - "That dawn, with the lamp unable to light, does the garage door open? Answer with exactly one word: Yes or No."
+      - "Even though the porch lamp cannot come on, does the garage door open that morning? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: >
+      The door and the lamp are two independent effects of the common cause, the
+      sensor detecting daylight; the lamp branch failing does not touch the door
+      branch, and the sensor still detects daylight, so the door opens.
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: cc-006
+  - id: cc-014
+    setup: >
+      A room has a sprinkler, a latch, and a guard, governed by exactly these three
+      rules and nothing else: the sprinkler runs unless the latch is engaged; the
+      latch engages unless the guard is present; and a running sprinkler douses any
+      fire in the room. Right now a fire is burning in the room. The guard is NOT
+      present.
+    question: "Is the fire doused? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Given that the guard is absent, does the fire get doused? Answer with exactly one word: Yes or No."
+      - "With no guard present, is the burning fire put out? Answer with exactly one word: Yes or No."
+      - "Under these rules and with the guard absent, is the fire doused? Answer with exactly one word: Yes or No."
+      - "Does the fire end up being doused, given that the guard is not present? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: >
+      The guard is absent, so the latch engages; an engaged latch means the
+      sprinkler does not run; and only a running sprinkler douses the fire, so the
+      fire is not doused.
+    difficulty: adversarial
+  - id: cc-015
+    setup: >
+      Six bulbs B1, B2, B3, B4, B5, B6 are wired in a single chain so that, by
+      these rules only, B1 lighting lights B2, B2 lighting lights B3, B3 lighting
+      lights B4, B4 lighting lights B5, and B5 lighting lights B6. No bulb can be
+      lit by anything other than the bulb just before it in the chain, except that
+      B1 can be lit by hand. The wire between B3 and B4 is cut, so B3 lighting can
+      no longer light B4 and nothing else can light B4. All other wires are intact.
+      B1 is then lit by hand.
+    question: "After B1 is lit, how many of the six bulbs are lit? Answer with a single number written in digits."
+    paraphrases:
+      - "Once B1 has been lit by hand, how many of the six bulbs end up lit? Answer with a single number written in digits."
+      - "With the B3-B4 wire cut, how many bulbs are lit after B1 is lit? Answer with a single number written in digits."
+      - "After lighting B1, count how many of the six bulbs are lit. Answer with a single number written in digits."
+      - "How many bulbs in the chain are lit once B1 is lit by hand? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "3"
+    rationale: >
+      B1 lights B2, B2 lights B3, so B1, B2, and B3 are lit; the cut between B3 and
+      B4 blocks the middle link, and nothing else can light B4, so B4, B5, and B6
+      stay dark, leaving exactly 3 bulbs lit.
+    difficulty: adversarial

@@ -1,0 +1,346 @@
+id: nested_negation
+title: "Nested and Scoped Negation"
+statement: >
+  A model must resolve nested, stacked, and scoped negation to a definite
+  state whenever the underlying facts are fully stated. Double and triple
+  negation must cancel correctly ("it is not the case that none of the
+  doors is unlocked" asserts that at least one door is unlocked). Negation
+  must compose correctly with quantifiers ("not all of the five doors are
+  locked" entails at least one is unlocked; "none of them failed to sign"
+  entails everyone signed) and with the scope of "and"/"or" ("she did not
+  both call and email" allows at most one of the two). A model that miscounts
+  the negations, mis-scopes a negation over a quantifier, or lets a negation
+  slip past a conjunction does not hold a stable model of the described
+  situation.
+severity: high
+lineage: ["CondaQA (2022)", "BECEL negational consistency (2022)", "ParaRel negation probes (2021)"]
+scenarios:
+  - id: nn-001
+    setup: >
+      A night watchman is responsible for five doors in an old library: the
+      North door, the South door, the East door, the West door, and the
+      Cellar door. When his shift began, all five doors were locked. During
+      the shift only these things happened: he unlocked the South door to let
+      a book cart through and left it unlocked; a cleaner unlocked the East
+      door, stepped outside, and then locked it again from the outside; and a
+      gust of wind rattled the West door but did not change its lock. Nobody
+      touched the North door or the Cellar door.
+    question: "Consider this claim about the doors right now: 'It is not the case that none of the five doors is unlocked.' Is that claim correct? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the following statement about the doors right now accurate: 'It is not the case that none of the five doors is unlocked.'? Answer with exactly one word: Yes or No."
+      - "Decide whether this claim holds right now: 'It is not the case that none of the five doors is unlocked.' Answer with exactly one word: Yes or No."
+      - "Right now, is it correct to say that it is not the case that none of the five doors is unlocked? Answer with exactly one word: Yes or No."
+      - "Evaluate this statement about the current situation: it is not the case that none of the five doors is unlocked. Is it true? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Start locked; South ends unlocked, East is unlocked then relocked, others untouched, so exactly the South door is unlocked. 'None is unlocked' is false, so 'it is not the case that none is unlocked' is true."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: nn-002
+  - id: nn-002
+    setup: >
+      A night watchman is responsible for five doors in an old library: the
+      North door, the South door, the East door, the West door, and the
+      Cellar door. When his shift began, all five doors were locked. During
+      the shift only these things happened: he unlocked the South door to let
+      a book cart through and left it unlocked; a cleaner unlocked the East
+      door, stepped outside, and then locked it again from the outside; and a
+      gust of wind rattled the West door but did not change its lock. Nobody
+      touched the North door or the Cellar door.
+    question: "Consider this claim about the doors right now: 'It is not true that at least one of the five doors is unlocked.' Is that claim correct? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the following statement about the doors right now accurate: 'It is not true that at least one of the five doors is unlocked.'? Answer with exactly one word: Yes or No."
+      - "Decide whether this claim holds right now: 'It is not true that at least one of the five doors is unlocked.' Answer with exactly one word: Yes or No."
+      - "Right now, is it correct to say that it is not true that at least one of the five doors is unlocked? Answer with exactly one word: Yes or No."
+      - "Evaluate this statement about the current situation: it is not true that at least one of the five doors is unlocked. Is it true? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The South door is unlocked (East was relocked), so at least one door is unlocked is true; the claim asserts the opposite, so it is false."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: nn-001
+  - id: nn-003
+    setup: >
+      A night watchman is responsible for five doors in an old library: the
+      North door, the South door, the East door, the West door, and the
+      Cellar door. When his shift began, all five doors were locked. During
+      the shift only these things happened: he unlocked the South door to let
+      a book cart through and left it unlocked; a cleaner unlocked the East
+      door, stepped outside, and then locked it again from the outside; and a
+      gust of wind rattled the West door but did not change its lock. Nobody
+      touched the North door or the Cellar door.
+    question: "How many of the five doors are not locked right now? Answer with a single number written in digits."
+    paraphrases:
+      - "Count them: how many of the five doors are not locked right now? Answer with a single number written in digits."
+      - "Give the number of doors that are not locked at this moment. Answer with a single number written in digits."
+      - "Right now, how many of the five doors fail to be locked? Answer with a single number written in digits."
+      - "State how many of the five doors are currently not in a locked state. Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "1"
+    rationale: "North, East (relocked), West, and Cellar are locked; only the South door is not locked, so exactly one door is not locked."
+    difficulty: adversarial
+  - id: nn-004
+    setup: >
+      Before a storm, a caretaker was asked to latch five windows: the
+      Kitchen, the Attic, the Study, the Hall, and the Garage window. At first
+      all five were unlatched. He latched the Kitchen, the Hall, and the
+      Garage. He latched the Attic window too, but a strong gust later shook it
+      and its latch popped open again, leaving the Attic window unlatched. He
+      started to latch the Study window, was called away before finishing, and
+      a neighbor came by and latched the Study window fully. No one touched any
+      window after that.
+    question: "Consider this claim about the windows right now: 'It is not false that not all of the five windows are latched.' Is that claim correct? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the following statement about the windows right now accurate: 'It is not false that not all of the five windows are latched.'? Answer with exactly one word: Yes or No."
+      - "Decide whether this claim holds right now: 'It is not false that not all of the five windows are latched.' Answer with exactly one word: Yes or No."
+      - "Right now, is it correct to say that it is not false that not all of the five windows are latched? Answer with exactly one word: Yes or No."
+      - "Evaluate this statement about the current situation: it is not false that not all of the five windows are latched. Is it true? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The Attic window's latch popped open, so it is unlatched while the other four are latched; 'not all are latched' is therefore true, and 'it is not false that [true]' is true."
+    difficulty: adversarial
+  - id: nn-005
+    setup: >
+      Before a storm, a caretaker was asked to latch five windows: the
+      Kitchen, the Attic, the Study, the Hall, and the Garage window. At first
+      all five were unlatched. He latched the Kitchen, the Hall, and the
+      Garage. He latched the Attic window too, but a strong gust later shook it
+      and its latch popped open again, leaving the Attic window unlatched. He
+      started to latch the Study window, was called away before finishing, and
+      a neighbor came by and latched the Study window fully. No one touched any
+      window after that.
+    question: "Right now, how many of the five windows are not unlatched? Answer with a single number written in digits."
+    paraphrases:
+      - "Count them: how many of the five windows are not unlatched at this moment? Answer with a single number written in digits."
+      - "Give the number of windows that are not unlatched right now. Answer with a single number written in digits."
+      - "How many of the five windows fail to be unlatched, exactly? Answer with a single number written in digits."
+      - "State how many of the five windows are currently not in an unlatched state. Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "4"
+    rationale: "Kitchen, Hall, Garage, and Study are latched; only the Attic is unlatched. 'Not unlatched' means latched, so four windows are not unlatched."
+    difficulty: adversarial
+  - id: nn-006
+    setup: >
+      A petition needed signatures from five neighbors: Ana, Ben, Cara, Deniz,
+      and Ela. Over the week the following happened: Ana signed it on Monday.
+      Ben said he would sign and did sign on Tuesday. Cara read it, disagreed,
+      and never signed. Deniz signed on Wednesday. Ela signed on Thursday. No
+      one crossed out or withdrew a signature afterward.
+    question: "Consider this claim: 'None of the five neighbors failed to sign the petition.' Is that claim correct? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the following statement accurate: 'None of the five neighbors failed to sign the petition.'? Answer with exactly one word: Yes or No."
+      - "Decide whether this claim holds: 'None of the five neighbors failed to sign the petition.' Answer with exactly one word: Yes or No."
+      - "Is it correct to say that none of the five neighbors failed to sign the petition? Answer with exactly one word: Yes or No."
+      - "Evaluate this statement about the signatures: none of the five neighbors failed to sign the petition. Is it true? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "'None failed to sign' means everyone signed. Cara never signed, so someone did fail to sign, and the claim is false."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: nn-007
+  - id: nn-007
+    setup: >
+      A petition needed signatures from five neighbors: Ana, Ben, Cara, Deniz,
+      and Ela. Over the week the following happened: Ana signed it on Monday.
+      Ben said he would sign and did sign on Tuesday. Cara read it, disagreed,
+      and never signed. Deniz signed on Wednesday. Ela signed on Thursday. No
+      one crossed out or withdrew a signature afterward.
+    question: "Consider this claim: 'It is not the case that every one of the five neighbors signed the petition.' Is that claim correct? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the following statement accurate: 'It is not the case that every one of the five neighbors signed the petition.'? Answer with exactly one word: Yes or No."
+      - "Decide whether this claim holds: 'It is not the case that every one of the five neighbors signed the petition.' Answer with exactly one word: Yes or No."
+      - "Is it correct to say that it is not the case that every one of the five neighbors signed the petition? Answer with exactly one word: Yes or No."
+      - "Evaluate this statement about the signatures: it is not the case that every one of the five neighbors signed the petition. Is it true? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Cara never signed, so it is false that every neighbor signed; the negation of that false statement is true."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: nn-006
+  - id: nn-008
+    setup: >
+      Five desk lamps stand in a row and are labeled A, B, C, D, and E. At noon
+      every lamp was off. Then only these things happened: someone switched
+      lamp A on and it stayed on; lamp B was switched on and then switched off
+      again a minute later; lamp C was switched on and stayed on; lamp D and
+      lamp E were never switched on at all.
+    question: "Consider this claim about the lamps right now: 'It is not the case that both lamp A and lamp B are on.' Is that claim correct? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the following statement about the lamps right now accurate: 'It is not the case that both lamp A and lamp B are on.'? Answer with exactly one word: Yes or No."
+      - "Decide whether this claim holds right now: 'It is not the case that both lamp A and lamp B are on.' Answer with exactly one word: Yes or No."
+      - "Right now, is it correct to say that it is not the case that both lamp A and lamp B are on? Answer with exactly one word: Yes or No."
+      - "Evaluate this statement about the current situation: it is not the case that both lamp A and lamp B are on. Is it true? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Lamp A is on but lamp B was switched off, so 'both A and B are on' is false; the negation of that is true."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: nn-009
+  - id: nn-009
+    setup: >
+      Five desk lamps stand in a row and are labeled A, B, C, D, and E. At noon
+      every lamp was off. Then only these things happened: someone switched
+      lamp A on and it stayed on; lamp B was switched on and then switched off
+      again a minute later; lamp C was switched on and stayed on; lamp D and
+      lamp E were never switched on at all.
+    question: "Consider this claim about the lamps right now: 'It is not the case that at least one of lamp A and lamp B is off.' Is that claim correct? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the following statement about the lamps right now accurate: 'It is not the case that at least one of lamp A and lamp B is off.'? Answer with exactly one word: Yes or No."
+      - "Decide whether this claim holds right now: 'It is not the case that at least one of lamp A and lamp B is off.' Answer with exactly one word: Yes or No."
+      - "Right now, is it correct to say that it is not the case that at least one of lamp A and lamp B is off? Answer with exactly one word: Yes or No."
+      - "Evaluate this statement about the current situation: it is not the case that at least one of lamp A and lamp B is off. Is it true? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Lamp B is off, so 'at least one of A and B is off' is true; asserting it is not the case makes the claim false."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: nn-008
+  - id: nn-010
+    setup: >
+      Five desk lamps stand in a row and are labeled A, B, C, D, and E. At noon
+      every lamp was off. Then only these things happened: someone switched
+      lamp A on and it stayed on; lamp B was switched on and then switched off
+      again a minute later; lamp C was switched on and stayed on; lamp D and
+      lamp E were never switched on at all.
+    question: "Right now, how many of the five lamps are not off? Answer with a single number written in digits."
+    paraphrases:
+      - "Count them: how many of the five lamps are not off at this moment? Answer with a single number written in digits."
+      - "Give the number of lamps that are not off right now. Answer with a single number written in digits."
+      - "How many of the five lamps fail to be off, exactly? Answer with a single number written in digits."
+      - "State how many of the five lamps are currently not in an off state. Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "2"
+    rationale: "Lamp A and lamp C are on; B was switched back off, and D and E were never on. 'Not off' means on, so two lamps are not off."
+    difficulty: adversarial
+  - id: nn-011
+    setup: >
+      On Saturday, Marisol tried to reach her sister in four ways, and these
+      four ways are the only ones under consideration. She emailed her sister
+      in the morning. She phoned her sister at noon; that phone call counts as
+      calling her. She did not send a text message at any point that day. She
+      did not visit her sister in person at any point that day.
+    question: "Consider this claim about Marisol on Saturday: 'She did not both call and email her sister.' Is that claim correct? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the following statement about Marisol on Saturday accurate: 'She did not both call and email her sister.'? Answer with exactly one word: Yes or No."
+      - "Decide whether this claim holds for Marisol on Saturday: 'She did not both call and email her sister.' Answer with exactly one word: Yes or No."
+      - "For Marisol on Saturday, is it correct to say that she did not both call and email her sister? Answer with exactly one word: Yes or No."
+      - "Evaluate this statement about Marisol on Saturday: she did not both call and email her sister. Is it true? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "She both called (the noon phone call) and emailed, so 'both call and email' is true; 'she did not both call and email' denies that and is therefore false."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: nn-012
+  - id: nn-012
+    setup: >
+      On Saturday, Marisol tried to reach her sister in four ways, and these
+      four ways are the only ones under consideration. She emailed her sister
+      in the morning. She phoned her sister at noon; that phone call counts as
+      calling her. She did not send a text message at any point that day. She
+      did not visit her sister in person at any point that day.
+    question: "Consider this claim about Marisol on Saturday: 'It is not the case that she did not both call and email her sister.' Is that claim correct? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the following statement about Marisol on Saturday accurate: 'It is not the case that she did not both call and email her sister.'? Answer with exactly one word: Yes or No."
+      - "Decide whether this claim holds for Marisol on Saturday: 'It is not the case that she did not both call and email her sister.' Answer with exactly one word: Yes or No."
+      - "For Marisol on Saturday, is it correct to say that it is not the case that she did not both call and email her sister? Answer with exactly one word: Yes or No."
+      - "Evaluate this statement about Marisol on Saturday: it is not the case that she did not both call and email her sister. Is it true? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "She both called and emailed, so 'she did not both call and email' is false; the outer negation cancels it, making the whole claim true."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: nn-011
+  - id: nn-013
+    setup: >
+      Five committee members each cast exactly one vote on a single motion,
+      either to approve or to reject it. Paula voted to approve. Quim leaned
+      toward approving during the debate but ultimately cast his vote to
+      reject. Rosa voted to reject. Sami's ballot was at first miscounted as an
+      approval, but the correction confirmed he had actually voted to reject.
+      Tariq voted to approve. The final tally counts each member's actual vote.
+    question: "In the final tally, how many of the five members did not vote to approve? Answer with a single number written in digits."
+    paraphrases:
+      - "Count them: in the final tally, how many of the five members did not vote to approve? Answer with a single number written in digits."
+      - "Give the number of members who did not vote to approve in the final tally. Answer with a single number written in digits."
+      - "How many of the five members failed to vote to approve, exactly? Answer with a single number written in digits."
+      - "State how many of the five members did not cast a vote to approve. Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "3"
+    rationale: "Paula and Tariq approved; Quim, Rosa, and Sami each ultimately voted to reject. 'Did not vote to approve' means voted to reject, so three members did not vote to approve."
+    difficulty: adversarial
+  - id: nn-014
+    setup: >
+      Five committee members each cast exactly one vote on a single motion,
+      either to approve or to reject it. Paula voted to approve. Quim leaned
+      toward approving during the debate but ultimately cast his vote to
+      reject. Rosa voted to reject. Sami's ballot was at first miscounted as an
+      approval, but the correction confirmed he had actually voted to reject.
+      Tariq voted to approve. The final tally counts each member's actual vote.
+    question: "Consider this claim about the final tally: 'It is not true that no member rejected the motion.' Is that claim correct? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the following statement about the final tally accurate: 'It is not true that no member rejected the motion.'? Answer with exactly one word: Yes or No."
+      - "Decide whether this claim holds for the final tally: 'It is not true that no member rejected the motion.' Answer with exactly one word: Yes or No."
+      - "For the final tally, is it correct to say that it is not true that no member rejected the motion? Answer with exactly one word: Yes or No."
+      - "Evaluate this statement about the final tally: it is not true that no member rejected the motion. Is it true? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Quim, Rosa, and Sami rejected the motion, so 'no member rejected' is false; the claim negates that false statement and is therefore true."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: nn-015
+  - id: nn-015
+    setup: >
+      Five committee members each cast exactly one vote on a single motion,
+      either to approve or to reject it. Paula voted to approve. Quim leaned
+      toward approving during the debate but ultimately cast his vote to
+      reject. Rosa voted to reject. Sami's ballot was at first miscounted as an
+      approval, but the correction confirmed he had actually voted to reject.
+      Tariq voted to approve. The final tally counts each member's actual vote.
+    question: "Consider this claim about the final tally: 'It is not the case that not every member approved the motion.' Is that claim correct? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Is the following statement about the final tally accurate: 'It is not the case that not every member approved the motion.'? Answer with exactly one word: Yes or No."
+      - "Decide whether this claim holds for the final tally: 'It is not the case that not every member approved the motion.' Answer with exactly one word: Yes or No."
+      - "For the final tally, is it correct to say that it is not the case that not every member approved the motion? Answer with exactly one word: Yes or No."
+      - "Evaluate this statement about the final tally: it is not the case that not every member approved the motion. Is it true? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Three members rejected, so 'not every member approved' is true; asserting it is not the case denies a true statement, so the claim is false."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: nn-014

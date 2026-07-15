@@ -1,0 +1,304 @@
+id: multihop_temporal
+title: "Multi-Hop Temporal Ordering and Duration Arithmetic"
+statement: >
+  A model must reconstruct a single coherent timeline from facts that are stated
+  out of chronological order and mix absolute clock times with relative offsets,
+  then answer questions that require composing that timeline: the relative order
+  of two events that are never directly compared (transitive ordering), whether
+  two intervals overlap enough to co-occur, and how long spans, gaps, or totals
+  work out under addition and subtraction. Every fact needed is given explicitly;
+  the answer follows by tracking state across the whole chain, and red-herring
+  times, distractor events, and reordered narration must not change it.
+severity: high
+lineage: ["ChronoScope (ACL 2026)", "BECEL temporal consistency (2022)"]
+scenarios:
+  - id: mt-001
+    setup: >
+      A courier logged four drop-offs on Tuesday, but jotted them in her notebook
+      out of chronological order. The drop-off at the bakery was at 1:50pm. The
+      drop-off at the clinic happened 40 minutes before the bakery drop-off. The
+      drop-off at the school was at 9:10am. The drop-off at the gym happened 25
+      minutes after the school drop-off.
+    question: "Did the gym drop-off happen after the bakery drop-off? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was the drop-off at the gym later in the day than the drop-off at the bakery? Answer with exactly one word: Yes or No."
+      - "Did the courier reach the gym after she reached the bakery? Answer with exactly one word: Yes or No."
+      - "Was the gym drop-off made at a later time than the bakery drop-off? Answer with exactly one word: Yes or No."
+      - "Is it true that the gym drop-off came after the bakery drop-off? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The school drop-off is 9:10am, so the gym is 9:35am; the clinic is 1:10pm (40 minutes before the 1:50pm bakery). The gym at 9:35am is well before the 1:50pm bakery drop-off, not after it."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: mt-002
+  - id: mt-002
+    setup: >
+      A courier logged four drop-offs on Tuesday, but jotted them in her notebook
+      out of chronological order. The drop-off at the bakery was at 1:50pm. The
+      drop-off at the clinic happened 40 minutes before the bakery drop-off. The
+      drop-off at the school was at 9:10am. The drop-off at the gym happened 25
+      minutes after the school drop-off.
+    question: "Did the school drop-off happen before the clinic drop-off? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was the drop-off at the school earlier in the day than the drop-off at the clinic? Answer with exactly one word: Yes or No."
+      - "Did the courier reach the school before she reached the clinic? Answer with exactly one word: Yes or No."
+      - "Was the school drop-off made at an earlier time than the clinic drop-off? Answer with exactly one word: Yes or No."
+      - "Is it true that the school drop-off came before the clinic drop-off? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The clinic drop-off is 40 minutes before the 1:50pm bakery, so 1:10pm. The school drop-off at 9:10am is earlier than 1:10pm, so it happened before the clinic drop-off."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: mt-001
+  - id: mt-003
+    setup: >
+      In one studio, three activities were scheduled, but they are described here
+      out of order. The photographer worked from 3:15pm to 4:45pm. The recording
+      session ran from 2:00pm to 3:30pm. The caterer set up from 1:00pm to 2:20pm.
+    question: "Could the recording session and the photographer's work have been happening at the very same moment? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was there any instant when the recording session and the photographer's work were both underway? Answer with exactly one word: Yes or No."
+      - "Do the recording session and the photographer's working period overlap in time at all? Answer with exactly one word: Yes or No."
+      - "Could someone have caught the recording session and the photographer working simultaneously? Answer with exactly one word: Yes or No."
+      - "Is there a moment that falls inside both the recording session and the photographer's work? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The recording session runs 2:00pm-3:30pm and the photographer 3:15pm-4:45pm; these overlap from 3:15pm to 3:30pm, so they could co-occur."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: mt-004
+      - relation: same_answer
+        target: mt-015
+  - id: mt-004
+    setup: >
+      In one studio, three activities were scheduled, but they are described here
+      out of order. The photographer worked from 3:15pm to 4:45pm. The recording
+      session ran from 2:00pm to 3:30pm. The caterer set up from 1:00pm to 2:20pm.
+    question: "Could the caterer's set-up and the photographer's work have been happening at the very same moment? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was there any instant when the caterer's set-up and the photographer's work were both underway? Answer with exactly one word: Yes or No."
+      - "Do the caterer's set-up and the photographer's working period overlap in time at all? Answer with exactly one word: Yes or No."
+      - "Could someone have caught the caterer setting up and the photographer working simultaneously? Answer with exactly one word: Yes or No."
+      - "Is there a moment that falls inside both the caterer's set-up and the photographer's work? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The caterer sets up 1:00pm-2:20pm and the photographer works 3:15pm-4:45pm; the caterer finishes 55 minutes before the photographer begins, so they never overlap."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: mt-003
+      - relation: same_answer
+        target: mt-009
+  - id: mt-005
+    setup: >
+      On Saturday, three activities took place in the community hall, listed here
+      in no particular order. The chess club met from 1:00pm to 2:15pm. The choir
+      rehearsal ran from 10:00am to 11:30am. The yoga class ran from 8:45am to
+      9:45am.
+    question: "How many minutes passed from the start of the earliest activity to the end of the latest activity? Answer with a single number written in digits."
+    paraphrases:
+      - "Counting from when the first activity began to when the last activity ended, how many minutes elapsed? Answer with a single number written in digits."
+      - "What is the number of minutes between the start of the day's earliest activity and the end of its latest activity? Answer with a single number written in digits."
+      - "From the beginning of the earliest activity until the finish of the latest one, how many minutes went by? Answer with a single number written in digits."
+      - "How many minutes span the whole stretch from the first activity's start to the last activity's end? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "330"
+    rationale: "The earliest start is the yoga class at 8:45am; the latest end is the chess club at 2:15pm. From 8:45am to 2:15pm is 5 hours 30 minutes, which is 330 minutes."
+    difficulty: adversarial
+  - id: mt-006
+    setup: >
+      Six trains left one station over an afternoon, described here out of order.
+      The local to Brime left before the freight to Corley. The express to Aldale
+      left before the shuttle to Dunmoor. The shuttle to Dunmoor left before the
+      local to Brime. Separately, the parcel train to Elmsford left at 4:00pm and
+      the mail train to Fenwick also left at 4:00pm.
+    question: "Did the express to Aldale leave before the freight to Corley? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was the express to Aldale's departure earlier than the freight to Corley's departure? Answer with exactly one word: Yes or No."
+      - "Did the express to Aldale pull out of the station before the freight to Corley did? Answer with exactly one word: Yes or No."
+      - "Is it true that the express to Aldale departed ahead of the freight to Corley? Answer with exactly one word: Yes or No."
+      - "Between the express to Aldale and the freight to Corley, did the express leave first? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "The express left before the shuttle, the shuttle left before the local, and the local left before the freight; chaining these, the express left before the freight. The two 4:00pm trains carry no information about that ordering."
+    difficulty: adversarial
+  - id: mt-007
+    setup: >
+      Four colleagues each finished a report at some point during one week,
+      described here out of order. Cody finished his report before Dana finished
+      hers. Alan finished his report before Bea finished hers. Bea finished her
+      report before Cody finished his.
+    question: "Did Dana finish her report before Alan finished his? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was Dana's report finished earlier than Alan's report? Answer with exactly one word: Yes or No."
+      - "Did Dana complete her report before Alan completed his? Answer with exactly one word: Yes or No."
+      - "Is it true that Dana was done with her report before Alan was done with his? Answer with exactly one word: Yes or No."
+      - "Between Dana and Alan, did Dana finish first? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The chain is Alan before Bea, Bea before Cody, and Cody before Dana, so the order is Alan, Bea, Cody, Dana. Dana finished last, so she did not finish before Alan."
+    difficulty: adversarial
+  - id: mt-008
+    setup: >
+      A relay had four legs run one after another with rest gaps in between,
+      described here from first to last. Leg 1 started at 9:00am and took 25
+      minutes. After a 10-minute rest, Leg 2 took 30 minutes. After a 5-minute
+      rest, Leg 3 took 20 minutes. After a 15-minute rest, Leg 4 took 35 minutes.
+    question: "How many minutes after 9:00am did Leg 4 finish? Answer with a single number written in digits."
+    paraphrases:
+      - "Counting from 9:00am, how many minutes had passed by the time Leg 4 ended? Answer with a single number written in digits."
+      - "How many minutes elapsed between 9:00am and the finish of Leg 4? Answer with a single number written in digits."
+      - "Measured from 9:00am, at how many minutes did Leg 4 come to an end? Answer with a single number written in digits."
+      - "From the 9:00am start, what is the number of minutes until Leg 4 finished? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "140"
+    rationale: "Summing legs and rests in order: 25 + 10 + 30 + 5 + 20 + 15 + 35 = 140 minutes after 9:00am."
+    difficulty: adversarial
+  - id: mt-009
+    setup: >
+      During a festival, three acts appeared, described here out of order. The
+      magician performed for 30 minutes, starting at 7:30pm. The band performed
+      for 50 minutes, finishing at 7:10pm. The juggler performed for 40 minutes,
+      starting at 6:20pm.
+    question: "Could the band and the magician have been performing at the very same moment? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was there any instant when the band and the magician were both performing? Answer with exactly one word: Yes or No."
+      - "Do the band's and the magician's performance times overlap at all? Answer with exactly one word: Yes or No."
+      - "Could an onlooker have seen the band and the magician performing simultaneously? Answer with exactly one word: Yes or No."
+      - "Is there a moment that falls inside both the band's and the magician's performance? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The band finished at 7:10pm (50 minutes long, so 6:20pm-7:10pm) and the magician started at 7:30pm; the magician began 20 minutes after the band ended, so they never overlap."
+    difficulty: adversarial
+  - id: mt-010
+    setup: >
+      A museum guide listed the day's five tours out of order. The Egypt tour was
+      at 2:00pm. The Rome tour began 90 minutes before the Egypt tour. The Greece
+      tour was at 9:00am. The Norse tour began 45 minutes after the Greece tour.
+      The Maya tour began 30 minutes before the Egypt tour.
+    question: "Did the Norse tour begin before the Maya tour? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was the Norse tour's start earlier than the Maya tour's start? Answer with exactly one word: Yes or No."
+      - "Did the Norse tour get underway before the Maya tour did? Answer with exactly one word: Yes or No."
+      - "Is it true that the Norse tour started ahead of the Maya tour? Answer with exactly one word: Yes or No."
+      - "Between the Norse tour and the Maya tour, did the Norse one begin first? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Greece is 9:00am, so Norse is 9:45am. The Maya tour is 30 minutes before the 2:00pm Egypt tour, so 1:30pm. Norse at 9:45am is earlier than Maya at 1:30pm."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: mt-011
+  - id: mt-011
+    setup: >
+      A museum guide listed the day's five tours out of order. The Egypt tour was
+      at 2:00pm. The Rome tour began 90 minutes before the Egypt tour. The Greece
+      tour was at 9:00am. The Norse tour began 45 minutes after the Greece tour.
+      The Maya tour began 30 minutes before the Egypt tour.
+    question: "Did the Egypt tour begin before the Rome tour? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was the Egypt tour's start earlier than the Rome tour's start? Answer with exactly one word: Yes or No."
+      - "Did the Egypt tour get underway before the Rome tour did? Answer with exactly one word: Yes or No."
+      - "Is it true that the Egypt tour started ahead of the Rome tour? Answer with exactly one word: Yes or No."
+      - "Between the Egypt tour and the Rome tour, did the Egypt one begin first? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "The Rome tour began 90 minutes before the 2:00pm Egypt tour, so at 12:30pm. The Egypt tour at 2:00pm is later than 12:30pm, so it did not begin before the Rome tour."
+    difficulty: adversarial
+    links:
+      - relation: different_answer
+        target: mt-010
+  - id: mt-012
+    setup: >
+      Four machines ran on the factory floor one afternoon, listed here out of
+      order. Machine B ran from 2:55pm to 3:40pm. Machine D ran from 3:05pm to
+      3:20pm. Machine A ran from 2:30pm to 3:10pm. Machine C ran from 1:00pm to
+      2:50pm.
+    question: "Exactly at 3:00pm, how many of the machines were running? Answer with a single number written in digits."
+    paraphrases:
+      - "At the 3:00pm mark, how many machines were in operation? Answer with a single number written in digits."
+      - "Counting the machines that were running right at 3:00pm, how many were there? Answer with a single number written in digits."
+      - "How many of the four machines were active at exactly 3:00pm? Answer with a single number written in digits."
+      - "At precisely 3:00pm, what is the number of machines that were running? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "2"
+    rationale: "At 3:00pm: Machine A (2:30-3:10) is running and Machine B (2:55-3:40) is running; Machine C ended at 2:50pm and Machine D started at 3:05pm, so neither is running. That is 2 machines."
+    difficulty: adversarial
+  - id: mt-013
+    setup: >
+      Four emails went out one morning, described here out of order. The invoice
+      email was sent 20 minutes after the reminder email. The receipt email was
+      sent 5 minutes before the invoice email. A newsletter was also sent at
+      exactly noon, unrelated to the timing of the other three.
+    question: "Was the receipt email sent before the reminder email? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was the receipt email's send time earlier than the reminder email's send time? Answer with exactly one word: Yes or No."
+      - "Did the receipt email go out before the reminder email did? Answer with exactly one word: Yes or No."
+      - "Is it true that the receipt email was sent ahead of the reminder email? Answer with exactly one word: Yes or No."
+      - "Between the receipt email and the reminder email, was the receipt one sent first? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: "Take the reminder as the reference: the invoice is 20 minutes after it, and the receipt is 5 minutes before the invoice, so the receipt is 15 minutes after the reminder. The receipt was sent after, not before, the reminder; the noon newsletter is irrelevant."
+    difficulty: adversarial
+  - id: mt-014
+    setup: >
+      A workshop had three sessions one day, described here out of order. Session
+      Two ran from 10:45am to 12:15pm. Session Three ran from 1:30pm to 2:45pm.
+      Session One ran from 9:30am to 11:00am.
+    question: "Counting only the stretch from the first session's start to the last session's end, how many minutes were not covered by any session? Answer with a single number written in digits."
+    paraphrases:
+      - "Within the span from the earliest session's start to the latest session's end, how many minutes fell outside every session? Answer with a single number written in digits."
+      - "Between the start of the first session and the end of the last session, how many minutes had no session running? Answer with a single number written in digits."
+      - "Over the period from the first session's beginning to the last session's finish, how many uncovered minutes were there? Answer with a single number written in digits."
+      - "From the earliest session start to the latest session end, what is the number of minutes not spanned by any session? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "75"
+    rationale: "The span runs 9:30am to 2:45pm, which is 315 minutes. Sessions One and Two together cover 9:30am-12:15pm (165 minutes, since they overlap) and Session Three covers 1:30pm-2:45pm (75 minutes), 240 covered in all; 315 minus 240 leaves a 75-minute gap between 12:15pm and 1:30pm."
+    difficulty: adversarial
+  - id: mt-015
+    setup: >
+      Two painters worked on a mural, described here out of order. Painter Two
+      started at 1:45pm and worked for 60 minutes without stopping. Painter One
+      worked in one continuous 90-minute stretch that finished at 2:30pm.
+    question: "Could both painters have been painting at the very same moment? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Was there any instant when both painters were painting at once? Answer with exactly one word: Yes or No."
+      - "Do the two painters' working periods overlap in time at all? Answer with exactly one word: Yes or No."
+      - "Could an observer have seen the two painters working simultaneously? Answer with exactly one word: Yes or No."
+      - "Is there a moment that falls inside both painters' working stretches? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "Painter One's 90-minute stretch ending at 2:30pm runs 1:00pm-2:30pm; Painter Two works 1:45pm-2:45pm. They overlap from 1:45pm to 2:30pm, so both could be painting at once."
+    difficulty: adversarial
+    links:
+      - relation: same_answer
+        target: mt-003
