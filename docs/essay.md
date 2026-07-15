@@ -1,8 +1,11 @@
 # Ontology Debt: the ledger your LLM evals are missing
 
-*Draft — companion essay to [ontodebt](../README.md). ~1,300 words.*
+*Draft — companion essay to [ontodebt](../README.md).*
 
 ---
+
+> **First, in plain terms: what's an "ontology"?**
+> Think of it as a rulebook for what exists and how it fits together — not a description of one particular thing, but the categories and the rules between them. *A wheel is always a wheel; wheels attach to axles; an axle holds two wheels.* You're not describing one Lego model; you're laying down the pieces and how they may connect. A language model has one too — an implicit rulebook it operates by: *a ball that rolls behind a wall still exists; a cause comes before its effect; a quantity doesn't change because you reworded the sentence.* **Ontology Debt is a quiz that checks whether the model's rulebook stays consistent and matches the one you say it should follow — and keeps a running tab of the mismatches until they're fixed.**
 
 Your product logic assumes a world-model. Somewhere in your system there is a set of things that must be true for the code around the LLM to make sense: an occluded object still exists, a cause precedes its effect, a question and its negation cannot both be "yes," a quantity doesn't change because you rephrased the sentence describing it. Nobody wrote these down, because nobody writes down the obvious.
 
