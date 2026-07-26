@@ -1,4 +1,10 @@
 {
+ "monitoring": {
+  "anthropic": "unmonitored",
+  "gemini": "unmonitored",
+  "huggingface": "monitored",
+  "openai": "unmonitored"
+ },
  "providers": {
   "huggingface": {
    "baseline_established": "2026-07-26T18:57:48Z",
