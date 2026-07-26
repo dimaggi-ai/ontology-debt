@@ -141,6 +141,21 @@ Every individual mechanism here has strong prior art. The composition — user-d
 6. **Model ids are as-invoked, not guaranteed immutable.** Pin dated snapshot ids in `models.yaml` where the provider offers them; the report labels the id it actually called.
 7. **A high pass rate is not safety.** These are floor checks. Passing all 750 probes means the floor holds, nothing more.
 
+## The repo maintains itself (up to a human gate)
+
+A set of scheduled jobs — the [maintainer loop](docs/maintainer-loop.md) —
+watches provider model-list APIs and opens an audit PR when a new relevant
+model ships, watches arXiv/OpenAlex/GitHub for prior art (every candidate
+must survive a fetch-then-quote verifier: a citation that cannot be
+re-fetched cannot surface), and detects when the hard tier saturates so a
+harder one can be drafted. The organizing rule mirrors the harness itself:
+**the agent proposes, deterministic code decides, a human merges.** No LLM
+touches scoring, the ledger, or the registry diff; drafted packs carry a
+`never-automerge` label; releases stay manual. The loop's own logic is
+tested like everything else (`tests/test_maintainer_*.py`), including
+regression tests for its two founding burns: a fabricated citation and a
+dead API key masquerading as a clean run.
+
 ## Development
 
 ```bash

@@ -1,0 +1,58 @@
+# Phase 4 of the maintainer loop - SHIPPED DISABLED. Does nothing until a
+# human sets the repo variable AUTOMERGE_MECHANICAL=true, and even then the
+# only thing that can ever merge itself is a report.md regeneration that
+# `ontodebt report` reproduces byte-for-byte from committed run files.
+# Audits, transcripts, ledgers, citations, packs, and code never auto-merge.
+name: maintainer-automerge
+
+on:
+  pull_request:
+    types: [opened, labeled, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  gate:
+    if: >-
+      vars.AUTOMERGE_MECHANICAL == 'true' &&
+      contains(github.event.pull_request.labels.*.name, 'mechanical-refresh') &&
+      !contains(github.event.pull_request.labels.*.name, 'never-automerge')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e .
+      - name: Collect changed files
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+        run: git diff --name-only "$BASE"...HEAD > /tmp/changed.txt
+      - name: Deterministic path guard
+        run: |
+          python -m ontodebt.maintainer.mechanical \
+            --files-from /tmp/changed.txt --plan-out /tmp/plan.txt
+      - name: Recompute every touched report; require an identical document
+        # Identity is checked modulo the volatile 'Generated:' timestamp line
+        # and trailing newlines (reports_equivalent in mechanical.py) - the
+        # wall-clock stamp would otherwise make this gate unsatisfiable.
+        run: |
+          while IFS=$'\t' read -r results commitments; do
+            if [ -z "$results" ]; then continue; fi
+            echo "recomputing $results (commitments: $commitments)"
+            ontodebt report --results "$results" --commitments "$commitments" \
+              > /tmp/recomputed.md
+            python -m ontodebt.maintainer.mechanical \
+              --compare "$results/report.md" /tmp/recomputed.md
+          done < /tmp/plan.txt
+      - name: Auto-merge (squash)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: gh pr merge --squash --auto "$PR"

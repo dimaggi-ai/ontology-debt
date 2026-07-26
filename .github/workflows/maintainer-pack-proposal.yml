@@ -1,0 +1,80 @@
+# L3 action of the maintainer loop: draft a harder commitment pack.
+# Human-dispatched only, spend-gated, and the resulting PR carries
+# `never-automerge`: a draft becomes a scoring pack only when a human
+# promotes it out of commitments-frontier-draft/ after review.
+name: maintainer-pack-proposal
+
+on:
+  workflow_dispatch:
+    inputs:
+      theme:
+        description: "Theme for the new pack (e.g. 'counterfactual stability under irrelevant perturbations')"
+        required: true
+        type: string
+      pack_id:
+        description: "lower_snake_case pack id (e.g. counterfactual_stability)"
+        required: true
+        type: string
+      style_pack:
+        description: "Existing pack to anchor style on"
+        required: false
+        default: "commitments-frontier/stacked_conservation.yaml"
+        type: string
+      n_scenarios:
+        description: "Scenarios to draft"
+        required: false
+        default: "8"
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  propose:
+    # MAINTAINER_SPEND_CONFIRMED guards against GitHub auto-creating an
+    # unprotected maintainer-spend environment on first reference.
+    if: ${{ vars.MAINTAINER_LOOP_ENABLED != 'false' && vars.MAINTAINER_SPEND_CONFIRMED == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: maintainer-spend   # human approval gates the API spend
+    env:
+      HAS_APP: ${{ secrets.MAINTAINER_APP_ID != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e .
+      - name: Draft, adversarially filter, and validate the pack
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          THEME: ${{ inputs.theme }}
+          PACK_ID: ${{ inputs.pack_id }}
+          STYLE: ${{ inputs.style_pack }}
+          N: ${{ inputs.n_scenarios }}
+        run: |
+          python -m ontodebt.maintainer.propose \
+            --theme "$THEME" --pack-id "$PACK_ID" --style-pack "$STYLE" \
+            --n "$N" --out-dir commitments-frontier-draft --pr-body /tmp/pr-body.md
+      - name: Deterministic re-validation of the draft (same gate as CI)
+        run: ontodebt validate --commitments commitments-frontier-draft
+      - name: Mint app token
+        id: app
+        if: ${{ env.HAS_APP == 'true' }}
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.MAINTAINER_APP_ID }}
+          private-key: ${{ secrets.MAINTAINER_APP_PRIVATE_KEY }}
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ steps.app.outputs.token || github.token }}
+          branch: maintainer/pack-${{ inputs.pack_id }}-${{ github.run_id }}
+          title: "Draft pack (never auto-merge): ${{ inputs.pack_id }}"
+          body-path: /tmp/pr-body.md
+          labels: |
+            maintainer-loop
+            never-automerge
+          commit-message: "maintainer: draft pack ${{ inputs.pack_id }} (human review required)"
+          add-paths: |
+            commitments-frontier-draft/

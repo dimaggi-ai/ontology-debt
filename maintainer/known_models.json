@@ -1,0 +1,2508 @@
+{
+ "providers": {
+  "huggingface": {
+   "baseline_established": "2026-07-26T18:57:48Z",
+   "models": {
+    "Qwen/Qwen-AgentWorld-35B-A3B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "10ecae01c7168f1d",
+     "meta": {
+      "created_at": "2026-06-22T14:49:37.000Z"
+     }
+    },
+    "Qwen/Qwen-Image-Bench": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "3874f3bc4ee252b8",
+     "meta": {
+      "created_at": "2026-05-21T04:15:56.000Z"
+     }
+    },
+    "Qwen/Qwen3-ASR-0.6B-hf": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "64e6a5c33fbb1b0e",
+     "meta": {
+      "created_at": "2026-06-26T08:39:00.000Z"
+     }
+    },
+    "Qwen/Qwen3-ASR-1.7B-hf": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "ab6ed1c2c288e03a",
+     "meta": {
+      "created_at": "2026-06-26T08:34:21.000Z"
+     }
+    },
+    "Qwen/Qwen3-Coder-Next-Base": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "47aef2ecacdaf0c1",
+     "meta": {
+      "created_at": "2026-02-01T12:42:15.000Z"
+     }
+    },
+    "Qwen/Qwen3-Coder-Next-FP8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "c05f6d85dc3a60f4",
+     "meta": {
+      "created_at": "2026-02-01T12:22:41.000Z"
+     }
+    },
+    "Qwen/Qwen3-Coder-Next-GGUF": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "50c2c28f89e58be5",
+     "meta": {
+      "created_at": "2026-02-02T05:40:51.000Z"
+     }
+    },
+    "Qwen/Qwen3-ForcedAligner-0.6B-hf": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "9df1245fb0a7ad3c",
+     "meta": {
+      "created_at": "2026-06-26T08:42:01.000Z"
+     }
+    },
+    "Qwen/Qwen3.5-0.8B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "8e546691e3086419",
+     "meta": {
+      "created_at": "2026-02-28T23:57:01.000Z"
+     }
+    },
+    "Qwen/Qwen3.5-0.8B-Base": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "61504d1d5f7eee88",
+     "meta": {
+      "created_at": "2026-02-28T23:57:45.000Z"
+     }
+    },
+    "Qwen/Qwen3.5-122B-A10B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "b4830c56ee6cf2d2",
+     "meta": {
+      "created_at": "2026-02-24T09:43:37.000Z"
+     }
+    },
+    "Qwen/Qwen3.5-122B-A10B-FP8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "edc2686a10bc9f39",
+     "meta": {
+      "created_at": "2026-02-25T13:01:23.000Z"
+     }
+    },
+    "Qwen/Qwen3.5-122B-A10B-GPTQ-Int4": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "c439f3b47f85d852",
+     "meta": {
+      "created_at": "2026-03-03T06:08:00.000Z"
+     }
+    },
+    "Qwen/Qwen3.5-27B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "1dbd4ad853c07160",
+     "meta": {
+      "created_at": "2026-02-24T09:41:56.000Z"
+     }
+    },
+    "Qwen/Qwen3.5-27B-FP8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "7b32485fc16e5186",
+     "meta": {
+      "created_at": "2026-02-25T13:20:07.000Z"
+     }
+    },
+    "Qwen/Qwen3.5-27B-GPTQ-Int4": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "0ae877d03ea6ff6c",
+     "meta": {
+      "created_at": "2026-03-03T07:08:41.000Z"
+     }
+    },
+    "Qwen/Qwen3.5-2B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "ef788f7508151abc",
+     "meta": {
+      "created_at": "2026-02-28T23:56:16.000Z"
+     }
+    },
+    "Qwen/Qwen3.5-2B-Base": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "c93dec38eba88cd4",
+     "meta": {
+      "created_at": "2026-02-28T23:57:23.000Z"
+     }
+    },
+    "Qwen/Qwen3.5-35B-A3B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "9457627383cb68e8",
+     "meta": {
+      "created_at": "2026-02-24T09:39:25.000Z"
+     }
+    },
+    "Qwen/Qwen3.5-35B-A3B-Base": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "fc5bd0ccf252cb7b",
+     "meta": {
+      "created_at": "2026-02-24T09:42:42.000Z"
+     }
+    },
+    "Qwen/Qwen3.5-35B-A3B-FP8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "5a04d58e73198f3e",
+     "meta": {
+      "created_at": "2026-02-25T13:34:21.000Z"
+     }
+    },
+    "Qwen/Qwen3.5-35B-A3B-GPTQ-Int4": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "6bdf6f04eb5d45c9",
+     "meta": {
+      "created_at": "2026-03-03T07:18:32.000Z"
+     }
+    },
+    "Qwen/Qwen3.5-397B-A17B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "161d339598236541",
+     "meta": {
+      "created_at": "2026-02-16T04:55:12.000Z"
+     }
+    },
+    "Qwen/Qwen3.5-397B-A17B-FP8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "6b2bb622899ffb84",
+     "meta": {
+      "created_at": "2026-02-18T13:01:57.000Z"
+     }
+    },
+    "Qwen/Qwen3.5-397B-A17B-GPTQ-Int4": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "0ce121ee7002e020",
+     "meta": {
+      "created_at": "2026-03-03T06:25:36.000Z"
+     }
+    },
+    "Qwen/Qwen3.5-4B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "74015b6433564e25",
+     "meta": {
+      "created_at": "2026-02-27T14:45:03.000Z"
+     }
+    },
+    "Qwen/Qwen3.5-4B-Base": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "8e552e99380896c2",
+     "meta": {
+      "created_at": "2026-02-27T13:20:09.000Z"
+     }
+    },
+    "Qwen/Qwen3.5-9B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "5ae40e36653bfdf6",
+     "meta": {
+      "created_at": "2026-02-27T12:58:26.000Z"
+     }
+    },
+    "Qwen/Qwen3.5-9B-Base": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "247614cb830028ff",
+     "meta": {
+      "created_at": "2026-02-26T16:20:10.000Z"
+     }
+    },
+    "Qwen/Qwen3.6-27B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "b8291e38758146e5",
+     "meta": {
+      "created_at": "2026-04-21T07:50:43.000Z"
+     }
+    },
+    "Qwen/Qwen3.6-27B-FP8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "efa9a8614ed35e6b",
+     "meta": {
+      "created_at": "2026-04-21T07:51:33.000Z"
+     }
+    },
+    "Qwen/Qwen3.6-35B-A3B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "36a3a1b81a1f2cce",
+     "meta": {
+      "created_at": "2026-04-15T05:59:19.000Z"
+     }
+    },
+    "Qwen/Qwen3.6-35B-A3B-FP8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "20651e1a08a8d67d",
+     "meta": {
+      "created_at": "2026-04-15T06:05:13.000Z"
+     }
+    },
+    "Qwen/SAE-Res-Qwen3-1.7B-Base-W32K-L0_100": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "7c06c52c79e9a197",
+     "meta": {
+      "created_at": "2026-04-27T03:39:36.000Z"
+     }
+    },
+    "Qwen/SAE-Res-Qwen3-1.7B-Base-W32K-L0_50": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "3eb5c288ec4437bf",
+     "meta": {
+      "created_at": "2026-04-27T03:39:35.000Z"
+     }
+    },
+    "Qwen/SAE-Res-Qwen3-30B-A3B-Base-W128K-L0_100": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "a80ac596c9be6cf5",
+     "meta": {
+      "created_at": "2026-04-27T03:39:45.000Z"
+     }
+    },
+    "Qwen/SAE-Res-Qwen3-30B-A3B-Base-W32K-L0_50": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "e830eb0f6b6654e5",
+     "meta": {
+      "created_at": "2026-04-27T03:39:44.000Z"
+     }
+    },
+    "Qwen/SAE-Res-Qwen3-8B-Base-W64K-L0_100": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "7b538b71ac309087",
+     "meta": {
+      "created_at": "2026-04-27T03:39:38.000Z"
+     }
+    },
+    "Qwen/SAE-Res-Qwen3-8B-Base-W64K-L0_50": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "34b9122b4efc1dfb",
+     "meta": {
+      "created_at": "2026-04-27T03:39:37.000Z"
+     }
+    },
+    "Qwen/SAE-Res-Qwen3.5-27B-W80K-L0_100": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "75f82912636b7106",
+     "meta": {
+      "created_at": "2026-04-27T03:39:43.000Z"
+     }
+    },
+    "Qwen/SAE-Res-Qwen3.5-27B-W80K-L0_50": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "dafd5a3fd507d2cd",
+     "meta": {
+      "created_at": "2026-04-27T03:39:42.000Z"
+     }
+    },
+    "Qwen/SAE-Res-Qwen3.5-2B-Base-W32K-L0_100": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "5ff359ab13cc2300",
+     "meta": {
+      "created_at": "2026-04-27T03:39:40.000Z"
+     }
+    },
+    "Qwen/SAE-Res-Qwen3.5-2B-Base-W32K-L0_50": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "32503141d11c5e3a",
+     "meta": {
+      "created_at": "2026-04-27T03:39:39.000Z"
+     }
+    },
+    "Qwen/SAE-Res-Qwen3.5-35B-A3B-Base-W128K-L0_100": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "f65c751afe4d3978",
+     "meta": {
+      "created_at": "2026-04-27T03:39:47.000Z"
+     }
+    },
+    "Qwen/SAE-Res-Qwen3.5-35B-A3B-Base-W32K-L0_50": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "f0eee2c8dad72267",
+     "meta": {
+      "created_at": "2026-04-27T03:39:46.000Z"
+     }
+    },
+    "Qwen/SAE-Res-Qwen3.5-9B-Base-W64K-L0_100": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "5c077862eecebb06",
+     "meta": {
+      "created_at": "2026-04-27T03:39:41.000Z"
+     }
+    },
+    "Qwen/SAE-Res-Qwen3.5-9B-Base-W64K-L0_50": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "5ff359ab13cc2300",
+     "meta": {
+      "created_at": "2026-04-27T03:39:40.000Z"
+     }
+    },
+    "Qwen/WebWorld-14B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "549c960570c6ce51",
+     "meta": {
+      "created_at": "2026-02-13T14:14:04.000Z"
+     }
+    },
+    "Qwen/WebWorld-32B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "209a89a88443ef89",
+     "meta": {
+      "created_at": "2026-02-13T14:14:13.000Z"
+     }
+    },
+    "Qwen/WebWorld-8B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "4d81e261e5263c2f",
+     "meta": {
+      "created_at": "2026-02-13T14:13:39.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-Math-V2": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "df16f1dc81a86362",
+     "meta": {
+      "created_at": "2025-11-27T09:54:23.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-OCR": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "9c30ea07d070571d",
+     "meta": {
+      "created_at": "2025-10-17T06:22:05.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-OCR-2": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "985cfb10d606e90b",
+     "meta": {
+      "created_at": "2026-01-27T02:56:54.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-Prover-V2-671B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "0c036432f346d39a",
+     "meta": {
+      "created_at": "2025-04-30T06:14:35.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-Prover-V2-7B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "acd5f938ee2cc907",
+     "meta": {
+      "created_at": "2025-04-30T06:32:28.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-R1": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "2d574c9150ea54a8",
+     "meta": {
+      "created_at": "2025-01-20T03:46:07.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-R1-0528": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "f42ba85f1560bc34",
+     "meta": {
+      "created_at": "2025-05-28T09:46:42.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-R1-0528-Qwen3-8B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "f910053953c77ac6",
+     "meta": {
+      "created_at": "2025-05-29T11:07:47.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-R1-Distill-Llama-70B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "fb37962ff9328a37",
+     "meta": {
+      "created_at": "2025-01-20T09:13:33.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-R1-Distill-Llama-8B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "85859f6fc71d9952",
+     "meta": {
+      "created_at": "2025-01-20T09:09:42.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "4b8c79654e54152b",
+     "meta": {
+      "created_at": "2025-01-20T09:04:18.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "18c793b242ee74ac",
+     "meta": {
+      "created_at": "2025-01-20T09:18:27.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "d053da21053d0dbb",
+     "meta": {
+      "created_at": "2025-01-20T09:19:00.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "61cab2d078748a9f",
+     "meta": {
+      "created_at": "2025-01-20T09:16:14.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-R1-Zero": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "8ba3d32da4c8d1f6",
+     "meta": {
+      "created_at": "2025-01-20T03:35:48.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-V2.5-1210": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "6fd1d2dbde7278f8",
+     "meta": {
+      "created_at": "2024-12-10T05:51:13.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-V3": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "f239ad1b87ab0743",
+     "meta": {
+      "created_at": "2024-12-25T12:52:23.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-V3-0324": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "887bb2ea32f3730b",
+     "meta": {
+      "created_at": "2025-03-24T09:28:22.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-V3-Base": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "e495d8420b963842",
+     "meta": {
+      "created_at": "2024-12-25T12:52:06.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-V3.1": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "14b098d5140e1acb",
+     "meta": {
+      "created_at": "2025-08-21T02:37:52.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-V3.1-Base": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "46761b72580ba117",
+     "meta": {
+      "created_at": "2025-08-19T10:01:00.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-V3.1-Terminus": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "486e04120fcdc6ac",
+     "meta": {
+      "created_at": "2025-09-22T04:56:04.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-V3.2": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "0578e7b9fa48278c",
+     "meta": {
+      "created_at": "2025-12-01T02:34:49.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-V3.2-Exp": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "5775c58a4b32c92e",
+     "meta": {
+      "created_at": "2025-09-29T06:07:26.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-V3.2-Exp-Base": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "e81434652c4c1e4d",
+     "meta": {
+      "created_at": "2025-09-29T02:43:23.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-V3.2-Speciale": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "97a5d255921681f9",
+     "meta": {
+      "created_at": "2025-11-28T03:00:02.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-V4-Flash": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "e56f6ee837bd841a",
+     "meta": {
+      "created_at": "2026-04-22T06:04:20.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-V4-Flash-Base": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "b30f88e0cb13be35",
+     "meta": {
+      "created_at": "2026-04-22T06:03:55.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-V4-Flash-DSpark": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "c191d7642f86413a",
+     "meta": {
+      "created_at": "2026-06-27T02:27:36.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-V4-Pro": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "8b813bd128a3d78a",
+     "meta": {
+      "created_at": "2026-04-22T06:04:45.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-V4-Pro-Base": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "d37680e2bbb8a85d",
+     "meta": {
+      "created_at": "2026-04-22T06:04:35.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-V4-Pro-DSpark": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "14b4b2c93d5d5147",
+     "meta": {
+      "created_at": "2026-06-27T03:02:56.000Z"
+     }
+    },
+    "deepseek-ai/Janus-Pro-1B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "596267ebd263e4e4",
+     "meta": {
+      "created_at": "2025-01-26T12:07:49.000Z"
+     }
+    },
+    "deepseek-ai/Janus-Pro-7B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "75cc800ee2d7e2f6",
+     "meta": {
+      "created_at": "2025-01-26T12:05:50.000Z"
+     }
+    },
+    "deepseek-ai/JanusFlow-1.3B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "0c40772ffc8df57a",
+     "meta": {
+      "created_at": "2024-11-12T06:39:25.000Z"
+     }
+    },
+    "deepseek-ai/deepseek-vl2": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "4ad663a752b4d78b",
+     "meta": {
+      "created_at": "2024-12-13T09:06:44.000Z"
+     }
+    },
+    "deepseek-ai/deepseek-vl2-small": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "e91a31c5cec6d0dd",
+     "meta": {
+      "created_at": "2024-12-13T09:01:03.000Z"
+     }
+    },
+    "deepseek-ai/deepseek-vl2-tiny": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "c3f2a590e1691f4d",
+     "meta": {
+      "created_at": "2024-12-13T08:49:22.000Z"
+     }
+    },
+    "deepseek-ai/dflash_gemma4_12b_block7": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "d08c294b84066a46",
+     "meta": {
+      "created_at": "2026-06-28T12:33:24.000Z"
+     }
+    },
+    "deepseek-ai/dflash_qwen3_14b_block7": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "50ea82f1600db789",
+     "meta": {
+      "created_at": "2026-06-28T12:31:30.000Z"
+     }
+    },
+    "deepseek-ai/dflash_qwen3_4b_block7": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "3d44c85daf292391",
+     "meta": {
+      "created_at": "2026-06-28T12:29:12.000Z"
+     }
+    },
+    "deepseek-ai/dflash_qwen3_8b_block7": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "f1882412909006a4",
+     "meta": {
+      "created_at": "2026-06-28T12:30:07.000Z"
+     }
+    },
+    "deepseek-ai/dspark_gemma4_12b_block7": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "bc44b0ae534bdb3a",
+     "meta": {
+      "created_at": "2026-06-28T12:27:36.000Z"
+     }
+    },
+    "deepseek-ai/dspark_qwen3_14b_block7": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "b16ca56839a5f159",
+     "meta": {
+      "created_at": "2026-06-28T12:25:33.000Z"
+     }
+    },
+    "deepseek-ai/dspark_qwen3_4b_block7": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "4d23db99ad534fcf",
+     "meta": {
+      "created_at": "2026-06-28T11:29:16.000Z"
+     }
+    },
+    "deepseek-ai/dspark_qwen3_8b_block7": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "19f7dd34ee1cd191",
+     "meta": {
+      "created_at": "2026-06-28T12:24:08.000Z"
+     }
+    },
+    "deepseek-ai/eagle3_gemma4_12b_ttt7": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "2706b9985fa44eb5",
+     "meta": {
+      "created_at": "2026-06-28T12:37:17.000Z"
+     }
+    },
+    "deepseek-ai/eagle3_qwen3_14b_ttt7": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "b09441ef37e21162",
+     "meta": {
+      "created_at": "2026-06-28T12:36:20.000Z"
+     }
+    },
+    "deepseek-ai/eagle3_qwen3_4b_ttt7": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "968fd71f6713330a",
+     "meta": {
+      "created_at": "2026-06-28T12:34:59.000Z"
+     }
+    },
+    "deepseek-ai/eagle3_qwen3_8b_ttt7": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "e27c748f75dbe2fd",
+     "meta": {
+      "created_at": "2026-06-28T12:35:29.000Z"
+     }
+    },
+    "google/diffusiongemma-26B-A4B-it": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "4197c5ba98f34593",
+     "meta": {
+      "created_at": "2026-06-09T12:40:12.000Z"
+     }
+    },
+    "google/gemma-4-12B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "83b28cb68bd7acb7",
+     "meta": {
+      "created_at": "2026-05-23T02:43:54.000Z"
+     }
+    },
+    "google/gemma-4-12B-it": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "5f56a099363e0626",
+     "meta": {
+      "created_at": "2026-05-23T01:17:15.000Z"
+     }
+    },
+    "google/gemma-4-12B-it-assistant": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "81c445285e4140a0",
+     "meta": {
+      "created_at": "2026-05-23T01:17:47.000Z"
+     }
+    },
+    "google/gemma-4-12B-it-qat-q4_0-gguf": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "297f2494237c748b",
+     "meta": {
+      "created_at": "2026-06-05T00:28:47.000Z"
+     }
+    },
+    "google/gemma-4-12B-it-qat-q4_0-unquantized": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "2bdfd6720f90bcbf",
+     "meta": {
+      "created_at": "2026-06-04T05:20:28.000Z"
+     }
+    },
+    "google/gemma-4-12B-it-qat-q4_0-unquantized-assistant": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "7eed656d65e4c7a0",
+     "meta": {
+      "created_at": "2026-06-04T22:58:12.000Z"
+     }
+    },
+    "google/gemma-4-12B-it-qat-w4a16-ct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "445b4ead5de66424",
+     "meta": {
+      "created_at": "2026-06-05T02:50:55.000Z"
+     }
+    },
+    "google/gemma-4-26B-A4B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "d163d998a0f9214f",
+     "meta": {
+      "created_at": "2026-03-12T00:38:03.000Z"
+     }
+    },
+    "google/gemma-4-26B-A4B-it": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "fc2323d93ac457ca",
+     "meta": {
+      "created_at": "2026-03-11T21:25:57.000Z"
+     }
+    },
+    "google/gemma-4-26B-A4B-it-assistant": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "a57707d51fe06aee",
+     "meta": {
+      "created_at": "2026-04-23T20:16:46.000Z"
+     }
+    },
+    "google/gemma-4-26B-A4B-it-qat-q4_0-gguf": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "54940c9cd272f54a",
+     "meta": {
+      "created_at": "2026-05-01T04:26:14.000Z"
+     }
+    },
+    "google/gemma-4-26B-A4B-it-qat-q4_0-unquantized": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "97500aa82bbef756",
+     "meta": {
+      "created_at": "2026-04-29T21:55:52.000Z"
+     }
+    },
+    "google/gemma-4-26B-A4B-it-qat-q4_0-unquantized-assistant": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "de1e3e2801815fd8",
+     "meta": {
+      "created_at": "2026-05-29T19:19:16.000Z"
+     }
+    },
+    "google/gemma-4-31B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "bf95481b39ab176c",
+     "meta": {
+      "created_at": "2026-03-12T00:38:28.000Z"
+     }
+    },
+    "google/gemma-4-31B-it": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "1d096d29df8cf6c8",
+     "meta": {
+      "created_at": "2026-03-11T18:22:36.000Z"
+     }
+    },
+    "google/gemma-4-31B-it-assistant": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "496474b7cd83bf74",
+     "meta": {
+      "created_at": "2026-04-23T18:55:29.000Z"
+     }
+    },
+    "google/gemma-4-31B-it-qat-q4_0-gguf": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "c1caae6c1fb46700",
+     "meta": {
+      "created_at": "2026-05-01T04:27:56.000Z"
+     }
+    },
+    "google/gemma-4-31B-it-qat-q4_0-unquantized": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "eb9bc087883808a3",
+     "meta": {
+      "created_at": "2026-04-28T20:55:54.000Z"
+     }
+    },
+    "google/gemma-4-31B-it-qat-q4_0-unquantized-assistant": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "8303f5a6621bc483",
+     "meta": {
+      "created_at": "2026-05-29T19:19:43.000Z"
+     }
+    },
+    "google/gemma-4-31B-it-qat-w4a16-ct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "8c87aa957a476737",
+     "meta": {
+      "created_at": "2026-06-04T22:30:30.000Z"
+     }
+    },
+    "google/gemma-4-E2B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "c54fa7d945831ffb",
+     "meta": {
+      "created_at": "2026-03-02T19:59:14.000Z"
+     }
+    },
+    "google/gemma-4-E2B-it": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "f4e55ce899440ff1",
+     "meta": {
+      "created_at": "2026-03-02T19:58:09.000Z"
+     }
+    },
+    "google/gemma-4-E2B-it-assistant": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "b4827220d900342a",
+     "meta": {
+      "created_at": "2026-04-23T18:35:40.000Z"
+     }
+    },
+    "google/gemma-4-E2B-it-qat-mobile-ct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "c4cab70e2be8e6db",
+     "meta": {
+      "created_at": "2026-06-01T23:40:57.000Z"
+     }
+    },
+    "google/gemma-4-E2B-it-qat-mobile-transformers": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "c27832d9a2e7207e",
+     "meta": {
+      "created_at": "2026-06-02T23:54:55.000Z"
+     }
+    },
+    "google/gemma-4-E2B-it-qat-q4_0-gguf": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "13dfd8e2227eb325",
+     "meta": {
+      "created_at": "2026-05-01T04:15:00.000Z"
+     }
+    },
+    "google/gemma-4-E2B-it-qat-q4_0-unquantized": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "eba18824187e6256",
+     "meta": {
+      "created_at": "2026-04-29T23:37:13.000Z"
+     }
+    },
+    "google/gemma-4-E2B-it-qat-q4_0-unquantized-assistant": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "404e6d4246be747b",
+     "meta": {
+      "created_at": "2026-05-29T19:18:42.000Z"
+     }
+    },
+    "google/gemma-4-E2B-it-qat-w4a16-ct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "4e7124e4a1100e1f",
+     "meta": {
+      "created_at": "2026-06-04T22:29:35.000Z"
+     }
+    },
+    "google/gemma-4-E4B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "8ea37d63adc0244b",
+     "meta": {
+      "created_at": "2026-03-02T19:57:53.000Z"
+     }
+    },
+    "google/gemma-4-E4B-it": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "77e640cdeacadd9b",
+     "meta": {
+      "created_at": "2026-03-02T19:57:40.000Z"
+     }
+    },
+    "google/gemma-4-E4B-it-assistant": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "c4492d4f15ac5042",
+     "meta": {
+      "created_at": "2026-04-23T18:44:33.000Z"
+     }
+    },
+    "google/gemma-4-E4B-it-qat-mobile-ct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "973dec365b8dd030",
+     "meta": {
+      "created_at": "2026-06-01T23:41:22.000Z"
+     }
+    },
+    "google/gemma-4-E4B-it-qat-mobile-transformers": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "224203019abc9fed",
+     "meta": {
+      "created_at": "2026-06-02T23:55:15.000Z"
+     }
+    },
+    "google/gemma-4-E4B-it-qat-q4_0-gguf": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "9e09998cdbc67f8e",
+     "meta": {
+      "created_at": "2026-05-01T04:25:27.000Z"
+     }
+    },
+    "google/gemma-4-E4B-it-qat-q4_0-unquantized": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "ff04b59ebca4371c",
+     "meta": {
+      "created_at": "2026-04-30T03:39:04.000Z"
+     }
+    },
+    "google/gemma-4-E4B-it-qat-q4_0-unquantized-assistant": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "0d8456d00faa48e8",
+     "meta": {
+      "created_at": "2026-05-29T19:19:00.000Z"
+     }
+    },
+    "google/gemma-4-E4B-it-qat-w4a16-ct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "077c02f84e32ef8d",
+     "meta": {
+      "created_at": "2026-06-04T22:28:22.000Z"
+     }
+    },
+    "google/magenta-realtime-2": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "70f66b4703e0e464",
+     "meta": {
+      "created_at": "2026-05-28T21:55:47.000Z"
+     }
+    },
+    "google/tabfm-1.0.0-jax": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "5a49b97625dba295",
+     "meta": {
+      "created_at": "2026-06-29T23:04:41.000Z"
+     }
+    },
+    "google/tabfm-1.0.0-pytorch": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "5a49b97625dba295",
+     "meta": {
+      "created_at": "2026-06-29T23:04:41.000Z"
+     }
+    },
+    "google/tipsv2-b14": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "c5d80f8a2b2aa202",
+     "meta": {
+      "created_at": "2026-04-09T06:28:59.000Z"
+     }
+    },
+    "google/tipsv2-b14-dpt": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "9d8d772cee812db0",
+     "meta": {
+      "created_at": "2026-04-09T06:50:51.000Z"
+     }
+    },
+    "google/tipsv2-g14": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "2b81e26c6e28043a",
+     "meta": {
+      "created_at": "2026-04-09T06:29:08.000Z"
+     }
+    },
+    "google/tipsv2-g14-dpt": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "593d806445841350",
+     "meta": {
+      "created_at": "2026-04-09T06:52:14.000Z"
+     }
+    },
+    "google/tipsv2-l14": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "801d3214417cfb38",
+     "meta": {
+      "created_at": "2026-04-09T05:55:21.000Z"
+     }
+    },
+    "google/tipsv2-l14-dpt": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "948cdb8f8bfd24c5",
+     "meta": {
+      "created_at": "2026-04-09T06:51:32.000Z"
+     }
+    },
+    "google/tipsv2-so400m14": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "c875fc2768940d5b",
+     "meta": {
+      "created_at": "2026-04-09T06:29:07.000Z"
+     }
+    },
+    "google/tipsv2-so400m14-dpt": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "1c604d8ee7d4f0ac",
+     "meta": {
+      "created_at": "2026-04-09T06:51:48.000Z"
+     }
+    },
+    "meta-llama/CodeLlama-34b-Instruct-hf": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "0682c0fa694abb2e",
+     "meta": {
+      "created_at": "2024-03-14T01:16:04.000Z"
+     }
+    },
+    "meta-llama/CodeLlama-34b-Python-hf": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "cf5f7fdee38ea504",
+     "meta": {
+      "created_at": "2024-03-14T00:50:31.000Z"
+     }
+    },
+    "meta-llama/CodeLlama-34b-hf": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "bb9dd19f54468c42",
+     "meta": {
+      "created_at": "2024-03-14T00:24:52.000Z"
+     }
+    },
+    "meta-llama/CodeLlama-70b-Instruct-hf": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "051a51a624c70cf7",
+     "meta": {
+      "created_at": "2024-03-13T21:50:19.000Z"
+     }
+    },
+    "meta-llama/CodeLlama-70b-Python-hf": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "623d67f968ec09b4",
+     "meta": {
+      "created_at": "2024-03-13T21:15:50.000Z"
+     }
+    },
+    "meta-llama/Llama-3.1-405B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "6902a33d0b74ecac",
+     "meta": {
+      "created_at": "2024-07-16T01:29:54.000Z"
+     }
+    },
+    "meta-llama/Llama-3.1-405B-FP8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "6bc8715f5109e950",
+     "meta": {
+      "created_at": "2024-07-20T03:20:19.000Z"
+     }
+    },
+    "meta-llama/Llama-3.1-405B-Instruct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "f50a36a54ffc8dda",
+     "meta": {
+      "created_at": "2024-07-16T18:24:44.000Z"
+     }
+    },
+    "meta-llama/Llama-3.1-405B-Instruct-FP8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "4e4d132c94a432d6",
+     "meta": {
+      "created_at": "2024-07-20T03:06:04.000Z"
+     }
+    },
+    "meta-llama/Llama-3.1-70B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "10532bfc3fb125c0",
+     "meta": {
+      "created_at": "2024-07-14T22:23:12.000Z"
+     }
+    },
+    "meta-llama/Llama-3.1-70B-Instruct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "2cb2f885bd4e687f",
+     "meta": {
+      "created_at": "2024-07-16T16:07:46.000Z"
+     }
+    },
+    "meta-llama/Llama-3.1-8B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "1e51e1d8f1f39cfc",
+     "meta": {
+      "created_at": "2024-07-14T22:20:15.000Z"
+     }
+    },
+    "meta-llama/Llama-3.1-8B-Instruct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "ed2e426d2d9b54c9",
+     "meta": {
+      "created_at": "2024-07-18T08:56:00.000Z"
+     }
+    },
+    "meta-llama/Llama-3.2-11B-Vision": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "3d37f98a11ea20a5",
+     "meta": {
+      "created_at": "2024-09-18T16:46:21.000Z"
+     }
+    },
+    "meta-llama/Llama-3.2-11B-Vision-Instruct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "b142a649574cd1ae",
+     "meta": {
+      "created_at": "2024-09-18T16:47:28.000Z"
+     }
+    },
+    "meta-llama/Llama-3.2-1B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "09c9ef02cf99c471",
+     "meta": {
+      "created_at": "2024-09-18T15:03:14.000Z"
+     }
+    },
+    "meta-llama/Llama-3.2-1B-Instruct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "4399020fd440b8e6",
+     "meta": {
+      "created_at": "2024-09-18T15:12:47.000Z"
+     }
+    },
+    "meta-llama/Llama-3.2-1B-Instruct-QLORA_INT4_EO8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "1e4ce3943ad4b090",
+     "meta": {
+      "created_at": "2024-10-23T21:29:57.000Z"
+     }
+    },
+    "meta-llama/Llama-3.2-1B-Instruct-SpinQuant_INT4_EO8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "7d47e25273dbbaf4",
+     "meta": {
+      "created_at": "2024-10-23T21:30:23.000Z"
+     }
+    },
+    "meta-llama/Llama-3.2-3B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "50b500a8338793ce",
+     "meta": {
+      "created_at": "2024-09-18T15:23:48.000Z"
+     }
+    },
+    "meta-llama/Llama-3.2-3B-Instruct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "1c29451b0342ab51",
+     "meta": {
+      "created_at": "2024-09-18T15:19:20.000Z"
+     }
+    },
+    "meta-llama/Llama-3.2-3B-Instruct-QLORA_INT4_EO8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "7df311f7c4498ff1",
+     "meta": {
+      "created_at": "2024-10-23T21:30:48.000Z"
+     }
+    },
+    "meta-llama/Llama-3.2-3B-Instruct-SpinQuant_INT4_EO8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "f9ffdf456c2dc250",
+     "meta": {
+      "created_at": "2024-10-23T21:39:25.000Z"
+     }
+    },
+    "meta-llama/Llama-3.2-90B-Vision": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "5d27f30de6776b30",
+     "meta": {
+      "created_at": "2024-09-19T11:32:34.000Z"
+     }
+    },
+    "meta-llama/Llama-3.2-90B-Vision-Instruct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "f76245596722904f",
+     "meta": {
+      "created_at": "2024-09-19T16:03:11.000Z"
+     }
+    },
+    "meta-llama/Llama-3.3-70B-Instruct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "15e5e7c3911c3ec9",
+     "meta": {
+      "created_at": "2024-11-26T16:08:47.000Z"
+     }
+    },
+    "meta-llama/Llama-4-Maverick-17B-128E": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "8394119b7e49b0dd",
+     "meta": {
+      "created_at": "2025-04-02T17:35:27.000Z"
+     }
+    },
+    "meta-llama/Llama-4-Maverick-17B-128E-Instruct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "77aa8c346e4802bb",
+     "meta": {
+      "created_at": "2025-04-01T22:17:20.000Z"
+     }
+    },
+    "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "46606930109ba029",
+     "meta": {
+      "created_at": "2025-04-01T20:47:02.000Z"
+     }
+    },
+    "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8-Original": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "68bf8fdfb5022363",
+     "meta": {
+      "created_at": "2025-04-04T10:03:43.000Z"
+     }
+    },
+    "meta-llama/Llama-4-Maverick-17B-128E-Instruct-Original": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "3bac9ef790e2ccef",
+     "meta": {
+      "created_at": "2025-04-04T08:02:25.000Z"
+     }
+    },
+    "meta-llama/Llama-4-Maverick-17B-128E-Original": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "22309e2435842ace",
+     "meta": {
+      "created_at": "2025-04-03T15:51:13.000Z"
+     }
+    },
+    "meta-llama/Llama-4-Scout-17B-16E": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "646eb83aaecd64d8",
+     "meta": {
+      "created_at": "2025-04-02T17:03:27.000Z"
+     }
+    },
+    "meta-llama/Llama-4-Scout-17B-16E-Instruct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "42cd3523f1461723",
+     "meta": {
+      "created_at": "2025-04-02T13:34:17.000Z"
+     }
+    },
+    "meta-llama/Llama-4-Scout-17B-16E-Instruct-Original": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "0facc1e3bdd3be93",
+     "meta": {
+      "created_at": "2025-04-03T15:39:52.000Z"
+     }
+    },
+    "meta-llama/Llama-4-Scout-17B-16E-Original": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "84199df8cd946142",
+     "meta": {
+      "created_at": "2025-04-03T15:06:08.000Z"
+     }
+    },
+    "meta-llama/Llama-Guard-3-11B-Vision": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "96f092408a0f1633",
+     "meta": {
+      "created_at": "2024-09-20T15:42:27.000Z"
+     }
+    },
+    "meta-llama/Llama-Guard-3-1B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "cbe0ad8e9d12b140",
+     "meta": {
+      "created_at": "2024-09-20T16:04:40.000Z"
+     }
+    },
+    "meta-llama/Llama-Guard-3-1B-INT4": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "7abc78567028eebe",
+     "meta": {
+      "created_at": "2024-09-20T16:07:42.000Z"
+     }
+    },
+    "meta-llama/Llama-Guard-3-8B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "f46a85a692457167",
+     "meta": {
+      "created_at": "2024-07-22T08:10:45.000Z"
+     }
+    },
+    "meta-llama/Llama-Guard-3-8B-INT8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "65340bb1a8eda664",
+     "meta": {
+      "created_at": "2024-07-21T19:20:24.000Z"
+     }
+    },
+    "meta-llama/Llama-Guard-4-12B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "3e32e8e567e771d0",
+     "meta": {
+      "created_at": "2025-04-23T11:30:25.000Z"
+     }
+    },
+    "meta-llama/Llama-Prompt-Guard-2-22M": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "1c00f62b50324c38",
+     "meta": {
+      "created_at": "2025-04-28T07:15:58.000Z"
+     }
+    },
+    "meta-llama/Llama-Prompt-Guard-2-86M": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "9053eb499de4ad84",
+     "meta": {
+      "created_at": "2025-04-28T07:16:35.000Z"
+     }
+    },
+    "meta-llama/Meta-Llama-3-70B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "74c5017933af2bd5",
+     "meta": {
+      "created_at": "2024-04-17T09:25:54.000Z"
+     }
+    },
+    "meta-llama/Meta-Llama-3-70B-Instruct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "dea88dfb4de4f767",
+     "meta": {
+      "created_at": "2024-04-17T09:34:54.000Z"
+     }
+    },
+    "meta-llama/Meta-Llama-3-8B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "e39d31a4118ff795",
+     "meta": {
+      "created_at": "2024-04-17T09:35:16.000Z"
+     }
+    },
+    "meta-llama/Meta-Llama-3-8B-Instruct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "630676f09127b9c4",
+     "meta": {
+      "created_at": "2024-04-17T09:35:12.000Z"
+     }
+    },
+    "meta-llama/Meta-Llama-Guard-2-8B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "2a37eee8a1e086fa",
+     "meta": {
+      "created_at": "2024-04-17T09:35:34.000Z"
+     }
+    },
+    "meta-llama/Prompt-Guard-86M": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "f7e3cf1260414af2",
+     "meta": {
+      "created_at": "2024-07-21T19:18:13.000Z"
+     }
+    },
+    "mistralai/Devstral-2-123B-Instruct-2512": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "b5ccb64392b41325",
+     "meta": {
+      "created_at": "2025-11-28T17:32:09.000Z"
+     }
+    },
+    "mistralai/Devstral-Small-2-24B-Instruct-2512": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "cc948fba6a9cc21b",
+     "meta": {
+      "created_at": "2025-11-28T11:27:11.000Z"
+     }
+    },
+    "mistralai/Devstral-Small-2505": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "abb7f7d24f4d52d3",
+     "meta": {
+      "created_at": "2025-05-12T21:49:21.000Z"
+     }
+    },
+    "mistralai/Devstral-Small-2505_gguf": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "8df65dd21e2be411",
+     "meta": {
+      "created_at": "2025-05-19T16:34:03.000Z"
+     }
+    },
+    "mistralai/Devstral-Small-2507": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "2ef3c8d748528a0e",
+     "meta": {
+      "created_at": "2025-07-04T14:23:44.000Z"
+     }
+    },
+    "mistralai/Devstral-Small-2507_gguf": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "aa224bd3753bc957",
+     "meta": {
+      "created_at": "2025-07-07T12:22:38.000Z"
+     }
+    },
+    "mistralai/Leanstral-1.5-119B-A6B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "7bbbcfc9ed2439e6",
+     "meta": {
+      "created_at": "2026-07-01T16:43:19.000Z"
+     }
+    },
+    "mistralai/Leanstral-2603": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "964623ef2f6fa200",
+     "meta": {
+      "created_at": "2026-03-11T14:01:29.000Z"
+     }
+    },
+    "mistralai/Magistral-Small-2506": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "4a0b107c21e860ad",
+     "meta": {
+      "created_at": "2025-06-04T10:51:21.000Z"
+     }
+    },
+    "mistralai/Magistral-Small-2506_gguf": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "dcbe298f5b30f41d",
+     "meta": {
+      "created_at": "2025-06-09T09:25:46.000Z"
+     }
+    },
+    "mistralai/Magistral-Small-2507": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "05867d82da06a8a8",
+     "meta": {
+      "created_at": "2025-07-18T08:14:36.000Z"
+     }
+    },
+    "mistralai/Magistral-Small-2507-GGUF": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "d4a7ece339f9cafa",
+     "meta": {
+      "created_at": "2025-07-23T21:15:44.000Z"
+     }
+    },
+    "mistralai/Magistral-Small-2509": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "1a5b3f6d695a191b",
+     "meta": {
+      "created_at": "2025-09-12T09:45:10.000Z"
+     }
+    },
+    "mistralai/Magistral-Small-2509-GGUF": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "9b84fb4c903ca58c",
+     "meta": {
+      "created_at": "2025-09-12T09:45:52.000Z"
+     }
+    },
+    "mistralai/Ministral-3-14B-Base-2512": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "31d81701b68a5a8c",
+     "meta": {
+      "created_at": "2025-10-31T08:41:49.000Z"
+     }
+    },
+    "mistralai/Ministral-3-14B-Instruct-2512": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "1016c5fd5a3bd0cd",
+     "meta": {
+      "created_at": "2025-10-31T08:43:24.000Z"
+     }
+    },
+    "mistralai/Ministral-3-14B-Instruct-2512-BF16": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "11e46be3c4375549",
+     "meta": {
+      "created_at": "2025-10-31T08:42:04.000Z"
+     }
+    },
+    "mistralai/Ministral-3-14B-Instruct-2512-GGUF": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "d235175f9b6e3bee",
+     "meta": {
+      "created_at": "2025-10-31T08:47:30.000Z"
+     }
+    },
+    "mistralai/Ministral-3-14B-Reasoning-2512": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "d88c630073af8020",
+     "meta": {
+      "created_at": "2025-10-31T08:42:28.000Z"
+     }
+    },
+    "mistralai/Ministral-3-14B-Reasoning-2512-GGUF": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "414638000f025482",
+     "meta": {
+      "created_at": "2025-10-31T08:47:40.000Z"
+     }
+    },
+    "mistralai/Ministral-3-3B-Base-2512": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "6e989509732f4dc0",
+     "meta": {
+      "created_at": "2025-10-31T08:38:59.000Z"
+     }
+    },
+    "mistralai/Ministral-3-3B-Instruct-2512": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "2440399db7311e4c",
+     "meta": {
+      "created_at": "2025-10-31T08:43:46.000Z"
+     }
+    },
+    "mistralai/Ministral-3-3B-Instruct-2512-BF16": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "1e039792203728fb",
+     "meta": {
+      "created_at": "2025-10-31T08:39:19.000Z"
+     }
+    },
+    "mistralai/Ministral-3-3B-Instruct-2512-GGUF": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "188814998e345f19",
+     "meta": {
+      "created_at": "2025-10-31T08:45:13.000Z"
+     }
+    },
+    "mistralai/Ministral-3-3B-Instruct-2512-ONNX": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "edc63229035dd0af",
+     "meta": {
+      "created_at": "2025-11-24T08:49:49.000Z"
+     }
+    },
+    "mistralai/Ministral-3-3B-Reasoning-2512": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "a81c88ad4c25e79b",
+     "meta": {
+      "created_at": "2025-10-31T08:39:58.000Z"
+     }
+    },
+    "mistralai/Ministral-3-3B-Reasoning-2512-GGUF": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "1f832f17e121f422",
+     "meta": {
+      "created_at": "2025-10-31T08:45:49.000Z"
+     }
+    },
+    "mistralai/Ministral-3-8B-Base-2512": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "5b4974c8a8bdd9ef",
+     "meta": {
+      "created_at": "2025-10-31T08:40:56.000Z"
+     }
+    },
+    "mistralai/Ministral-3-8B-Instruct-2512": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "d62a893a894a11f1",
+     "meta": {
+      "created_at": "2025-10-31T08:43:35.000Z"
+     }
+    },
+    "mistralai/Ministral-3-8B-Instruct-2512-BF16": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "e53f684b11ac118c",
+     "meta": {
+      "created_at": "2025-10-31T08:41:17.000Z"
+     }
+    },
+    "mistralai/Ministral-3-8B-Instruct-2512-GGUF": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "d8e9b27e2e5ca855",
+     "meta": {
+      "created_at": "2025-10-31T08:46:24.000Z"
+     }
+    },
+    "mistralai/Ministral-3-8B-Reasoning-2512": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "3b9a7933ab2690f9",
+     "meta": {
+      "created_at": "2025-10-31T08:41:36.000Z"
+     }
+    },
+    "mistralai/Ministral-3-8B-Reasoning-2512-GGUF": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "f0a301842f7b8c7c",
+     "meta": {
+      "created_at": "2025-10-31T08:46:38.000Z"
+     }
+    },
+    "mistralai/Mistral-Large-3-675B-Base-2512": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "1199fd37611c68c2",
+     "meta": {
+      "created_at": "2025-11-30T13:05:40.000Z"
+     }
+    },
+    "mistralai/Mistral-Large-3-675B-Instruct-2512": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "35fd88dcb45939e0",
+     "meta": {
+      "created_at": "2025-11-28T18:05:12.000Z"
+     }
+    },
+    "mistralai/Mistral-Large-3-675B-Instruct-2512-BF16": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "047d62f2ca47992d",
+     "meta": {
+      "created_at": "2025-09-28T23:11:04.000Z"
+     }
+    },
+    "mistralai/Mistral-Large-3-675B-Instruct-2512-Eagle": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "2e2023d066b57322",
+     "meta": {
+      "created_at": "2025-11-10T07:41:02.000Z"
+     }
+    },
+    "mistralai/Mistral-Large-3-675B-Instruct-2512-NVFP4": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "2ddd298e28ca622c",
+     "meta": {
+      "created_at": "2025-11-28T17:57:04.000Z"
+     }
+    },
+    "mistralai/Mistral-Medium-3.5-128B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "cdaf29477b56fbe5",
+     "meta": {
+      "created_at": "2026-03-31T09:50:20.000Z"
+     }
+    },
+    "mistralai/Mistral-Medium-3.5-128B-EAGLE": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "7f273071f587c724",
+     "meta": {
+      "created_at": "2026-04-27T13:35:34.000Z"
+     }
+    },
+    "mistralai/Mistral-Nemo-Instruct-FP8-2407": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "6e4b500b0642e51a",
+     "meta": {
+      "created_at": "2025-03-21T14:24:45.000Z"
+     }
+    },
+    "mistralai/Mistral-Small-3.1-24B-Base-2503": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "82fc70366c23b504",
+     "meta": {
+      "created_at": "2025-03-16T23:31:11.000Z"
+     }
+    },
+    "mistralai/Mistral-Small-3.2-24B-Instruct-2506": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "35f9cc7b7d87c442",
+     "meta": {
+      "created_at": "2025-06-19T17:41:13.000Z"
+     }
+    },
+    "mistralai/Mistral-Small-4-119B-2603": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "bf95ede9a03249eb",
+     "meta": {
+      "created_at": "2026-01-23T13:14:14.000Z"
+     }
+    },
+    "mistralai/Mistral-Small-4-119B-2603-NVFP4": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "75c0ad918af29dee",
+     "meta": {
+      "created_at": "2026-03-03T10:51:08.000Z"
+     }
+    },
+    "mistralai/Mistral-Small-4-119B-2603-eagle": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "fb56d23841236b81",
+     "meta": {
+      "created_at": "2026-03-04T16:38:14.000Z"
+     }
+    },
+    "mistralai/Voxtral-4B-TTS-2603": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "2888c2404bb23f00",
+     "meta": {
+      "created_at": "2025-11-17T17:06:57.000Z"
+     }
+    },
+    "mistralai/Voxtral-Mini-3B-2507": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "69d507d66b93e7f1",
+     "meta": {
+      "created_at": "2025-07-01T14:11:46.000Z"
+     }
+    },
+    "mistralai/Voxtral-Mini-4B-Realtime-2602": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "ed7a108eb3bdf3fc",
+     "meta": {
+      "created_at": "2026-01-21T17:22:02.000Z"
+     }
+    },
+    "mistralai/Voxtral-Small-24B-2507": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "ec3973005f089f4b",
+     "meta": {
+      "created_at": "2025-07-01T14:11:59.000Z"
+     }
+    },
+    "moonshotai/Kimi-Audio-7B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "c674068de539cb4f",
+     "meta": {
+      "created_at": "2025-04-25T12:22:40.000Z"
+     }
+    },
+    "moonshotai/Kimi-Audio-7B-Instruct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "bfb9a24a586423e6",
+     "meta": {
+      "created_at": "2025-04-25T08:05:10.000Z"
+     }
+    },
+    "moonshotai/Kimi-Dev-72B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "1a38f572957cfdcd",
+     "meta": {
+      "created_at": "2025-06-16T11:40:59.000Z"
+     }
+    },
+    "moonshotai/Kimi-K2-Base": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "632a5e2e50ec53be",
+     "meta": {
+      "created_at": "2025-07-03T12:49:14.000Z"
+     }
+    },
+    "moonshotai/Kimi-K2-Instruct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "a3caf86d77ff9175",
+     "meta": {
+      "created_at": "2025-07-11T00:55:12.000Z"
+     }
+    },
+    "moonshotai/Kimi-K2-Instruct-0905": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "b771c03960aa61e0",
+     "meta": {
+      "created_at": "2025-09-03T03:34:36.000Z"
+     }
+    },
+    "moonshotai/Kimi-K2-Thinking": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "2b184ec1549f38c2",
+     "meta": {
+      "created_at": "2025-11-04T08:25:31.000Z"
+     }
+    },
+    "moonshotai/Kimi-K2.5": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "f9e1fb9ffc9a5a56",
+     "meta": {
+      "created_at": "2026-01-01T06:06:03.000Z"
+     }
+    },
+    "moonshotai/Kimi-K2.6": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "87d95de578a5c154",
+     "meta": {
+      "created_at": "2026-04-14T04:23:36.000Z"
+     }
+    },
+    "moonshotai/Kimi-K2.7-Code": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "b2da4644be311ccf",
+     "meta": {
+      "created_at": "2026-06-11T07:51:47.000Z"
+     }
+    },
+    "moonshotai/Kimi-Linear-48B-A3B-Base": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "4a8db86849b438b8",
+     "meta": {
+      "created_at": "2025-10-30T12:39:14.000Z"
+     }
+    },
+    "moonshotai/Kimi-Linear-48B-A3B-Instruct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "58836d7ed1626f30",
+     "meta": {
+      "created_at": "2025-10-30T12:37:31.000Z"
+     }
+    },
+    "moonshotai/Kimi-VL-A3B-Instruct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "6664f047e6592ffa",
+     "meta": {
+      "created_at": "2025-04-09T08:07:06.000Z"
+     }
+    },
+    "moonshotai/Kimi-VL-A3B-Thinking": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "7222e9d3f8733f09",
+     "meta": {
+      "created_at": "2025-04-09T08:13:53.000Z"
+     }
+    },
+    "moonshotai/Kimi-VL-A3B-Thinking-2506": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "2a168a7e5c4b99be",
+     "meta": {
+      "created_at": "2025-06-21T09:40:28.000Z"
+     }
+    },
+    "moonshotai/MoonViT-SO-400M": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "3f00ad68ab599011",
+     "meta": {
+      "created_at": "2025-04-10T10:02:35.000Z"
+     }
+    },
+    "moonshotai/Moonlight-16B-A3B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "6240c321240637a3",
+     "meta": {
+      "created_at": "2025-02-22T04:14:40.000Z"
+     }
+    },
+    "moonshotai/Moonlight-16B-A3B-Instruct": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "fd3ca1505bf7c6d8",
+     "meta": {
+      "created_at": "2025-02-22T04:15:17.000Z"
+     }
+    },
+    "openai/circuit-sparsity": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "cf79fe7693b7ffc3",
+     "meta": {
+      "created_at": "2025-12-11T22:39:34.000Z"
+     }
+    },
+    "openai/clip-vit-base-patch16": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "920e20fe5f07dfd0",
+     "meta": {
+      "created_at": "2022-03-02T23:29:05.000Z"
+     }
+    },
+    "openai/clip-vit-base-patch32": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "920e20fe5f07dfd0",
+     "meta": {
+      "created_at": "2022-03-02T23:29:05.000Z"
+     }
+    },
+    "openai/clip-vit-large-patch14": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "920e20fe5f07dfd0",
+     "meta": {
+      "created_at": "2022-03-02T23:29:05.000Z"
+     }
+    },
+    "openai/clip-vit-large-patch14-336": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "d558ce7d360c50b8",
+     "meta": {
+      "created_at": "2022-04-22T14:57:43.000Z"
+     }
+    },
+    "openai/consistency-decoder": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "d3cf15e19e8dcf73",
+     "meta": {
+      "created_at": "2023-11-09T10:50:49.000Z"
+     }
+    },
+    "openai/diffusers-cd_bedroom256_l2": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "8e74c6bdc6879bf0",
+     "meta": {
+      "created_at": "2023-07-05T13:29:12.000Z"
+     }
+    },
+    "openai/diffusers-cd_bedroom256_lpips": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "20b405bef28d7254",
+     "meta": {
+      "created_at": "2023-07-05T13:28:02.000Z"
+     }
+    },
+    "openai/diffusers-cd_cat256_l2": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "bae8bd2c6d7a5cdf",
+     "meta": {
+      "created_at": "2023-07-05T13:28:27.000Z"
+     }
+    },
+    "openai/diffusers-cd_cat256_lpips": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "41192a3e37ec4bdb",
+     "meta": {
+      "created_at": "2023-07-05T13:27:50.000Z"
+     }
+    },
+    "openai/diffusers-cd_imagenet64_l2": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "d2b053a81c574bee",
+     "meta": {
+      "created_at": "2023-07-05T14:02:55.000Z"
+     }
+    },
+    "openai/diffusers-cd_imagenet64_lpips": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "57683e3024f2f752",
+     "meta": {
+      "created_at": "2023-07-05T13:28:56.000Z"
+     }
+    },
+    "openai/diffusers-ct_bedroom256": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "f80de7d379718f63",
+     "meta": {
+      "created_at": "2023-07-05T13:28:42.000Z"
+     }
+    },
+    "openai/diffusers-ct_cat256": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "6d80e45cacea4d92",
+     "meta": {
+      "created_at": "2023-07-05T13:27:29.000Z"
+     }
+    },
+    "openai/diffusers-ct_imagenet64": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "77dcf910a92aa92e",
+     "meta": {
+      "created_at": "2023-07-05T13:29:26.000Z"
+     }
+    },
+    "openai/gpt-oss-120b": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "2df1282abcf2c0d8",
+     "meta": {
+      "created_at": "2025-08-04T22:33:06.000Z"
+     }
+    },
+    "openai/gpt-oss-20b": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "c13963518cd0ccba",
+     "meta": {
+      "created_at": "2025-08-04T22:33:29.000Z"
+     }
+    },
+    "openai/gpt-oss-safeguard-120b": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "09c359ecb5ae2c0a",
+     "meta": {
+      "created_at": "2025-09-18T18:50:45.000Z"
+     }
+    },
+    "openai/gpt-oss-safeguard-20b": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "90cb9716702e4ed2",
+     "meta": {
+      "created_at": "2025-09-18T18:51:08.000Z"
+     }
+    },
+    "openai/imagegpt-large": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "920e20fe5f07dfd0",
+     "meta": {
+      "created_at": "2022-03-02T23:29:05.000Z"
+     }
+    },
+    "openai/imagegpt-medium": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "920e20fe5f07dfd0",
+     "meta": {
+      "created_at": "2022-03-02T23:29:05.000Z"
+     }
+    },
+    "openai/imagegpt-small": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "920e20fe5f07dfd0",
+     "meta": {
+      "created_at": "2022-03-02T23:29:05.000Z"
+     }
+    },
+    "openai/jukebox-1b-lyrics": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "3258d488eab97ad8",
+     "meta": {
+      "created_at": "2022-08-10T16:58:14.000Z"
+     }
+    },
+    "openai/jukebox-5b-lyrics": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "ab9e0f29b313adff",
+     "meta": {
+      "created_at": "2022-08-10T16:49:34.000Z"
+     }
+    },
+    "openai/privacy-filter": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "b96697d8b2574f75",
+     "meta": {
+      "created_at": "2026-04-17T21:38:35.000Z"
+     }
+    },
+    "openai/shap-e": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "cc2843cba436b83e",
+     "meta": {
+      "created_at": "2023-07-04T13:25:35.000Z"
+     }
+    },
+    "openai/shap-e-img2img": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "3f37ec4b0c7600a1",
+     "meta": {
+      "created_at": "2023-07-04T13:25:57.000Z"
+     }
+    },
+    "openai/whisper-base": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "c441c87774cb564e",
+     "meta": {
+      "created_at": "2022-09-26T06:50:46.000Z"
+     }
+    },
+    "openai/whisper-base.en": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "99a9fc60d4001c28",
+     "meta": {
+      "created_at": "2022-09-26T06:58:29.000Z"
+     }
+    },
+    "openai/whisper-large": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "2bbefdc88edb3aa6",
+     "meta": {
+      "created_at": "2022-09-26T06:56:04.000Z"
+     }
+    },
+    "openai/whisper-large-v2": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "40b60e44cd565764",
+     "meta": {
+      "created_at": "2022-12-05T18:42:20.000Z"
+     }
+    },
+    "openai/whisper-large-v3": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "9d8421be08495ec3",
+     "meta": {
+      "created_at": "2023-11-07T18:41:14.000Z"
+     }
+    },
+    "openai/whisper-large-v3-turbo": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "18ea1d7a128c9037",
+     "meta": {
+      "created_at": "2024-10-01T07:39:28.000Z"
+     }
+    },
+    "openai/whisper-medium": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "beb9c7d12a2170e6",
+     "meta": {
+      "created_at": "2022-09-26T06:52:52.000Z"
+     }
+    },
+    "openai/whisper-medium.en": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "9694fba29d708862",
+     "meta": {
+      "created_at": "2022-09-26T07:02:02.000Z"
+     }
+    },
+    "openai/whisper-small": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "063045cfedb5ba5f",
+     "meta": {
+      "created_at": "2022-09-26T06:51:27.000Z"
+     }
+    },
+    "openai/whisper-small.en": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "a961e9554194f489",
+     "meta": {
+      "created_at": "2022-09-26T06:59:49.000Z"
+     }
+    },
+    "openai/whisper-tiny": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "92f8565f3d057650",
+     "meta": {
+      "created_at": "2022-09-26T06:50:30.000Z"
+     }
+    },
+    "openai/whisper-tiny.en": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "dd53d92ec516c076",
+     "meta": {
+      "created_at": "2022-09-26T06:57:49.000Z"
+     }
+    },
+    "zai-org/AutoGLM-Phone-9B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "847bac0546b0d5f6",
+     "meta": {
+      "created_at": "2025-12-08T08:20:34.000Z"
+     }
+    },
+    "zai-org/AutoGLM-Phone-9B-Multilingual": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "122d5a10b26882b7",
+     "meta": {
+      "created_at": "2025-12-09T04:16:21.000Z"
+     }
+    },
+    "zai-org/CogView4-6B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "959d7194d030c0a0",
+     "meta": {
+      "created_at": "2025-03-03T12:19:58.000Z"
+     }
+    },
+    "zai-org/GLM-4-32B-0414": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "99f12959aadbbf12",
+     "meta": {
+      "created_at": "2025-04-07T12:53:41.000Z"
+     }
+    },
+    "zai-org/GLM-4-32B-Base-0414": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "4ce752fd85516271",
+     "meta": {
+      "created_at": "2025-04-07T12:53:57.000Z"
+     }
+    },
+    "zai-org/GLM-4-9B-0414": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "54936676991767c8",
+     "meta": {
+      "created_at": "2025-04-07T11:57:02.000Z"
+     }
+    },
+    "zai-org/GLM-4.1V-9B-Base": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "ec0983b63f01500a",
+     "meta": {
+      "created_at": "2025-06-28T14:23:46.000Z"
+     }
+    },
+    "zai-org/GLM-4.1V-9B-Thinking": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "085796532e763768",
+     "meta": {
+      "created_at": "2025-06-28T14:24:10.000Z"
+     }
+    },
+    "zai-org/GLM-4.5": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "03bdca4dd0a31132",
+     "meta": {
+      "created_at": "2025-07-20T03:25:36.000Z"
+     }
+    },
+    "zai-org/GLM-4.5-Air": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "7a77d94d82f7d56f",
+     "meta": {
+      "created_at": "2025-07-20T03:25:55.000Z"
+     }
+    },
+    "zai-org/GLM-4.5-Air-Base": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "23053e2b56298dac",
+     "meta": {
+      "created_at": "2025-07-20T03:24:43.000Z"
+     }
+    },
+    "zai-org/GLM-4.5-Air-FP8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "e94969464f440686",
+     "meta": {
+      "created_at": "2025-07-20T03:30:00.000Z"
+     }
+    },
+    "zai-org/GLM-4.5-Base": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "1665ea027d12fe2c",
+     "meta": {
+      "created_at": "2025-07-20T05:14:19.000Z"
+     }
+    },
+    "zai-org/GLM-4.5-FP8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "f5facb8a9397a5f5",
+     "meta": {
+      "created_at": "2025-07-20T03:29:41.000Z"
+     }
+    },
+    "zai-org/GLM-4.5V": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "a49440d2b79524e8",
+     "meta": {
+      "created_at": "2025-08-10T13:55:30.000Z"
+     }
+    },
+    "zai-org/GLM-4.5V-FP8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "3e5575098a0412ff",
+     "meta": {
+      "created_at": "2025-08-10T13:41:24.000Z"
+     }
+    },
+    "zai-org/GLM-4.6": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "f3bbc4c140460caf",
+     "meta": {
+      "created_at": "2025-09-29T18:22:51.000Z"
+     }
+    },
+    "zai-org/GLM-4.6-FP8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "a100d09c15f8c396",
+     "meta": {
+      "created_at": "2025-09-29T07:52:20.000Z"
+     }
+    },
+    "zai-org/GLM-4.6V": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "c7b2224e07790ca7",
+     "meta": {
+      "created_at": "2025-12-07T07:20:45.000Z"
+     }
+    },
+    "zai-org/GLM-4.6V-FP8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "e12556e516a3419c",
+     "meta": {
+      "created_at": "2025-12-07T07:21:18.000Z"
+     }
+    },
+    "zai-org/GLM-4.6V-Flash": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "79b027fdf306a24f",
+     "meta": {
+      "created_at": "2025-12-07T06:30:04.000Z"
+     }
+    },
+    "zai-org/GLM-4.7": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "0c8c2f64c2d8c9a0",
+     "meta": {
+      "created_at": "2025-12-22T07:45:52.000Z"
+     }
+    },
+    "zai-org/GLM-4.7-FP8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "e187233bb83f9040",
+     "meta": {
+      "created_at": "2025-12-22T13:41:42.000Z"
+     }
+    },
+    "zai-org/GLM-4.7-Flash": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "ef6e8544afd6ba1c",
+     "meta": {
+      "created_at": "2026-01-19T06:28:10.000Z"
+     }
+    },
+    "zai-org/GLM-5": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "591c5cba769ef35b",
+     "meta": {
+      "created_at": "2026-02-11T04:55:46.000Z"
+     }
+    },
+    "zai-org/GLM-5-FP8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "f3bfbfae23b6ddce",
+     "meta": {
+      "created_at": "2026-02-11T04:05:41.000Z"
+     }
+    },
+    "zai-org/GLM-5.1": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "866ff5a2a653bdad",
+     "meta": {
+      "created_at": "2026-04-03T09:28:47.000Z"
+     }
+    },
+    "zai-org/GLM-5.1-FP8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "fa9fad7449f502a4",
+     "meta": {
+      "created_at": "2026-04-03T09:29:04.000Z"
+     }
+    },
+    "zai-org/GLM-5.2": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "59ae35ca7873042b",
+     "meta": {
+      "created_at": "2026-06-16T07:39:20.000Z"
+     }
+    },
+    "zai-org/GLM-5.2-FP8": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "bb7d0ee882709463",
+     "meta": {
+      "created_at": "2026-06-16T07:20:33.000Z"
+     }
+    },
+    "zai-org/GLM-ASR-Nano-2512": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "6b70c11fbb7c8cc3",
+     "meta": {
+      "created_at": "2025-12-09T09:07:41.000Z"
+     }
+    },
+    "zai-org/GLM-Image": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "fbf4a25ca6207426",
+     "meta": {
+      "created_at": "2026-01-08T09:39:56.000Z"
+     }
+    },
+    "zai-org/GLM-OCR": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "d389e4469088b25b",
+     "meta": {
+      "created_at": "2026-01-30T04:24:21.000Z"
+     }
+    },
+    "zai-org/GLM-TTS": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "001665f1fc063328",
+     "meta": {
+      "created_at": "2025-12-10T09:59:48.000Z"
+     }
+    },
+    "zai-org/GLM-Z1-32B-0414": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "0b0da30537c3a285",
+     "meta": {
+      "created_at": "2025-04-08T06:57:28.000Z"
+     }
+    },
+    "zai-org/GLM-Z1-9B-0414": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "1c57dc8d286df13f",
+     "meta": {
+      "created_at": "2025-04-08T06:39:51.000Z"
+     }
+    },
+    "zai-org/GLM-Z1-Rumination-32B-0414": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "6574723aef280563",
+     "meta": {
+      "created_at": "2025-04-13T12:06:04.000Z"
+     }
+    },
+    "zai-org/Glyph": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "8cd63276adce293f",
+     "meta": {
+      "created_at": "2025-10-25T06:19:07.000Z"
+     }
+    },
+    "zai-org/Kaleido-14B-S2V": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "5f71c4a0aa64fe6b",
+     "meta": {
+      "created_at": "2025-10-27T08:31:26.000Z"
+     }
+    },
+    "zai-org/RealVideo": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "77feae380b4b28c9",
+     "meta": {
+      "created_at": "2025-12-11T08:04:35.000Z"
+     }
+    },
+    "zai-org/SCAIL-2": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "99970d8ab350e9fb",
+     "meta": {
+      "created_at": "2026-06-09T07:18:27.000Z"
+     }
+    },
+    "zai-org/SCAIL-Preview": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "37d50676534a8784",
+     "meta": {
+      "created_at": "2025-12-08T12:40:27.000Z"
+     }
+    },
+    "zai-org/SSVAE": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "1f23db36a7ae634c",
+     "meta": {
+      "created_at": "2025-12-04T06:22:58.000Z"
+     }
+    },
+    "zai-org/SWE-Dev-32B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "23754c0e1aeff8a5",
+     "meta": {
+      "created_at": "2025-04-06T13:33:41.000Z"
+     }
+    },
+    "zai-org/SWE-Dev-7B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "5bef61fca297c2ab",
+     "meta": {
+      "created_at": "2025-04-06T13:33:25.000Z"
+     }
+    },
+    "zai-org/SWE-Dev-9B": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "19b63e36d223df53",
+     "meta": {
+      "created_at": "2025-04-06T15:01:41.000Z"
+     }
+    },
+    "zai-org/UI2Code_N": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "316d9e2442d547b5",
+     "meta": {
+      "created_at": "2025-11-11T11:18:32.000Z"
+     }
+    },
+    "zai-org/WebVIA-Agent": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "9a9790a56fe09cfc",
+     "meta": {
+      "created_at": "2025-11-12T04:39:14.000Z"
+     }
+    },
+    "zai-org/androidgen-glm-4-9b": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "667f8c226c601bfd",
+     "meta": {
+      "created_at": "2025-05-28T07:58:17.000Z"
+     }
+    },
+    "zai-org/androidgen-llama-3-70b": {
+     "first_seen": "2026-07-26T18:57:48Z",
+     "hash": "b0e7495622de10fd",
+     "meta": {
+      "created_at": "2025-05-28T07:58:34.000Z"
+     }
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,133 @@
+# L1 of the maintainer loop: deterministic model-release detection, then a
+# spend-gated audit of anything new. See docs/maintainer-loop.md.
+#
+# detect: no LLM, no spend. Providers without keys are loudly UNMONITORED;
+#         a provider whose pull errors turns the run red (fail-closed).
+# audit:  runs only when a new relevant model appears on an auditable
+#         provider, and only after a human approves the `maintainer-spend`
+#         environment. Opens a PR; never pushes to main.
+name: maintainer-detect
+
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+    inputs:
+      audit_specs:
+        description: >-
+          Re-run a lost/declined audit directly (comma-separated
+          provider:model_id). Skips detection; the registry has already
+          recorded these models so the diff would not re-fire them.
+        required: false
+        default: ""
+        type: string
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: maintainer-detect
+  cancel-in-progress: false
+
+jobs:
+  detect:
+    if: ${{ vars.MAINTAINER_LOOP_ENABLED != 'false' && inputs.audit_specs == '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      audit_specs: ${{ steps.detect.outputs.audit_specs }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e .
+      - id: detect
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python -m ontodebt.maintainer.detect --github-output "$GITHUB_OUTPUT"
+      # Issue FIRST, bookkeeping LAST: if surfacing fails, the uncommitted
+      # registry means the trigger re-fires next run (recoverable duplicate);
+      # the reverse order would bury the trigger forever.
+      - name: Open digest issue
+        if: ${{ steps.detect.outputs.issue_needed == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TITLE: ${{ steps.detect.outputs.issue_title }}
+        run: |
+          gh issue create --title "$TITLE" \
+            --body-file maintainer/state/detect-issue.md \
+            --label maintainer-loop --label model-release
+      - name: Commit registry bookkeeping (state only, no factual claims)
+        if: ${{ steps.detect.outputs.registry_changed == 'true' }}
+        run: |
+          git config user.name "ontodebt-maintainer"
+          git config user.email "maintainer-loop@users.noreply.github.com"
+          git add maintainer/known_models.json maintainer/payloads/
+          git commit -m "maintainer: model-registry update $(date -u +%F) [bookkeeping]"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+  audit:
+    needs: detect
+    # always(): a manual audit_specs dispatch must run even though detect was
+    # skipped. MAINTAINER_SPEND_CONFIRMED is the belt-and-braces guard against
+    # GitHub auto-creating an *unprotected* maintainer-spend environment: the
+    # human sets it only after configuring the required reviewer.
+    if: >-
+      ${{ always() &&
+          vars.MAINTAINER_LOOP_ENABLED != 'false' &&
+          vars.MAINTAINER_SPEND_CONFIRMED == 'true' &&
+          (inputs.audit_specs != '' || needs.detect.outputs.audit_specs != '') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    environment: maintainer-spend   # human approval gates the API spend
+    env:
+      HAS_APP: ${{ secrets.MAINTAINER_APP_ID != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[all]"
+      - id: entry
+        env:
+          SPECS: ${{ inputs.audit_specs || needs.detect.outputs.audit_specs }}
+        run: |
+          python -m ontodebt.maintainer.add_model \
+            --models-file models.yaml --specs "$SPECS" --github-output "$GITHUB_OUTPUT"
+      - name: Run the audit (deterministic harness; fail-closed preflight)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          NAMES: ${{ steps.entry.outputs.names }}
+        run: |
+          ontodebt run --models "$NAMES" --results examples/gradient
+          ontodebt report --results examples/gradient > examples/gradient/report.md
+      - env:
+          NAMES: ${{ steps.entry.outputs.names }}
+        run: |
+          python -m ontodebt.maintainer.audit_pr_body \
+            --models "$NAMES" --report examples/gradient/report.md --out /tmp/pr-body.md
+      - name: Mint app token (PR CI triggers only with a non-GITHUB_TOKEN)
+        id: app
+        if: ${{ env.HAS_APP == 'true' }}
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.MAINTAINER_APP_ID }}
+          private-key: ${{ secrets.MAINTAINER_APP_PRIVATE_KEY }}
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ steps.app.outputs.token || github.token }}
+          branch: maintainer/audit-${{ github.run_id }}
+          title: "Maintainer audit: ${{ steps.entry.outputs.names }}"
+          body-path: /tmp/pr-body.md
+          labels: maintainer-loop
+          commit-message: "maintainer: audit new model(s) ${{ steps.entry.outputs.names }}"
+          add-paths: |
+            models.yaml
+            examples/gradient/

@@ -1,0 +1,49 @@
+{
+  "families": [
+    "claude", "gpt-", "^o[0-9]", "gemini", "grok", "llama", "deepseek",
+    "qwen", "qwq", "mistral", "mixtral", "gemma", "phi-", "kimi", "glm", "command"
+  ],
+  "ignore_global": ["preview", "-latest$", "experimental", "internal-only"],
+  "ignore_by_provider": {
+    "anthropic": [],
+    "openai": [
+      "embedding", "whisper", "tts", "dall-e", "moderation", "audio",
+      "realtime", "transcribe", "image", "davinci", "babbage", "codex",
+      "computer-use", "^ft:", "chatgpt", "search", "deep-research", "instruct"
+    ],
+    "gemini": [
+      "embedding", "embed", "aqa", "imagen", "veo", "tts", "audio", "live",
+      "learnlm", "gecko", "thinking-exp"
+    ],
+    "huggingface": [
+      "gguf", "awq", "gptq", "fp8", "int4", "int8", "bnb", "-base$",
+      "guard", "embed", "vision-encoder", "onnx", "mlx", "image", "asr",
+      "aligner", "audio", "tts", "ocr", "video", "bench", "reranker"
+    ]
+  },
+  "hf_orgs": ["meta-llama", "deepseek-ai", "Qwen", "mistralai", "openai", "google", "moonshotai", "zai-org"],
+  "max_new_audits": 3,
+  "prior_art": {
+    "queries": [
+      "LLM consistency evaluation",
+      "language model self-contradiction",
+      "belief consistency language model",
+      "paraphrase robustness evaluation LLM",
+      "ontology evaluation large language model",
+      "world model probing language model"
+    ],
+    "keywords": {
+      "consistency": 3, "contradiction": 4, "belief": 3, "ontology": 4,
+      "paraphrase": 3, "invariant": 3, "commitment": 3, "ledger": 5,
+      "world model": 4, "audit": 3, "debt": 5, "eval": 1, "benchmark": 1
+    },
+    "threshold": 8,
+    "max_results_per_query": 20,
+    "max_candidates_per_run": 10
+  },
+  "saturation": { "min_clean_models": 2 },
+  "report_dirs": {
+    "examples/gradient": "commitments",
+    "examples/gradient-frontier": "commitments-frontier"
+  }
+}

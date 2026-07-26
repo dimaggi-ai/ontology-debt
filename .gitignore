@@ -8,3 +8,6 @@ build/
 .pytest_cache/
 .claude/
 results/
+
+# maintainer-loop transient artifacts (issue bodies rendered per run)
+maintainer/state/

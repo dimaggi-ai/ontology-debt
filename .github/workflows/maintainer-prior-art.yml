@@ -1,0 +1,57 @@
+# L2 of the maintainer loop: prior-art watch. Deterministic keyword scoring
+# over arXiv/OpenAlex/GitHub, then the fetch-then-quote verifier: nothing
+# surfaces unless its id re-fetches with the stored quote verbatim inside.
+# Output is an issue only - the human alone edits the related-work table.
+name: maintainer-prior-art
+
+on:
+  schedule:
+    - cron: "23 7 * * 1"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: maintainer-prior-art
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    if: ${{ vars.MAINTAINER_LOOP_ENABLED != 'false' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e .
+      - id: watch
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          OPENALEX_MAILTO: ${{ vars.OPENALEX_MAILTO }}
+        run: python -m ontodebt.maintainer.prior_art --github-output "$GITHUB_OUTPUT"
+      # Issue FIRST, seen-state LAST: candidates are marked seen only after
+      # they have actually surfaced to a human. If issue creation fails, the
+      # uncommitted seen-state means they re-surface next week instead of
+      # being silently buried.
+      - name: Open digest issue
+        if: ${{ steps.watch.outputs.novel != '0' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TITLE: ${{ steps.watch.outputs.issue_title }}
+        run: |
+          gh issue create --title "$TITLE" \
+            --body-file maintainer/state/prior-art-issue.md \
+            --label maintainer-loop --label prior-art
+      - name: Commit seen-state bookkeeping
+        if: ${{ steps.watch.outputs.seen_changed == 'true' }}
+        run: |
+          git config user.name "ontodebt-maintainer"
+          git config user.email "maintainer-loop@users.noreply.github.com"
+          git add maintainer/prior_art_seen.json
+          git commit -m "maintainer: prior-art seen-state $(date -u +%F) [bookkeeping]"
+          git pull --rebase origin main
+          git push origin HEAD:main

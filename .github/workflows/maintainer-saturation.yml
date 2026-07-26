@@ -1,0 +1,52 @@
+# L3 trigger of the maintainer loop: saturation check. Pure arithmetic over
+# committed runs; fires an issue (never a pack) when the hard tier is held
+# clean by enough models. Deduped: one open saturation issue per tier max.
+name: maintainer-saturation
+
+on:
+  schedule:
+    - cron: "41 7 * * 1"
+  workflow_dispatch: {}
+
+permissions:
+  issues: write
+  contents: read
+
+concurrency:
+  group: maintainer-saturation
+  cancel-in-progress: false
+
+jobs:
+  check:
+    if: ${{ vars.MAINTAINER_LOOP_ENABLED != 'false' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e .
+      - id: check
+        run: |
+          python -m ontodebt.maintainer.saturation \
+            --results examples/gradient-frontier \
+            --commitments commitments-frontier \
+            --min-clean 2 \
+            --github-output "$GITHUB_OUTPUT"
+      - name: Open issue unless one is already open for this tier
+        if: ${{ steps.check.outputs.saturated == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TITLE: ${{ steps.check.outputs.issue_title }}
+          MARKER: "ontodebt-maintainer:saturation:gradient-frontier"
+        run: |
+          existing=$(gh issue list --state open --label maintainer-loop \
+            --json number,body --jq "[.[] | select(.body | contains(\"$MARKER\"))] | length")
+          if [ "$existing" = "0" ]; then
+            gh issue create --title "$TITLE" \
+              --body-file maintainer/state/saturation-issue.md \
+              --label maintainer-loop
+          else
+            echo "open saturation issue already exists; not duplicating"
+          fi
