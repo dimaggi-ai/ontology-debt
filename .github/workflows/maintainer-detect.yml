@@ -67,7 +67,10 @@ jobs:
         run: |
           git config user.name "ontodebt-maintainer"
           git config user.email "maintainer-loop@users.noreply.github.com"
-          git add maintainer/known_models.json maintainer/payloads/
+          git add maintainer/known_models.json
+          # payloads are only written when a provider's model set changed; a
+          # monitoring-map-only update has none, and a bare pathspec is fatal
+          if [ -d maintainer/payloads ]; then git add maintainer/payloads/; fi
           git commit -m "maintainer: model-registry update $(date -u +%F) [bookkeeping]"
           git pull --rebase origin main
           git push origin HEAD:main
