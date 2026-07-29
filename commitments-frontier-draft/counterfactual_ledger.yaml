@@ -1,0 +1,577 @@
+id: counterfactual_ledger
+title: "Counterfactual Ledger"
+statement: >
+  A world-model must hold two fully determined world-lines apart: the sequence as executed, and the same sequence under a precisely specified edit to a numbered step. Downstream conditionals must be recomputed in the edited world, and no state may bleed between the two lines.
+severity: high
+lineage: ["drafted 2026-07-29 by the governed maintainer process: proposer agents, adversarial ambiguity gate, blind gold-answer recomputation; authority delegated per maintainer/decisions.md 2026-07-29"]
+scenarios:
+  - id: cf-001
+    setup: >
+      A jar on Tomas's desk holds 50 coins, and a box beside it holds 20 coins.
+      Tomas then carried out the following ten steps in order. Step 1: he moved
+      16 coins from the jar into the box. Step 2: he dropped 10 new coins into
+      the jar. Step 3: he moved 10 coins from the box into the jar. Step 4: he
+      removed exactly half of the coins then in the jar and spent them. Step 5:
+      he dropped 5 new coins into the box. Step 6: he moved 8 coins from the jar
+      into the box. Step 7: he doubled the number of coins then in the box by
+      adding new coins to it. Step 8: he removed 12 coins from the box and spent
+      them. Step 9: he moved 20 coins from the box into the jar. Step 10: he
+      removed 4 coins from the jar and spent them. No other coins were ever
+      added or removed.
+    question: "If step 2 had never happened, and every other step had been carried out exactly as described and in the same order, how many coins would the jar hold at the end? Answer with a single number written in digits."
+    paraphrases:
+      - "Suppose step 2 is deleted from the sequence while steps 1 and 3 through 10 run unchanged and in order. How many coins would end up in the jar? Answer with a single number written in digits."
+      - "In a version of events where Tomas skips step 2 but performs all the other steps exactly as stated, what would the jar's final coin count be? Answer with a single number written in digits."
+      - "Had the 10 new coins of step 2 never been dropped in, with the rest of the ten steps done as described, how many coins would the jar contain at the end? Answer with a single number written in digits."
+      - "Remove step 2 from the sequence and replay the remaining steps in order. What is the final number of coins in the jar? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "30"
+    rationale: >
+      Edited world with step 2 deleted: 1. Start: jar 50, box 20. 2. Step 1
+      moves 16 jar-to-box: jar 34, box 36. 3. Step 2 is skipped: jar 34. 4.
+      Step 3 moves 10 box-to-jar: jar 44, box 26. 5. Step 4 halves the jar's 44:
+      jar 22. 6. Step 5 adds 5 to the box: box 31. 7. Step 6 moves 8 jar-to-box:
+      jar 14, box 39. 8. Step 7 doubles the box's 39: box 78. 9. Step 8 removes
+      12 from the box: box 66. 10. Step 9 moves 20 box-to-jar: jar 34, box 46.
+      11. Step 10 removes 4 from the jar: jar 30. The actual world ends at 35;
+      the halving at step 4 turns the missing 10 coins into a missing 5.
+    difficulty: adversarial
+  - id: cf-002
+    setup: >
+      A vat in Ines's cellar holds 120 liters of water, and a barrel beside it
+      holds 40 liters. Ines then carried out the following ten steps in order.
+      Step 1: she poured 30 liters from the vat into the barrel. Step 2: she
+      drained 20 liters out of the vat and threw the water away. Step 3: she
+      added 10 liters of fresh water to the barrel. Step 4: she drained exactly
+      half of the water then in the vat and threw it away. Step 5: she poured 15
+      liters from the barrel into the vat. Step 6: she added 6 liters of fresh
+      water to the vat. Step 7: she doubled the amount of water then in the
+      barrel by adding fresh water. Step 8: she poured 25 liters from the barrel
+      into the vat. Step 9: she drained 11 liters out of the vat. Step 10: she
+      added 5 liters of fresh water to the barrel. No other water ever entered
+      or left either container.
+    question: "If the operations of step 2 and step 6 had been swapped in order - the 6 liters added to the vat in step 2's place, and the 20 liters drained from the vat in step 6's place, with all other steps unchanged - how many liters of water would the vat hold at the end? Answer with a single number written in digits."
+    paraphrases:
+      - "Suppose Ines had done step 6's addition of 6 liters second in the sequence and step 2's draining of 20 liters sixth, leaving every other step exactly as described. What would the vat's final volume in liters be? Answer with a single number written in digits."
+      - "Exchange the positions of step 2 and step 6 - the fresh 6 liters go in where the drain of 20 was, and the drain of 20 happens where the 6 liters went in - and replay the whole sequence. How many liters would the vat then hold at the end? Answer with a single number written in digits."
+      - "In a version of events where steps 2 and 6 trade places in the order while steps 1, 3, 4, 5, 7, 8, 9, and 10 stay put, what is the final number of liters in the vat? Answer with a single number written in digits."
+      - "Had the drain of 20 liters and the addition of 6 liters swapped their positions in the sequence, with everything else unchanged, how many liters would end up in the vat? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "57"
+    rationale: >
+      Edited world with steps 2 and 6 swapped: 1. Start: vat 120, barrel 40. 2.
+      Step 1 pours 30 vat-to-barrel: vat 90, barrel 70. 3. Swapped step 2 adds 6
+      to the vat: vat 96. 4. Step 3 adds 10 to the barrel: barrel 80. 5. Step 4
+      halves the vat's 96: vat 48. 6. Step 5 pours 15 barrel-to-vat: vat 63,
+      barrel 65. 7. Swapped step 6 drains 20 from the vat: vat 43. 8. Step 7
+      doubles the barrel's 65: barrel 130. 9. Step 8 pours 25 barrel-to-vat: vat
+      68, barrel 105. 10. Step 9 drains 11 from the vat: vat 57. 11. Step 10
+      adds 5 to the barrel: barrel 110. The swap matters because the halving at
+      step 4 sits between the two swapped operations: in the actual world the
+      vat ends at 70, but with the addition before the halving and the drain
+      after it, the vat ends at 57.
+    difficulty: adversarial
+  - id: cf-003
+    setup: >
+      A shelf in Owen's study holds 60 books, and a rolling cart beside it holds
+      24 books. Owen then carried out the following ten steps in order. Step 1:
+      he moved 20 books from the shelf onto the cart. Step 2: he removed 6 books
+      from the cart and donated them. Step 3: he moved every book then on the
+      cart onto the shelf, leaving the cart empty. Step 4: he removed 14 books
+      from the shelf and gave them away. Step 5: he placed 9 newly bought books
+      on the cart. Step 6: he moved 6 books from the cart onto the shelf. Step
+      7: he took exactly half of the books then on the shelf, boxed them, and
+      carried the box out of the room. Step 8: he placed 8 newly bought books on
+      the shelf. Step 9: he moved 4 books from the shelf onto the cart. Step 10:
+      he removed 2 books from the cart and donated them. No other books were
+      ever added or removed.
+    question: "If step 2 had never happened, and every other step had been carried out exactly as described and in the same order, would the shelf end with the same number of books as it actually did? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Delete step 2 from the sequence and replay the remaining steps in order. Would the shelf's final book count match its actual final book count? Answer with exactly one word: Yes or No."
+      - "In a version of events where Owen skips the donation in step 2 but performs all the other steps exactly as stated, does the shelf finish with the same number of books as it really finished with? Answer with exactly one word: Yes or No."
+      - "Had the 6 books of step 2 never been donated, with the rest of the ten steps done as described, would the shelf's ending count equal the ending count it actually had? Answer with exactly one word: Yes or No."
+      - "Compare two runs of the sequence, one as described and one with step 2 removed. Do the two runs leave the same number of books on the shelf? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "No"
+    rationale: >
+      Actual world: 1. Start: shelf 60, cart 24. 2. Step 1: shelf 40, cart 44.
+      3. Step 2: cart 38. 4. Step 3 moves all 38: shelf 78, cart 0. 5. Step 4:
+      shelf 64. 6. Step 5: cart 9. 7. Step 6: shelf 70, cart 3. 8. Step 7 halves
+      70: shelf 35. 9. Step 8: shelf 43. 10. Step 9: shelf 39, cart 7. 11. Step
+      10: cart 5. Actual shelf: 39. Edited world with step 2 deleted: 1. Step 1:
+      shelf 40, cart 44. 2. Step 3 moves all 44: shelf 84, cart 0. 3. Step 4:
+      shelf 70. 4. Step 5: cart 9. 5. Step 6: shelf 76, cart 3. 6. Step 7 halves
+      76: shelf 38. 7. Step 8: shelf 46. 8. Step 9: shelf 42, cart 7. 9. Step
+      10: cart 5. Edited shelf: 42. Because the move-everything at step 3
+      carries the extra 6 onto the shelf and the halving at step 7 cuts that
+      difference to 3, the counts are 42 versus 39, so the answer is No.
+    difficulty: adversarial
+  - id: cf-004
+    setup: >
+      A bowl on Lena's workbench holds 30 beads, and a tray beside it holds 12
+      beads. Lena then carried out the following ten steps in order. Step 1: she
+      dropped 8 new beads onto the tray. Step 2: she moved 5 beads from the bowl
+      onto the tray. Step 3: she doubled the number of beads then on the tray by
+      adding new beads to it. Step 4: she moved 10 beads from the tray into the
+      bowl. Step 5: she removed 7 beads from the bowl and strung them onto a
+      necklace. Step 6: she dropped 6 new beads onto the tray. Step 7: she
+      tipped every bead then on the tray into a discard bin, leaving the tray
+      empty. Step 8: she dropped 15 new beads onto the tray. Step 9: she moved 5
+      beads from the tray into the bowl. Step 10: she removed 3 beads from the
+      bowl and strung them onto the necklace. No other beads were ever added or
+      removed.
+    question: "If step 3 had never happened, and every other step had been carried out exactly as described and in the same order, would the bowl end with the same number of beads as it actually did? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Delete step 3 from the sequence and replay the remaining steps in order. Would the bowl's final bead count match its actual final bead count? Answer with exactly one word: Yes or No."
+      - "In a version of events where Lena skips the doubling in step 3 but performs all the other steps exactly as stated, does the bowl finish with the same number of beads as it really finished with? Answer with exactly one word: Yes or No."
+      - "Had the tray never been doubled at step 3, with the rest of the ten steps done as described, would the bowl's ending count equal the ending count it actually had? Answer with exactly one word: Yes or No."
+      - "Compare two runs of the sequence, one as described and one with step 3 removed. Do the two runs leave the same number of beads in the bowl? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: >
+      Actual world: 1. Start: bowl 30, tray 12. 2. Step 1: tray 20. 3. Step 2:
+      bowl 25, tray 25. 4. Step 3 doubles 25: tray 50. 5. Step 4: bowl 35, tray
+      40. 6. Step 5: bowl 28. 7. Step 6: tray 46. 8. Step 7 empties the tray:
+      tray 0. 9. Step 8: tray 15. 10. Step 9: bowl 33, tray 10. 11. Step 10:
+      bowl 30. Actual bowl: 30. Edited world with step 3 deleted: 1. Step 1:
+      tray 20. 2. Step 2: bowl 25, tray 25. 3. Step 4 moves a fixed 10: bowl 35,
+      tray 15. 4. Step 5: bowl 28. 5. Step 6: tray 21. 6. Step 7 empties the
+      tray: tray 0. 7. Step 8: tray 15. 8. Step 9: bowl 33. 9. Step 10: bowl 30.
+      Edited bowl: 30. Every transfer into the bowl is a fixed amount and the
+      tray is emptied at step 7 in both worlds, so deleting the doubling never
+      reaches the bowl: 30 equals 30, and the answer is Yes.
+    difficulty: adversarial
+  - id: cf-005
+    setup: >
+      Ravi holds 40 game tokens and Sana holds 26 game tokens, and a bank of
+      spare tokens sits between them. They then carried out the following ten
+      steps in order. Step 1: Ravi handed 10 tokens to Sana. Step 2: Sana
+      discarded 8 tokens into the bank. Step 3: Ravi took 6 tokens from the
+      bank. Step 4: Sana handed 4 tokens to Ravi. Step 5: Sana paid exactly half
+      of the tokens then in her hand into the bank. Step 6: Ravi discarded 9
+      tokens into the bank. Step 7: Sana took 7 tokens from the bank. Step 8:
+      Sana discarded 6 tokens into the bank. Step 9: Ravi handed 5 tokens to
+      Sana. Step 10: Sana handed 11 tokens to Ravi. No other tokens ever changed
+      hands.
+    question: "If the operations of step 2 and step 8 had been swapped in order - Sana discarding 6 tokens in step 2's place and discarding 8 tokens in step 8's place, with all other steps unchanged - how many tokens would Sana hold at the end? Answer with a single number written in digits."
+    paraphrases:
+      - "Suppose Sana's discard of 6 came second in the sequence and her discard of 8 came eighth, with every other step exactly as described. How many tokens would Sana end with? Answer with a single number written in digits."
+      - "Exchange the positions of step 2 and step 8 - the 6-token discard happens where the 8-token discard was, and the 8-token discard happens where the 6-token discard was - and replay the whole sequence. What would Sana's final token count be? Answer with a single number written in digits."
+      - "In a version of events where steps 2 and 8 trade places in the order while steps 1, 3, 4, 5, 6, 7, 9, and 10 stay put, how many tokens does Sana hold at the end? Answer with a single number written in digits."
+      - "Had the two discards in step 2 and step 8 swapped their positions in the sequence, with everything else unchanged, what number of tokens would Sana finish with? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "6"
+    rationale: >
+      Edited world with steps 2 and 8 swapped: 1. Start: Ravi 40, Sana 26. 2.
+      Step 1: Ravi 30, Sana 36. 3. Swapped step 2, Sana discards 6: Sana 30. 4.
+      Step 3: Ravi 36. 5. Step 4: Ravi 40, Sana 26. 6. Step 5 halves Sana's 26:
+      Sana 13. 7. Step 6: Ravi 31. 8. Step 7: Sana 20. 9. Swapped step 8, Sana
+      discards 8: Sana 12. 10. Step 9: Ravi 26, Sana 17. 11. Step 10: Ravi 37,
+      Sana 6. The swap matters because the halving at step 5 sits between the
+      two discards: in the actual world Sana ends with 7, but with the smaller
+      discard before the halving she ends with 6.
+    difficulty: adversarial
+  - id: cf-006
+    setup: >
+      On Bram's farm, Crate P holds 28 apples and Crate Q holds 50 apples. Bram
+      then carried out the following ten steps in order. Step 1: he moved 6
+      apples from Crate P into Crate Q. Step 2: he added 10 freshly picked
+      apples to Crate P. Step 3: he removed 12 apples from Crate Q and pressed
+      them for juice. Step 4: he doubled the number of apples then in Crate P by
+      adding freshly picked apples to it. Step 5: he moved 20 apples from Crate
+      Q into Crate P. Step 6: he removed 15 apples from Crate P and sold them.
+      Step 7: he added 8 freshly picked apples to Crate Q. Step 8: he moved 10
+      apples from Crate P into Crate Q. Step 9: he removed 6 apples from Crate P
+      and fed them to his goats. Step 10: he removed 9 apples from Crate Q and
+      fed them to his goats. No other apples were ever added or removed.
+    question: "If step 2 had never happened, and every other step had been carried out exactly as described and in the same order, would Crate P and Crate Q end with the same number of apples as each other? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Delete step 2 from the sequence and replay the remaining steps in order. Would the two crates finish holding equal numbers of apples? Answer with exactly one word: Yes or No."
+      - "In a version of events where Bram skips the 10 freshly picked apples of step 2 but performs all the other steps exactly as stated, do Crate P and Crate Q end up with matching apple counts? Answer with exactly one word: Yes or No."
+      - "Had step 2 never occurred, with the rest of the ten steps done as described, would the final number of apples in Crate P equal the final number in Crate Q? Answer with exactly one word: Yes or No."
+      - "Remove step 2 from the sequence and carry out the remaining steps in order. At the end, is Crate P's apple count the same as Crate Q's? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: >
+      Edited world with step 2 deleted: 1. Start: P 28, Q 50. 2. Step 1 moves 6
+      P-to-Q: P 22, Q 56. 3. Step 2 is skipped: P 22. 4. Step 3 removes 12 from
+      Q: Q 44. 5. Step 4 doubles P's 22: P 44. 6. Step 5 moves 20 Q-to-P: P 64,
+      Q 24. 7. Step 6 removes 15 from P: P 49. 8. Step 7 adds 8 to Q: Q 32. 9.
+      Step 8 moves 10 P-to-Q: P 39, Q 42. 10. Step 9 removes 6 from P: P 33. 11.
+      Step 10 removes 9 from Q: Q 33. Both crates end at 33, so the answer is
+      Yes. In the actual world P ends at 53 and Q at 33, because the doubling at
+      step 4 turns step 2's extra 10 into an extra 20 for P; only in the edited
+      world are the crates equal.
+    difficulty: adversarial
+  - id: cf-007
+    setup: >
+      A tin holds 26 buttons and a tray beside it starts empty. Tomas performs
+      the following nine steps in order. Step 1: he moves 8 buttons from the tin
+      to the tray. Step 2: he adds 5 new buttons to the tin. Step 3: he doubles
+      the number of buttons in the tin by adding new buttons. Step 4: he moves 6
+      buttons from the tin to the tray. Step 5: he removes 10 buttons from the
+      tray and gives them away. Step 6: he applies this rule: if the tin at that
+      moment holds more than 34 buttons, he removes 12 buttons from the tin;
+      otherwise he removes 4 buttons from the tin. Step 7: he moves 9 buttons
+      from the tin to the tray. Step 8: he adds 7 new buttons to the tin.
+      Step 9: he applies this rule: if the tray at that moment holds fewer than
+      10 buttons, he moves 5 buttons from the tin to the tray; otherwise he
+      moves 2 buttons from the tin to the tray. No other buttons are added,
+      removed, or moved.
+    question: "If step 2 had not happened and every other step had still been carried out in order, with each rule applied to the state at that moment, how many buttons would the tin hold at the end? Answer with a single number and nothing else."
+    paraphrases:
+      - "Suppose step 2 is deleted from the sequence and steps 1 and 3 through 9 run in order, each rule evaluated on the state at that moment. How many buttons would end up in the tin? Answer with a single number and nothing else."
+      - "In the version of events where step 2 never occurs but all remaining steps proceed in order with their rules applied as stated, what is the final number of buttons in the tin? Answer with a single number and nothing else."
+      - "Had Tomas skipped step 2 entirely while performing every other step in the same order, how many buttons would the tin contain at the end? Answer with a single number and nothing else."
+      - "Remove step 2 from the sequence, keep steps 1 and 3 through 9 unchanged and in order, and apply each rule to the tin and tray as they then stand. How many buttons does the tin hold at the end of that edited sequence? Answer with a single number and nothing else."
+    expected:
+      type: exact
+      value: "22"
+    rationale: >
+      Edited world with step 2 deleted. 1. Step 1: tin 26 - 8 = 18, tray 8.
+      2. Step 2: skipped, tin stays 18. 3. Step 3: tin doubles to 36.
+      4. Step 4: tin 36 - 6 = 30, tray 8 + 6 = 14. 5. Step 5: tray 14 - 10 = 4.
+      6. Step 6: tin is 30, which is not more than 34, so remove 4: tin 26.
+      7. Step 7: tin 26 - 9 = 17, tray 4 + 9 = 13. 8. Step 8: tin 17 + 7 = 24.
+      9. Step 9: tray is 13, which is not fewer than 10, so move 2: tin 24 - 2 =
+      22, tray 15. Final tin = 22. (In the actual world the tin reaches 40 at
+      step 6, the rule removes 12 instead of 4, and the tin ends at 24, so 24
+      is the state-bleed trap.)
+    difficulty: adversarial
+  - id: cf-008
+    setup: >
+      A cash box holds 40 dollars. Rosa performs the following nine steps in
+      order. Step 1: she adds 24 dollars to the box. Step 2: she removes 10
+      dollars from the box. Step 3: she removes exactly half of the money then
+      in the box. Step 4: she adds 15 dollars. Step 5: she removes 7 dollars.
+      Step 6: she removes 4 dollars. Step 7: she adds 18 dollars. Step 8: she
+      removes 6 dollars. Step 9: she adds 5 dollars. No other money enters or
+      leaves the box.
+    question: "If the operations of step 3 and step 7 had been performed in swapped order - the 18-dollar addition performed third and the remove-half operation performed seventh, with every other step unchanged and in its original position - how many dollars would the box hold at the end? Answer with a single number and nothing else."
+    paraphrases:
+      - "Swap steps 3 and 7, so that adding 18 dollars happens in step 3's position and removing half of the money then in the box happens in step 7's position, leaving all other steps as they are. How many dollars would the box hold at the end of that edited sequence? Answer with a single number and nothing else."
+      - "Suppose Rosa had done step 7's operation (adding 18 dollars) at the third position and step 3's operation (removing half of the money then in the box) at the seventh position, with the rest of the sequence unchanged. What would the final dollar amount in the box be? Answer with a single number and nothing else."
+      - "In the edited sequence where the operations of step 3 and step 7 trade places and everything else stays put, how many dollars are in the box at the end? Answer with a single number and nothing else."
+      - "Had the remove-half operation of step 3 and the add-18 operation of step 7 been exchanged in order, all other steps unchanged, what would the box hold in dollars at the end? Answer with a single number and nothing else."
+    expected:
+      type: exact
+      value: "37"
+    rationale: >
+      Edited world with steps 3 and 7 swapped. 1. Step 1: 40 + 24 = 64.
+      2. Step 2: 64 - 10 = 54. 3. Third position (add 18): 54 + 18 = 72.
+      4. Step 4: 72 + 15 = 87. 5. Step 5: 87 - 7 = 80. 6. Step 6: 80 - 4 = 76.
+      7. Seventh position (remove half): 76 / 2 = 38. 8. Step 8: 38 - 6 = 32.
+      9. Step 9: 32 + 5 = 37. Final box = 37. (In the actual order the halving
+      hits 54 giving 27, and the box ends at 48, so 48 is the state-bleed trap.)
+    difficulty: adversarial
+  - id: cf-009
+    setup: >
+      A barrel holds 60 liters of water and a drum beside it holds 20 liters.
+      The following ten steps happen in order. Step 1: 15 liters are moved from
+      the barrel to the drum. Step 2: 10 liters are added to the barrel from a
+      hose. Step 3: 25 liters are drained from the barrel. Step 4: the amount of
+      water in the drum is doubled by adding water. Step 5: 12 liters are moved
+      from the drum to the barrel. Step 6: this rule is applied: if the barrel
+      at that moment holds at least 40 liters, 20 liters are drained from the
+      barrel; otherwise 5 liters are drained from the barrel. Step 7: 8 liters
+      are added to the barrel. Step 8: 6 liters are moved from the barrel to the
+      drum. Step 9: this rule is applied: if the drum at that moment holds more
+      than 60 liters, 10 liters are moved from the drum to the barrel; otherwise
+      2 liters are moved from the drum to the barrel. Step 10: 4 liters are
+      drained from the barrel. No water moves except as stated.
+    question: "If step 2 had not happened and every other step had still been carried out in order, with each rule applied to the state at that moment, how many liters would the barrel hold at the end? Answer with a single number and nothing else."
+    paraphrases:
+      - "Delete step 2 from the sequence and run steps 1 and 3 through 10 in order, evaluating each rule on the water levels at that moment. How many liters would the barrel then hold at the end? Answer with a single number and nothing else."
+      - "In the version of events where the hose addition of step 2 never occurs but all other steps proceed in order with their rules applied as stated, what is the final number of liters in the barrel? Answer with a single number and nothing else."
+      - "Had step 2 been skipped entirely while every other step ran unchanged and in order, how many liters of water would the barrel contain at the end? Answer with a single number and nothing else."
+      - "Suppose the sequence is edited only by removing step 2, with the remaining steps performed in order and each rule judged against the levels at that time. How many liters end up in the barrel? Answer with a single number and nothing else."
+    expected:
+      type: exact
+      value: "35"
+    rationale: >
+      Edited world with step 2 deleted. 1. Step 1: barrel 60 - 15 = 45, drum
+      20 + 15 = 35. 2. Step 2: skipped, barrel stays 45. 3. Step 3: barrel
+      45 - 25 = 20. 4. Step 4: drum doubles to 70. 5. Step 5: barrel 20 + 12 =
+      32, drum 70 - 12 = 58. 6. Step 6: barrel is 32, which is not at least 40,
+      so drain 5: barrel 27. 7. Step 7: barrel 27 + 8 = 35. 8. Step 8: barrel
+      35 - 6 = 29, drum 58 + 6 = 64. 9. Step 9: drum is 64, which is more than
+      60, so move 10: barrel 29 + 10 = 39, drum 54. 10. Step 10: barrel 39 - 4 =
+      35. Final barrel = 35. (In the actual world the barrel is 42 at step 6,
+      the rule drains 20, and the barrel ends at 30, so removing 10 liters of
+      input raises the final level - the naive answer 20 and the actual answer
+      30 are both traps.)
+    difficulty: adversarial
+  - id: cf-010
+    setup: >
+      Shelf A holds 40 books and Shelf B holds 16 books. Ines performs the
+      following ten steps in order. Step 1: she moves 6 books from Shelf A to
+      Shelf B. Step 2: she adds 8 new books to Shelf A. Step 3: she moves
+      exactly half of the books then on Shelf B to Shelf A. Step 4: she removes
+      9 books from Shelf A and donates them. Step 5: she moves 4 books from
+      Shelf A to Shelf B. Step 6: she adds 5 new books to Shelf B. Step 7: she
+      moves exactly half of the books then on Shelf A to Shelf B. Step 8: she
+      removes 12 books from Shelf B and boxes them up. Step 9: she adds 6 new
+      books to Shelf A. Step 10: she moves 10 books from Shelf B to Shelf A. No
+      other books are added, removed, or moved.
+    question: "If the operations of step 3 and step 7 had been performed in swapped order - moving half of Shelf A's books to Shelf B done third, and moving half of Shelf B's books to Shelf A done seventh, with every other step unchanged and in its original position - how many books would Shelf A hold at the end? Answer with a single number and nothing else."
+    paraphrases:
+      - "Swap steps 3 and 7, so that the half-of-A transfer happens in step 3's position and the half-of-B transfer happens in step 7's position, all other steps staying put. How many books would end up on Shelf A? Answer with a single number and nothing else."
+      - "Suppose Ines had done step 7's operation (moving half of Shelf A's books to Shelf B) at the third position and step 3's operation (moving half of Shelf B's books to Shelf A) at the seventh position, with the rest of the sequence unchanged. How many books would Shelf A hold at the end? Answer with a single number and nothing else."
+      - "In the edited sequence where the two half-transfers of step 3 and step 7 trade places and everything else is unchanged, what is the final number of books on Shelf A? Answer with a single number and nothing else."
+      - "Had the step 3 and step 7 operations been exchanged in order, each half computed from the shelf's count at that moment and all other steps unchanged, how many books would sit on Shelf A at the end? Answer with a single number and nothing else."
+    expected:
+      type: exact
+      value: "50"
+    rationale: >
+      Edited world with steps 3 and 7 swapped. 1. Step 1: A 40 - 6 = 34, B
+      16 + 6 = 22. 2. Step 2: A 34 + 8 = 42. 3. Third position (move half of A
+      to B): half of 42 is 21, so A 21, B 22 + 21 = 43. 4. Step 4: A 21 - 9 =
+      12. 5. Step 5: A 12 - 4 = 8, B 43 + 4 = 47. 6. Step 6: B 47 + 5 = 52.
+      7. Seventh position (move half of B to A): half of 52 is 26, so B 26, A
+      8 + 26 = 34. 8. Step 8: B 26 - 12 = 14. 9. Step 9: A 34 + 6 = 40.
+      10. Step 10: A 40 + 10 = 50, B 14 - 10 = 4. Final Shelf A = 50. (In the
+      actual order Shelf A ends at 36, so 36 is the state-bleed trap.)
+    difficulty: adversarial
+  - id: cf-011
+    setup: >
+      A chest holds 30 tokens and a pouch beside it holds 14 tokens. The
+      following ten steps happen in order. Step 1: 12 tokens are added to the
+      chest. Step 2: 5 tokens are removed from the chest. Step 3: 9 tokens are
+      added to the pouch. Step 4: 8 tokens are added to the chest. Step 5: 10
+      tokens are removed from the chest. Step 6: 6 tokens are added to the
+      chest. Step 7: 6 tokens are removed from the chest. Step 8: this rule is
+      applied: if the chest at that moment holds more than 38 tokens, 9 tokens
+      are removed from the chest; otherwise 3 tokens are removed from the chest.
+      Step 9: 7 tokens are added to the chest. Step 10: 4 tokens are removed
+      from the chest. No tokens ever move between the chest and the pouch, and
+      nothing else is added or removed.
+    question: "If step 7 had not happened and every other step had still been carried out in order, with the rule in step 8 applied to the state at that moment, would the chest end with the same number of tokens as it actually did? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Delete step 7 and run the remaining steps in order, evaluating step 8's rule on the chest as it then stands. Does the chest finish with the same token count as in the actual sequence? Answer with exactly one word: Yes or No."
+      - "In the version of events where step 7 never occurs but every other step proceeds in order with step 8's rule applied as stated, is the final number of tokens in the chest equal to the actual final number? Answer with exactly one word: Yes or No."
+      - "Had step 7 been skipped entirely while all other steps ran unchanged and in order, would the chest's final token count match what it actually was? Answer with exactly one word: Yes or No."
+      - "Compare two worlds: the actual sequence, and the sequence with step 7 removed and everything else unchanged. Do the two worlds end with the same number of tokens in the chest? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: >
+      Actual world. 1. Step 1: chest 30 + 12 = 42. 2. Step 2: 42 - 5 = 37.
+      3. Step 3: pouch only, chest stays 37. 4. Step 4: 37 + 8 = 45. 5. Step 5:
+      45 - 10 = 35. 6. Step 6: 35 + 6 = 41. 7. Step 7: 41 - 6 = 35. 8. Step 8:
+      35 is not more than 38, so remove 3: chest 32. 9. Step 9: 32 + 7 = 39.
+      10. Step 10: 39 - 4 = 35. Actual final chest = 35. Edited world with step
+      7 deleted. 11. Steps 1-6 as before: chest 41. 12. Step 7: skipped, chest
+      stays 41. 13. Step 8: 41 is more than 38, so remove 9: chest 32.
+      14. Step 9: 32 + 7 = 39. 15. Step 10: 39 - 4 = 35. Edited final chest =
+      35. 16. Both worlds end at 35, so the answer is Yes: skipping the removal
+      of 6 flips the rule from removing 3 to removing 9, which exactly cancels.
+    difficulty: adversarial
+  - id: cf-012
+    setup: >
+      A sack holds 12 kilograms of flour and a bin beside it holds 5 kilograms.
+      Emil performs the following ten steps in order. Step 1: a delivery adds 6
+      kilograms to the sack. Step 2: he moves 4 kilograms from the sack to the
+      bin. Step 3: he doubles the amount of flour in the sack by adding new
+      flour. Step 4: he removes 9 kilograms from the sack to bake bread.
+      Step 5: he moves 3 kilograms from the bin to the sack. Step 6: he applies
+      this rule: if the sack at that moment holds at least 20 kilograms, he
+      removes 8 kilograms from the sack; otherwise he removes 2 kilograms from
+      the sack. Step 7: he adds 5 kilograms to the sack. Step 8: he doubles the
+      amount of flour in the bin by adding new flour. Step 9: he moves 4
+      kilograms from the bin to the sack. Step 10: he removes 6 kilograms from
+      the sack. No other flour is added, removed, or moved.
+    question: "If step 3 had not happened and every other step had still been carried out in order, with the rule in step 6 applied to the state at that moment, how many kilograms of flour would the sack hold at the end? Answer with a single number and nothing else."
+    paraphrases:
+      - "Delete step 3 from the sequence and run the remaining steps in order, evaluating step 6's rule on the sack as it then stands. How many kilograms would the sack hold at the end? Answer with a single number and nothing else."
+      - "In the version of events where the doubling of step 3 never occurs but all other steps proceed in order with step 6's rule applied as stated, what is the final number of kilograms in the sack? Answer with a single number and nothing else."
+      - "Had Emil skipped step 3 entirely while performing every other step unchanged and in order, how many kilograms of flour would remain in the sack at the end? Answer with a single number and nothing else."
+      - "Suppose the sequence is edited only by removing step 3, with the remaining steps performed in order and step 6's rule judged against the sack at that time. How many kilograms end up in the sack? Answer with a single number and nothing else."
+    expected:
+      type: exact
+      value: "9"
+    rationale: >
+      Edited world with step 3 deleted. 1. Step 1: sack 12 + 6 = 18. 2. Step 2:
+      sack 18 - 4 = 14, bin 5 + 4 = 9. 3. Step 3: skipped, sack stays 14.
+      4. Step 4: sack 14 - 9 = 5. 5. Step 5: sack 5 + 3 = 8, bin 9 - 3 = 6.
+      6. Step 6: sack is 8, which is not at least 20, so remove 2: sack 6.
+      7. Step 7: sack 6 + 5 = 11. 8. Step 8: bin doubles to 12. 9. Step 9: sack
+      11 + 4 = 15, bin 12 - 4 = 8. 10. Step 10: sack 15 - 6 = 9. Final sack =
+      9. (In the actual world the sack is 22 at step 6, the rule removes 8, and
+      the sack ends at 17, so 17 is the state-bleed trap.)
+    difficulty: adversarial
+  - id: cf-013
+    setup: >
+      A tin holds 40 marbles and a tray beside it holds 10 marbles. Tomas carries
+      out the following numbered steps in order. Step 1: he adds 8 new marbles to
+      the tin, bringing it to 48. Step 2: he removes 12 marbles from the tin,
+      leaving 36. Step 3: he doubles the number of marbles in the tin by adding
+      new marbles, bringing it to 72. Step 4: he rearranges the 10 marbles on the
+      tray into two rows, touching nothing in the tin. Step 5: he removes 20
+      marbles from the tin, leaving 52. Step 6: he adds 14 new marbles to the
+      tin, bringing it to 66. Step 7: he removes exactly half of the marbles now
+      in the tin, leaving 33. Step 8: his fixed rule for this step is that if the
+      tin holds more than 30 marbles he removes 9, and otherwise he adds 9 new
+      marbles; since the tin holds 33, he removes 9, leaving 24. Step 9: he adds
+      5 new marbles, bringing the tin to 29. Nothing else is ever added to or
+      removed from the tin, and in any variation of this sequence each step is
+      re-applied exactly as its rule is written.
+    question: "If step 6 had not happened (the 14 marbles never added), but every other step had still been carried out in order with step 8's rule re-applied as written, how many marbles would the tin hold at the end? Answer with a single number written in digits."
+    paraphrases:
+      - "Suppose step 6 is deleted from the sequence, so the 14 marbles are never added, while steps 1-5 and 7-9 still run in order and step 8's rule is re-evaluated as written. How many marbles would the tin hold at the end? Answer with a single number written in digits."
+      - "In the alternate run of this sequence where step 6 never happens and all remaining steps execute in order, with the step 8 rule applied to the new count, what would the final number of marbles in the tin be? Answer with a single number written in digits."
+      - "Imagine the same sequence except that step 6 is skipped entirely; every other step, including the rule in step 8, is carried out as written. What is the final marble count of the tin in that case? Answer with a single number written in digits."
+      - "Had Tomas omitted step 6 but performed every other numbered step in order, re-applying step 8's stated rule, how many marbles would end up in the tin? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "40"
+    rationale: "1. In the edited world step 6 is deleted and all other steps run in order, with step 8's rule re-evaluated. 2. Start: tin holds 40. 3. Step 1: 40 + 8 = 48. 4. Step 2: 48 - 12 = 36. 5. Step 3: doubled, 36 x 2 = 72. 6. Step 4 touches only the tray; tin stays 72. 7. Step 5: 72 - 20 = 52. 8. Step 6 is skipped; tin stays 52. 9. Step 7: half removed, 52 / 2 = 26. 10. Step 8: 26 is not more than 30, so the rule adds 9, giving 35 (in the actual world the tin held 33 here and the rule removed 9 instead). 11. Step 9: 35 + 5 = 40. 12. Final counterfactual count: 40."
+    difficulty: adversarial
+  - id: cf-014
+    setup: >
+      A barrel holds 84 liters of water and a drum beside it holds 30 liters.
+      Irena carries out the following numbered steps in order. Step 1: she
+      removes 24 liters from the barrel, leaving 60. Step 2: she adds 10 liters,
+      bringing it to 70. Step 3: she removes exactly half of the water now in the
+      barrel, leaving 35. Step 4: she adds 14 liters, bringing it to 49. Step 5:
+      she doubles the amount of water in the barrel by adding water, bringing it
+      to 98. Step 6: she pours 12 liters from the barrel into the drum, leaving
+      the barrel at 86. Step 7: she removes 30 liters from the barrel, leaving
+      56. Step 8: her fixed rule for this step is that if the barrel holds more
+      than 50 liters she removes 25 liters, and otherwise she adds 25 liters;
+      since the barrel holds 56 liters, she removes 25, leaving 31. Step 9: she
+      adds 5 liters, bringing the barrel to 36. No water enters or leaves except
+      as stated, and in any variation of this sequence each step is re-applied
+      exactly as its rule is written.
+    question: "If step 3 and step 5 had been swapped in order — the doubling carried out at step 3 and the halving carried out at step 5 — with every other step unchanged and step 8's rule re-applied as written, how many liters would the barrel hold at the end? Answer with a single number written in digits."
+    paraphrases:
+      - "Suppose the operations of step 3 and step 5 trade places, so the barrel is doubled at step 3 and halved at step 5, while all other steps run unchanged and step 8's rule is re-evaluated. How many liters would the barrel hold at the end? Answer with a single number written in digits."
+      - "In the alternate run where step 3's halving and step 5's doubling swap positions in the sequence, with every other step and the step 8 rule applied as written, what is the final number of liters in the barrel? Answer with a single number written in digits."
+      - "Imagine the same sequence except that the doubling happens at step 3 and the halving happens at step 5, everything else identical and step 8's stated rule re-applied. What would the barrel's final volume in liters be? Answer with a single number written in digits."
+      - "Had Irena performed the doubling as step 3 and the halving as step 5, keeping all other numbered steps in place and re-applying the rule in step 8, how many liters would end up in the barrel? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "65"
+    rationale: "1. In the edited world the doubling runs at step 3 and the halving at step 5; all other steps are unchanged and step 8's rule is re-evaluated. 2. Start: barrel holds 84. 3. Step 1: 84 - 24 = 60. 4. Step 2: 60 + 10 = 70. 5. Step 3 (now the doubling): 70 x 2 = 140. 6. Step 4: 140 + 14 = 154. 7. Step 5 (now the halving): 154 / 2 = 77. 8. Step 6: 77 - 12 = 65 poured to the drum. 9. Step 7: 65 - 30 = 35. 10. Step 8: 35 is not more than 50, so the rule adds 25, giving 60 (in the actual world the barrel held 56 here and the rule removed 25 instead). 11. Step 9: 60 + 5 = 65. 12. Final counterfactual amount: 65."
+    difficulty: adversarial
+  - id: cf-015
+    setup: >
+      Shelf A holds 50 books and Shelf B holds 30 books. Karl carries out the
+      following numbered steps in order. Step 1: he moves 12 books from Shelf A
+      to Shelf B, leaving A at 38 and B at 42. Step 2: he adds 6 new books to
+      Shelf A, bringing it to 44. Step 3: he moves 15 books from Shelf B to
+      Shelf A, leaving A at 59 and B at 27. Step 4: he removes 9 books from
+      Shelf A and donates them, leaving A at 50. Step 5: he moves 10 books from
+      Shelf A to Shelf B, leaving A at 40 and B at 37. Step 6: he doubles the
+      number of books on Shelf B by adding new books, bringing B to 74. Step 7:
+      he moves 20 books from Shelf B to Shelf A, leaving A at 60 and B at 54.
+      Step 8: he removes 14 books from Shelf B and boxes them up, leaving B at
+      40. Step 9: he moves 5 books from Shelf A to Shelf B, leaving A at 55 and
+      B at 45. No other books are ever added, removed, or moved, and in any
+      variation of this sequence each step is re-applied exactly as written.
+    question: "If in step 5 the 10 books had instead been moved from Shelf B to Shelf A — the opposite direction — with every other step carried out unchanged in order, how many books would Shelf B hold at the end? Answer with a single number written in digits."
+    paraphrases:
+      - "Suppose step 5 had run in reverse, moving its 10 books from Shelf B to Shelf A instead, while steps 1-4 and 6-9 stayed exactly as written. How many books would end up on Shelf B? Answer with a single number written in digits."
+      - "In the alternate run where the 10-book transfer of step 5 goes from Shelf B to Shelf A rather than from A to B, with all other steps unchanged, what is the final number of books on Shelf B? Answer with a single number written in digits."
+      - "Imagine the same sequence except that step 5 moves its 10 books in the opposite direction, from B to A; everything else is identical. How many books would Shelf B hold at the end? Answer with a single number written in digits."
+      - "Had Karl reversed only the direction of the step 5 transfer, sending 10 books from Shelf B to Shelf A, and performed every other numbered step as stated, what would Shelf B's final book count be? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "5"
+    rationale: "1. In the edited world step 5 moves 10 books from B to A instead of from A to B; all other steps are unchanged. 2. Start: A holds 50, B holds 30. 3. Step 1: 12 from A to B, so A 38, B 42. 4. Step 2: 6 new to A, so A 44, B 42. 5. Step 3: 15 from B to A, so A 59, B 27. 6. Step 4: A loses 9, so A 50, B 27. 7. Step 5 (reversed): 10 from B to A, so A 60, B 17. 8. Step 6: B doubled, 17 x 2 = 34, so A 60, B 34. 9. Step 7: 20 from B to A, so A 80, B 14. 10. Step 8: B loses 14, so B 0. 11. Step 9: 5 from A to B, so A 75, B 5. 12. Final counterfactual count on Shelf B: 5."
+    difficulty: adversarial
+  - id: cf-016
+    setup: >
+      A box holds 26 screws and a jar beside it holds 12 screws. Dora carries out
+      the following numbered steps in order. Step 1: she adds 10 new screws to
+      the box, bringing it to 36. Step 2: she removes 4 screws, leaving 32. Step
+      3: she doubles the number of screws in the box by adding new screws,
+      bringing it to 64. Step 4: she removes 30 screws, leaving 34. Step 5: she
+      tips the 12 screws out of the jar, counts them, and puts all 12 back in the
+      jar, touching nothing in the box. Step 6: she removes exactly half of the
+      screws now in the box, leaving 17. Step 7: she adds 15 new screws, bringing
+      the box to 32. Step 8: her fixed rule for this step is that if the box
+      holds fewer than 20 screws she adds 12 new screws, and otherwise she
+      removes 3 screws; since the box holds 32, she removes 3, leaving 29. Step
+      9: she adds 1 screw, bringing the box to 30. Nothing else is ever added to
+      or removed from the box, and in any variation of this sequence each step is
+      re-applied exactly as its rule is written.
+    question: "If step 7 had not happened (the 15 screws never added), with every other step still carried out in order and step 8's rule re-applied as written, would the box end with exactly the same number of screws as it did in the actual sequence? Answer with exactly one word: Yes or No."
+    paraphrases:
+      - "Suppose step 7 is deleted from the sequence while all other steps run in order and step 8's rule is re-evaluated as written. Would the final screw count of the box equal the actual final count of 30? Answer with exactly one word: Yes or No."
+      - "In the alternate run where step 7 never happens and every remaining step, including the rule in step 8, is applied as stated, does the box finish with exactly the same number of screws as in the real sequence? Answer with exactly one word: Yes or No."
+      - "Imagine the same sequence except that the 15 screws of step 7 are never added, with the other steps executed as written and step 8's rule re-applied. Would the box's final count match its actual final count exactly? Answer with exactly one word: Yes or No."
+      - "Had Dora skipped step 7 but performed every other numbered step in order, re-applying step 8's stated rule, would the box end up holding exactly as many screws as it actually did? Answer with exactly one word: Yes or No."
+    expected:
+      type: choice
+      values: ["Yes", "No"]
+      value: "Yes"
+    rationale: "1. Actual world final count, from the setup: the box ends at 30. 2. In the edited world step 7 is deleted and all other steps run with step 8's rule re-evaluated. 3. Steps 1 through 6 are upstream of the edit and unchanged: box goes 26, 36 (+10), 32 (-4), 64 (doubled), 34 (-30), unchanged by the jar step, 17 (half removed). 4. Step 7 is skipped; box stays 17. 5. Step 8: 17 is fewer than 20, so the rule adds 12, giving 29 (in the actual world the box held 32 here and the rule removed 3, also giving 29). 6. Step 9: 29 + 1 = 30. 7. Counterfactual final count is 30, which equals the actual final count of 30, so the answer is Yes."
+    difficulty: adversarial
+  - id: cf-017
+    setup: >
+      A basket holds 22 apples, a sack holds 40 apples, and a crate nearby holds
+      12 pears. Milo carries out the following numbered steps in order. Step 1:
+      he moves 10 apples from the sack to the basket, leaving the basket at 32
+      and the sack at 30. Step 2: 6 apples are eaten from the basket, leaving 26.
+      Step 3: he doubles the number of apples in the basket by adding new apples,
+      bringing it to 52. Step 4: he moves 8 apples from the basket to the sack,
+      leaving the basket at 44 and the sack at 38. Step 5: he removes exactly
+      half of the apples now in the basket and gives them away, leaving 22. Step
+      6: he polishes the 12 pears in the crate, touching no apples. Step 7: he
+      moves 9 apples from the sack to the basket, leaving the basket at 31 and
+      the sack at 29. Step 8: his fixed rule for this step is that if the basket
+      holds more than 20 apples he moves 15 apples from the basket to the sack,
+      and otherwise he moves 5 apples from the sack to the basket; since the
+      basket holds 31, he moves 15 to the sack, leaving the basket at 16 and the
+      sack at 44. Step 9: he adds 4 new apples to the basket, bringing it to 20.
+      No other apples are ever added, removed, or moved, and in any variation of
+      this sequence each step is re-applied exactly as its rule is written.
+    question: "If step 3 and step 5 had been swapped in order — the halving carried out at step 3 and the doubling carried out at step 5 — with every other step unchanged and step 8's rule re-applied as written, how many apples would the basket hold at the end? Answer with a single number written in digits."
+    paraphrases:
+      - "Suppose the operations of step 3 and step 5 trade places, so the basket is halved at step 3 and doubled at step 5, while every other step runs unchanged and step 8's rule is re-evaluated. How many apples would the basket hold at the end? Answer with a single number written in digits."
+      - "In the alternate run where step 3's doubling and step 5's halving swap positions in the sequence, with all other steps and the step 8 rule applied as written, what is the final number of apples in the basket? Answer with a single number written in digits."
+      - "Imagine the same sequence except that the halving happens at step 3 and the doubling happens at step 5, everything else identical and step 8's stated rule re-applied. What would the basket's final apple count be? Answer with a single number written in digits."
+      - "Had Milo performed the halving as step 3 and the doubling as step 5, keeping all other numbered steps in place and re-applying the rule in step 8, how many apples would end up in the basket? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "28"
+    rationale: "1. In the edited world the halving runs at step 3 and the doubling at step 5; all other steps are unchanged and step 8's rule is re-evaluated. 2. Start: basket 22, sack 40. 3. Step 1: 10 from sack to basket, so basket 32, sack 30. 4. Step 2: 6 eaten, basket 26. 5. Step 3 (now the halving): 26 / 2 = 13. 6. Step 4: 8 from basket to sack, so basket 5, sack 38. 7. Step 5 (now the doubling): 5 x 2 = 10. 8. Step 6 touches only the pears; basket stays 10. 9. Step 7: 9 from sack to basket, so basket 19, sack 29. 10. Step 8: 19 is not more than 20, so the rule moves 5 from the sack to the basket, giving basket 24, sack 24 (in the actual world the basket held 31 here and 15 went to the sack instead). 11. Step 9: 24 + 4 = 28. 12. Final counterfactual count: 28."
+    difficulty: adversarial
+  - id: cf-018
+    setup: >
+      A money tin holds 34 coins and a purse holds 20 coins. Aisha carries out
+      the following numbered steps in order. Step 1: she adds 6 new coins to the
+      tin, bringing it to 40. Step 2: she moves 10 coins from the tin to the
+      purse, leaving the tin at 30 and the purse at 30. Step 3: she doubles the
+      number of coins in the tin by adding new coins, bringing it to 60. Step 4:
+      she moves 12 coins from the purse to the tin, leaving the tin at 72 and
+      the purse at 18. Step 5: she removes 22 coins from the tin and spends
+      them, leaving 50. Step 6: she removes exactly half of the coins now in the
+      tin, leaving 25. Step 7: her fixed rule for this step is that if the tin
+      holds more than 28 coins she removes 8 coins, and otherwise she adds 8 new
+      coins; since the tin holds 25, she adds 8, bringing it to 33. Step 8: she
+      moves 5 coins from the tin to the purse, leaving the tin at 28 and the
+      purse at 23. Step 9: she adds 2 new coins to the tin, bringing it to 30.
+      No other coins are ever added, removed, or moved, and in any variation of
+      this sequence each step is re-applied exactly as its rule is written.
+    question: "If in step 4 Aisha had moved 22 coins from the purse to the tin instead of 12, with every other step carried out unchanged in order and step 7's rule re-applied as written, how many coins would the tin hold at the end? Answer with a single number written in digits."
+    paraphrases:
+      - "Suppose the transfer in step 4 had been 22 coins from the purse to the tin rather than 12, while all other steps ran unchanged and step 7's rule was re-evaluated as written. How many coins would the tin hold at the end? Answer with a single number written in digits."
+      - "In the alternate run where step 4 moves 22 coins instead of 12 from the purse to the tin, with every other step and the step 7 rule applied as stated, what is the final number of coins in the tin? Answer with a single number written in digits."
+      - "Imagine the same sequence except that step 4's transfer is 22 coins rather than 12, everything else identical and step 7's stated rule re-applied. What would the tin's final coin count be? Answer with a single number written in digits."
+      - "Had the step 4 transfer been 22 coins from purse to tin instead of 12, with all other numbered steps performed in order and the rule in step 7 re-applied, how many coins would end up in the tin? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "19"
+    rationale: "1. In the edited world step 4 transfers 22 coins instead of 12; all other steps are unchanged and step 7's rule is re-evaluated. 2. Start: tin 34, purse 20. 3. Step 1: tin 34 + 6 = 40. 4. Step 2: 10 from tin to purse, so tin 30, purse 30. 5. Step 3: tin doubled, 30 x 2 = 60. 6. Step 4 (edited): 22 from purse to tin, so tin 82, purse 8. 7. Step 5: tin 82 - 22 = 60. 8. Step 6: half removed, 60 / 2 = 30. 9. Step 7: 30 is more than 28, so the rule removes 8, giving 22 (in the actual world the tin held 25 here and the rule added 8 instead). 10. Step 8: 5 from tin to purse, so tin 17, purse 13. 11. Step 9: tin 17 + 2 = 19. 12. Final counterfactual count: 19."
+    difficulty: adversarial

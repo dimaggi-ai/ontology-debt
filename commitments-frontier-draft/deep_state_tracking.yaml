@@ -1,0 +1,725 @@
+id: deep_state_tracking
+title: "Deep State Tracking"
+statement: >
+  A world-model must maintain exact object state across long sequences of deterministic operations - moves, swaps, doublings, removals, and state-dependent conditionals - without being disturbed by operations that touch nothing relevant. Losing count, dropping a swap, or applying a conditional against stale state is a violation.
+severity: high
+lineage: ["drafted 2026-07-29 by the governed maintainer process: proposer agents, adversarial ambiguity gate, blind gold-answer recomputation; authority delegated per maintainer/decisions.md 2026-07-29"]
+scenarios:
+  - id: ds-001
+    setup: >
+      On a workbench sit a red tin with 14 buttons, a blue tin with 6 buttons, a
+      green tin with 9 buttons, and a paper sack with 20 buttons. Marta performs
+      the following steps in order. First she moves 5 buttons from the red tin to
+      the blue tin. Then she removes 3 buttons from the green tin and gives them
+      away. Then she doubles the number of buttons in the blue tin by adding new
+      buttons. Then she shakes the paper sack and counts its buttons without
+      moving any. Then she moves 7 buttons from the blue tin to the green tin.
+      Then, if the green tin now holds more than 10 buttons, she moves 4 buttons
+      from the green tin to the red tin; otherwise she does nothing. Then she
+      removes 6 buttons from the blue tin and gives them away. Then she paints 2
+      of the sack's buttons white, leaving them in the sack. Then she swaps the
+      entire contents of the red tin and the blue tin, so each tin now holds
+      exactly the buttons the other held. Then she adds 5 new buttons to the red
+      tin. Then, if the red tin now holds fewer than 12 buttons, she removes 2
+      buttons from it; otherwise she does nothing. Finally she moves 3 buttons
+      from the red tin to the green tin. Nothing else is added, removed, or moved.
+    question: "How many buttons are in the red tin now? Answer with a single number written in digits."
+    paraphrases:
+      - "After Marta finishes every step, what is the number of buttons in the red tin? Answer with a single number written in digits."
+      - "Count the buttons in the red tin at the end of the sequence. Answer with a single number written in digits."
+      - "Once all of Marta's moves are done, how many buttons does the red tin hold? Answer with a single number written in digits."
+      - "What is the final button count of the red tin? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "11"
+    rationale: >
+      1. Start: red 14, blue 6, green 9, sack 20.
+      2. Move 5 red to blue: red 9, blue 11.
+      3. Remove 3 from green: green 6.
+      4. Double blue: blue 22.
+      5. Counting the sack changes nothing.
+      6. Move 7 blue to green: blue 15, green 13.
+      7. Green 13 is more than 10, so move 4 green to red: green 9, red 13.
+      8. Remove 6 from blue: blue 9.
+      9. Painting sack buttons changes nothing.
+      10. Swap red and blue: red 9, blue 13.
+      11. Add 5 to red: red 14.
+      12. Red 14 is not fewer than 12, so nothing happens.
+      13. Move 3 red to green: red 11, green 12. Final red tin count is 11.
+    difficulty: adversarial
+  - id: ds-002
+    setup: >
+      Elena's apartment contains exactly three small objects: a brass key in the
+      desk drawer, a spare battery in the shoebox, and a coin in the kitchen jar.
+      The only places any object is ever kept are the desk drawer, Elena's coat
+      pocket, the kitchen jar, the toolbox, and the shoebox. Elena performs the
+      following steps in order. First she moves the key from the drawer to her
+      coat pocket. Then she moves the coin from the jar to the drawer. Then she
+      moves the key from her pocket to the toolbox. Then she moves the battery
+      from the shoebox to her pocket. Then she takes everything that is in the
+      toolbox and puts it into the shoebox. Then she moves the key from the
+      shoebox to the kitchen jar. Then, if the kitchen jar now contains the coin,
+      she moves the key from the jar to the drawer; otherwise she leaves the key
+      where it is. Then she moves the coin from the drawer to her pocket. Then she
+      empties everything in the kitchen jar into the toolbox. Then she moves the
+      battery from her pocket to the kitchen jar. Then she moves the key from the
+      toolbox to the drawer. Finally she swaps the entire contents of the drawer
+      and the shoebox, so everything that was in the drawer is now in the shoebox
+      and everything that was in the shoebox is now in the drawer. Nothing else is
+      moved.
+    question: "Where is the brass key now? Answer with exactly one word: Drawer, Pocket, Jar, Toolbox, or Shoebox."
+    paraphrases:
+      - "After Elena finishes every step, which place holds the brass key? Answer with exactly one word: Drawer, Pocket, Jar, Toolbox, or Shoebox."
+      - "At the end of the sequence, what is the location of the brass key? Answer with exactly one word: Drawer, Pocket, Jar, Toolbox, or Shoebox."
+      - "Once all the moves are done, where does the brass key sit? Answer with exactly one word: Drawer, Pocket, Jar, Toolbox, or Shoebox."
+      - "In which of the five places does the brass key end up? Answer with exactly one word: Drawer, Pocket, Jar, Toolbox, or Shoebox."
+    expected:
+      type: choice
+      values: ["Drawer", "Pocket", "Jar", "Toolbox", "Shoebox"]
+      value: "Shoebox"
+    rationale: >
+      1. Start: key in drawer, battery in shoebox, coin in jar.
+      2. Key drawer to pocket: key in pocket.
+      3. Coin jar to drawer: jar now holds nothing.
+      4. Key pocket to toolbox: key in toolbox.
+      5. Battery shoebox to pocket: shoebox now empty.
+      6. Everything in toolbox to shoebox: key in shoebox.
+      7. Key shoebox to jar: key in jar; shoebox empty again.
+      8. The jar does not contain the coin (the coin went to the drawer in step 3), so the key stays in the jar.
+      9. Coin drawer to pocket: drawer now empty.
+      10. Jar emptied into toolbox: key in toolbox.
+      11. Battery pocket to jar: does not involve the key.
+      12. Key toolbox to drawer: key in drawer; shoebox still empty.
+      13. Swap drawer and shoebox contents: the key, the drawer's only content, moves to the shoebox. Final location is the Shoebox.
+    difficulty: adversarial
+  - id: ds-003
+    setup: >
+      In a workshop, bucket P holds 16 nails, bucket Q holds 5 nails, bucket R
+      holds 12 nails, and a wall rack holds 30 screws. Deshi performs the
+      following steps in order. First he moves 6 nails from P to Q. Then he moves
+      4 nails from R to P. Then, if Q now holds more than 9 nails, he removes 5
+      nails from Q and discards them; otherwise he does nothing. Then he takes 10
+      screws off the wall rack and drops them into a jar. Then he doubles the
+      number of nails in R by adding new nails. Then he moves 7 nails from R to Q.
+      Then, if P now holds fewer than 12 nails, he adds 3 new nails to P;
+      otherwise he removes 3 nails from P and discards them. Then he swaps the
+      entire contents of Q and R, so each bucket now holds exactly the nails the
+      other held. Then he tips the jar of screws back onto the wall rack. Then he
+      removes 4 nails from Q and discards them. Then he moves 2 nails from P to R.
+      Then, if R now holds an even number of nails, he moves 1 nail from R to Q;
+      otherwise he does nothing. Finally he pastes a label onto bucket P without
+      touching any nails. Nothing else is added, removed, or moved.
+    question: "How many nails are in bucket R now? Answer with a single number written in digits."
+    paraphrases:
+      - "After Deshi finishes every step, what is the number of nails in bucket R? Answer with a single number written in digits."
+      - "Count the nails in bucket R at the end of the sequence. Answer with a single number written in digits."
+      - "Once all the steps are done, how many nails does bucket R hold? Answer with a single number written in digits."
+      - "What is the final nail count of bucket R? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "15"
+    rationale: >
+      1. Start: P 16, Q 5, R 12, rack 30 screws.
+      2. Move 6 P to Q: P 10, Q 11.
+      3. Move 4 R to P: R 8, P 14.
+      4. Q 11 is more than 9, so remove 5 from Q: Q 6.
+      5. Moving screws to the jar changes no nail counts.
+      6. Double R: R 16.
+      7. Move 7 R to Q: R 9, Q 13.
+      8. P 14 is not fewer than 12, so remove 3 from P: P 11.
+      9. Swap Q and R: Q 9, R 13.
+      10. Returning the screws changes no nail counts.
+      11. Remove 4 from Q: Q 5.
+      12. Move 2 P to R: P 9, R 15.
+      13. R 15 is odd, so nothing happens.
+      14. The label changes nothing. Final bucket R count is 15.
+    difficulty: adversarial
+  - id: ds-004
+    setup: >
+      In a library, the top shelf holds 22 books, the middle shelf holds 9 books,
+      the bottom shelf holds 14 books, and a return cart holds 6 books. Owen
+      performs the following steps in order. First he moves 8 books from the top
+      shelf to the middle shelf. Then, if the middle shelf now holds more than 15
+      books, he moves 6 books from the middle shelf to the bottom shelf; otherwise
+      he does nothing. Then he dusts the 6 books on the return cart without moving
+      them. Then he removes 5 books from the bottom shelf, which are checked out
+      and leave the library. Then he doubles the number of books on the middle
+      shelf by adding donated books. Then he moves 9 books from the middle shelf
+      to the top shelf. Then, if the top shelf now holds fewer than 20 books, he
+      adds 4 donated books to it; otherwise he removes 4 books from it and stores
+      them in the back room. Then he wheels the return cart to another aisle
+      without moving any books on or off it. Then he moves 3 books from the bottom
+      shelf to the middle shelf. Then he swaps the entire contents of the top
+      shelf and the bottom shelf, so each shelf now holds exactly the books the
+      other held. Then he removes 7 books from the middle shelf and stores them in
+      the back room. Finally, if the middle shelf now holds an odd number of
+      books, he moves 2 books from the middle shelf to the return cart; otherwise
+      he does nothing. Nothing else is added, removed, or moved.
+    question: "How many books are on the middle shelf now? Answer with a single number written in digits."
+    paraphrases:
+      - "After Owen finishes every step, what is the number of books on the middle shelf? Answer with a single number written in digits."
+      - "Count the books on the middle shelf at the end of the sequence. Answer with a single number written in digits."
+      - "Once all the steps are done, how many books does the middle shelf hold? Answer with a single number written in digits."
+      - "What is the final book count of the middle shelf? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "7"
+    rationale: >
+      1. Start: top 22, middle 9, bottom 14, cart 6.
+      2. Move 8 top to middle: top 14, middle 17.
+      3. Middle 17 is more than 15, so move 6 middle to bottom: middle 11, bottom 20.
+      4. Dusting the cart changes nothing.
+      5. Remove 5 from bottom: bottom 15.
+      6. Double middle: middle 22.
+      7. Move 9 middle to top: middle 13, top 23.
+      8. Top 23 is not fewer than 20, so remove 4 from top: top 19.
+      9. Wheeling the cart changes nothing.
+      10. Move 3 bottom to middle: bottom 12, middle 16.
+      11. Swap top and bottom: top 12, bottom 19.
+      12. Remove 7 from middle: middle 9.
+      13. Middle 9 is odd, so move 2 middle to cart: middle 7, cart 8. Final middle shelf count is 7.
+    difficulty: adversarial
+  - id: ds-005
+    setup: >
+      On a farm, the barn crate holds 24 eggs, the porch crate holds 10 eggs, the
+      cellar crate holds 7 eggs, and a wheelbarrow nearby holds 12 potatoes.
+      Agnes performs the following steps in order. First she moves 9 eggs from the
+      barn crate to the porch crate. Then, if the porch crate now holds more than
+      16 eggs, she moves 5 eggs from the porch crate to the cellar crate;
+      otherwise she does nothing. Then she moves 4 potatoes from the wheelbarrow
+      into a bin. Then she removes 6 eggs from the barn crate and sells them. Then
+      she doubles the number of eggs in the cellar crate by adding eggs from her
+      hens. Then she moves 8 eggs from the cellar crate to the barn crate. Then,
+      if the barn crate now holds an odd number of eggs, she moves 1 egg from the
+      barn crate to the porch crate; otherwise she does nothing. Then she wheels
+      the wheelbarrow into the shed without moving anything on or off it. Then she
+      swaps the entire contents of the porch crate and the cellar crate, so each
+      crate now holds exactly the eggs the other held. Then she removes 5 eggs
+      from the porch crate and cooks them. Then she adds 6 fresh eggs to the
+      cellar crate. Then, if the cellar crate now holds more than 20 eggs, she
+      moves 3 eggs from the cellar crate to the barn crate; otherwise she does
+      nothing. Then she counts the potatoes in the bin without moving any.
+      Finally she moves 2 eggs from the barn crate to the porch crate. Nothing
+      else is added, removed, or moved.
+    question: "How many eggs are in the barn crate now? Answer with a single number written in digits."
+    paraphrases:
+      - "After Agnes finishes every step, what is the number of eggs in the barn crate? Answer with a single number written in digits."
+      - "Count the eggs in the barn crate at the end of the sequence. Answer with a single number written in digits."
+      - "Once all the steps are done, how many eggs does the barn crate hold? Answer with a single number written in digits."
+      - "What is the final egg count of the barn crate? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "17"
+    rationale: >
+      1. Start: barn 24, porch 10, cellar 7, wheelbarrow 12 potatoes.
+      2. Move 9 barn to porch: barn 15, porch 19.
+      3. Porch 19 is more than 16, so move 5 porch to cellar: porch 14, cellar 12.
+      4. Moving potatoes changes no egg counts.
+      5. Remove 6 from barn: barn 9.
+      6. Double cellar: cellar 24.
+      7. Move 8 cellar to barn: cellar 16, barn 17.
+      8. Barn 17 is odd, so move 1 barn to porch: barn 16, porch 15.
+      9. Wheeling the wheelbarrow changes nothing.
+      10. Swap porch and cellar: porch 16, cellar 15.
+      11. Remove 5 from porch: porch 11.
+      12. Add 6 to cellar: cellar 21.
+      13. Cellar 21 is more than 20, so move 3 cellar to barn: cellar 18, barn 19.
+      14. Counting potatoes changes nothing.
+      15. Move 2 barn to porch: barn 17, porch 13. Final barn crate count is 17.
+    difficulty: adversarial
+  - id: ds-006
+    setup: >
+      On a craft table, a glass jar holds 20 beads, a clay pot holds 8 beads, a
+      wooden box holds 5 beads, and a metal tin holds 11 beads. Ines performs the
+      following steps in order. First she moves 7 beads from the glass jar to the
+      clay pot. Then she polishes the metal tin without moving any beads. Then, if
+      the clay pot now holds more than 12 beads, she moves 4 beads from the clay
+      pot to the wooden box; otherwise she does nothing. Then she removes 5 beads
+      from the glass jar and gives them away. Then she doubles the number of beads
+      in the wooden box by adding new beads. Then she moves every bead that is in
+      the clay pot into the glass jar, leaving the clay pot empty. Then, if the
+      clay pot is now empty, she moves 6 beads from the wooden box to the clay
+      pot; otherwise she does nothing. Then she moves the metal tin to the
+      windowsill without moving any beads on or off it. Then she removes 3 beads
+      from the glass jar and gives them away. Then she moves 5 beads from the
+      wooden box to the glass jar. Then, if the wooden box now holds fewer than 10
+      beads, she adds 4 new beads to it; otherwise she does nothing. Then she
+      moves 2 beads from the wooden box to the clay pot. Finally she counts the
+      beads in the metal tin without moving any. Nothing else is added, removed,
+      or moved.
+    question: "How many beads are in the wooden box now? Answer with a single number written in digits."
+    paraphrases:
+      - "After Ines finishes every step, what is the number of beads in the wooden box? Answer with a single number written in digits."
+      - "Count the beads in the wooden box at the end of the sequence. Answer with a single number written in digits."
+      - "Once all the steps are done, how many beads does the wooden box hold? Answer with a single number written in digits."
+      - "What is the final bead count of the wooden box? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "9"
+    rationale: >
+      1. Start: glass 20, clay 8, wood 5, tin 11.
+      2. Move 7 glass to clay: glass 13, clay 15.
+      3. Polishing the tin changes nothing.
+      4. Clay 15 is more than 12, so move 4 clay to wood: clay 11, wood 9.
+      5. Remove 5 from glass: glass 8.
+      6. Double wood: wood 18.
+      7. Move all 11 clay beads to glass: glass 19, clay 0.
+      8. Clay is empty, so move 6 wood to clay: wood 12, clay 6.
+      9. Moving the tin changes nothing.
+      10. Remove 3 from glass: glass 16.
+      11. Move 5 wood to glass: wood 7, glass 21.
+      12. Wood 7 is fewer than 10, so add 4 to wood: wood 11.
+      13. Move 2 wood to clay: wood 9, clay 8.
+      14. Counting the tin changes nothing. Final wooden box count is 9.
+    difficulty: adversarial
+  - id: ds-007
+    setup: >
+      Four crates of apples sit in a storeroom. Crate P holds 14 apples, Crate Q
+      holds 6, Crate R holds 9, and Crate S is empty. The following happens in
+      order. First, 5 apples are moved from Crate P to Crate Q. Second, 3 apples
+      are moved from Crate R to Crate S. Third, the paper label on Crate R is
+      rewritten in fresh ink. Fourth, the number of apples in Crate S is doubled
+      by adding new apples to it. Fifth, if Crate Q now holds more than 10
+      apples, 4 apples are moved from Crate Q to Crate P; otherwise nothing is
+      moved. Sixth, 2 apples are taken out of Crate P and eaten. Seventh, 6
+      apples are moved from Crate Q to Crate R. Eighth, Crate S is carried to
+      the far corner of the room with its contents untouched. Ninth, if Crate R
+      now holds fewer than 10 apples, 5 new apples are added to it; otherwise 5
+      apples are removed from it and discarded. Tenth, 1 apple is moved from
+      Crate Q to Crate S. Eleventh, 4 new apples are added to Crate P. Twelfth,
+      3 of the apples in Crate R are polished with a cloth. Finally, 6 apples
+      are taken out of Crate P and set aside. Nothing else is added, removed,
+      or moved.
+    question: "How many apples are in Crate P now? Answer with a single number written in digits."
+    paraphrases:
+      - "After the final step, what is the number of apples in Crate P? Answer with a single number written in digits."
+      - "Count the apples left in Crate P at the end of the sequence. Answer with a single number written in digits."
+      - "Once every step is complete, how many apples does Crate P hold? Answer with a single number written in digits."
+      - "What is the final apple count of Crate P? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "9"
+    rationale: >
+      1. P 14-5=9, Q 6+5=11. 2. R 9-3=6, S 0+3=3. 3. Relabeling R changes no
+      counts. 4. S doubled: 3 to 6. 5. Q is 11, more than 10, so Q 11-4=7 and
+      P 9+4=13. 6. P 13-2=11. 7. Q 7-6=1, R 6+6=12. 8. Carrying S changes no
+      counts. 9. R is 12, not fewer than 10, so R 12-5=7. 10. Q 1-1=0, S 6+1=7.
+      11. P 11+4=15. 12. Polishing changes no counts. 13. P 15-6=9. Final Crate
+      P count is 9.
+    difficulty: adversarial
+  - id: ds-008
+    setup: >
+      Four identical tins sit on a workbench, labeled A, B, C, and D. Tin A
+      holds a single brass key, Tin B holds red buttons, Tin C holds white
+      buttons, and Tin D holds washers. Marta performs the following steps in
+      order, and a swap always exchanges the entire contents of the two tins.
+      First, she swaps the contents of Tin A and Tin C. Second, she swaps the
+      contents of Tin B and Tin D. Third, she pours everything in Tin C into
+      Tin D, leaving Tin C empty. Fourth, she rinses the now-empty Tin C and
+      dries it. Fifth, she swaps the contents of Tin D and Tin B. Sixth, she
+      sticks a price sticker on the outside of Tin C. Seventh, she swaps the
+      contents of Tin B and Tin A. Eighth, she pours everything in Tin A into
+      Tin C, leaving Tin A empty. Ninth, she swaps the contents of Tin C and
+      Tin D. Tenth, she moves Tin B to a higher shelf without opening it.
+      Eleventh, she swaps the contents of Tin D and Tin A. Twelfth, she swaps
+      the contents of Tin A and Tin B. Nothing is ever taken out of any tin
+      except by these steps.
+    question: "Which tin holds the brass key now? Answer with exactly one letter: A, B, C, or D."
+    paraphrases:
+      - "At the end of all twelve steps, which tin contains the brass key? Answer with exactly one letter: A, B, C, or D."
+      - "Once Marta finishes, in which tin is the brass key sitting? Answer with exactly one letter: A, B, C, or D."
+      - "Where does the brass key end up - which tin? Answer with exactly one letter: A, B, C, or D."
+      - "After the final swap, which tin holds the brass key? Answer with exactly one letter: A, B, C, or D."
+    expected:
+      type: choice
+      values: ["A", "B", "C", "D"]
+      value: "B"
+    rationale: >
+      1. Swap A and C: the key moves from A to C. 2. Swap B and D: the key
+      stays in C. 3. C poured into D: the key moves to D. 4. Rinsing empty C
+      moves nothing. 5. Swap D and B: the key moves to B. 6. A sticker on C
+      moves nothing. 7. Swap B and A: the key moves to A. 8. A poured into C:
+      the key moves to C. 9. Swap C and D: the key moves to D. 10. Relocating
+      closed Tin B moves nothing. 11. Swap D and A: the key moves to A.
+      12. Swap A and B: the key moves to B. Final location is Tin B.
+    difficulty: adversarial
+  - id: ds-009
+    setup: >
+      In a pump room, Tank 1 holds 60 liters of water, Tank 2 holds 25 liters,
+      Tank 3 is empty, and a sealed barrel by the door holds 40 liters. The
+      following happens in order. First, 20 liters are pumped from Tank 1 to
+      Tank 2. Second, 15 liters are pumped from Tank 2 to Tank 3. Third, the
+      barrel is rolled to the opposite wall with nothing added or removed.
+      Fourth, if Tank 3 now holds less than 20 liters, 10 liters from a hose
+      are added to Tank 3; otherwise nothing is added. Fifth, the amount of
+      water in Tank 1 is halved by draining water away. Sixth, 10 liters are
+      pumped from Tank 3 to Tank 1. Seventh, the lid of Tank 2 is repainted.
+      Eighth, if Tank 2 now holds more than 25 liters, 12 liters are pumped
+      from Tank 2 to Tank 3; otherwise 5 liters are pumped from Tank 2 to
+      Tank 3. Ninth, 6 liters from the hose are added to Tank 2. Tenth, 9
+      liters are pumped from Tank 3 to Tank 2. Eleventh, 8 liters are drained
+      out of the barrel. Twelfth, 7 liters are pumped from Tank 2 to Tank 1.
+      Finally, 5 liters are drained out of Tank 3 and away. No other water
+      moves anywhere.
+    question: "How many liters of water are in Tank 3 now? Answer with a single number written in digits."
+    paraphrases:
+      - "At the end of the sequence, how many liters does Tank 3 hold? Answer with a single number written in digits."
+      - "After every pump and drain, what is the amount of water in Tank 3, in liters? Answer with a single number written in digits."
+      - "Count the liters of water left in Tank 3. Answer with a single number written in digits."
+      - "Once the final drain is done, how many liters are in Tank 3? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "13"
+    rationale: >
+      1. Tank 1 60-20=40, Tank 2 25+20=45. 2. Tank 2 45-15=30, Tank 3 0+15=15.
+      3. Rolling the barrel changes no tank. 4. Tank 3 is 15, less than 20, so
+      Tank 3 15+10=25. 5. Tank 1 halved: 40 to 20. 6. Tank 3 25-10=15, Tank 1
+      20+10=30. 7. Painting changes nothing. 8. Tank 2 is 30, more than 25, so
+      Tank 2 30-12=18 and Tank 3 15+12=27. 9. Tank 2 18+6=24. 10. Tank 3
+      27-9=18, Tank 2 24+9=33. 11. The barrel loses 8; no tank changes.
+      12. Tank 2 33-7=26, Tank 1 30+7=37. 13. Tank 3 18-5=13. Final Tank 3
+      holds 13 liters.
+    difficulty: adversarial
+  - id: ds-010
+    setup: >
+      Ana, Ben, and Cal each have a plate of cookies, and a glass jar of 12
+      cookies stands on the shelf. Ana starts with 7 cookies, Ben with 4, and
+      Cal with 10. The following happens in order, and a plate swap always
+      exchanges every cookie on the two plates. First, Ana gives 3 cookies to
+      Ben. Second, Cal eats 2 of his cookies. Third, Ana and Cal swap plates.
+      Fourth, Ben lines his cookies up in a single row without adding or
+      removing any. Fifth, the number of cookies on Ben's plate is doubled with
+      new cookies taken from a fresh box. Sixth, if Ben now has more than 12
+      cookies, he gives 5 to Cal; otherwise he gives none. Seventh, Ana eats 1
+      of her cookies. Eighth, the glass jar is moved from the shelf to the
+      counter. Ninth, Ben and Ana swap plates. Tenth, Cal gives 4 cookies to
+      Ana. Eleventh, if Ana now has more than 10 cookies, she puts 6 of them
+      back into the fresh box; otherwise she puts back none. Twelfth, the lid
+      of the glass jar is tightened. Finally, Ben eats 2 of his cookies. No
+      other cookies change hands.
+    question: "How many cookies are on Ana's plate now? Answer with a single number written in digits."
+    paraphrases:
+      - "At the end of the sequence, what is the number of cookies on Ana's plate? Answer with a single number written in digits."
+      - "Count the cookies Ana's plate holds after the final step. Answer with a single number written in digits."
+      - "Once everything is done, how many cookies does Ana have on her plate? Answer with a single number written in digits."
+      - "What is Ana's final cookie count? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "7"
+    rationale: >
+      1. Ana 7-3=4, Ben 4+3=7. 2. Cal 10-2=8. 3. Ana and Cal swap: Ana 8,
+      Cal 4. 4. Lining up changes no counts. 5. Ben doubled: 7 to 14. 6. Ben is
+      14, more than 12, so Ben 14-5=9 and Cal 4+5=9. 7. Ana 8-1=7. 8. Moving
+      the jar changes no plate. 9. Ben and Ana swap: Ben 7, Ana 9. 10. Cal
+      9-4=5, Ana 9+4=13. 11. Ana is 13, more than 10, so Ana 13-6=7. 12. The
+      jar lid changes nothing. 13. Ben 7-2=5. Final Ana count is 7.
+    difficulty: adversarial
+  - id: ds-011
+    setup: >
+      A workshop has four bins of bolts. Bin K holds 36 bolts, Bin L holds 10,
+      Bin M holds 5, and Bin N is empty. The following happens in order. First,
+      12 bolts are moved from Bin K to Bin L. Second, half of the bolts now in
+      Bin L are moved to Bin M. Third, the empty Bin N is swept out with a
+      brush. Fourth, if Bin M now holds at least 15 bolts, 6 bolts are moved
+      from Bin M to Bin N; otherwise none are moved. Fifth, 8 new bolts are
+      added to Bin K. Sixth, 9 bolts are moved from Bin K to Bin M. Seventh,
+      the stencil on Bin K's label is repainted. Eighth, the number of bolts in
+      Bin N is doubled by adding new bolts to it. Ninth, if Bin K now holds
+      fewer than 25 bolts, 5 bolts are moved from Bin L to Bin K; otherwise 5
+      bolts are moved from Bin K to Bin L. Tenth, 4 bolts are moved from Bin M
+      to Bin N. Eleventh, 7 bolts are taken from Bin N and shipped out.
+      Twelfth, three of the bolts in Bin M are oiled where they lie. Finally,
+      2 bolts are moved from Bin L to Bin N. Nothing else is added, removed,
+      or moved.
+    question: "How many bolts are in Bin N now? Answer with a single number written in digits."
+    paraphrases:
+      - "At the end of the sequence, what is the number of bolts in Bin N? Answer with a single number written in digits."
+      - "Count the bolts left in Bin N after the last move. Answer with a single number written in digits."
+      - "Once every step is finished, how many bolts does Bin N hold? Answer with a single number written in digits."
+      - "What is the final bolt count of Bin N? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "11"
+    rationale: >
+      1. K 36-12=24, L 10+12=22. 2. Half of L's 22 is 11 moved: L 22-11=11,
+      M 5+11=16. 3. Sweeping empty N changes nothing. 4. M is 16, at least 15,
+      so M 16-6=10 and N 0+6=6. 5. K 24+8=32. 6. K 32-9=23, M 10+9=19.
+      7. Repainting changes nothing. 8. N doubled: 6 to 12. 9. K is 23, fewer
+      than 25, so L 11-5=6 and K 23+5=28. 10. M 19-4=15, N 12+4=16. 11. N
+      16-7=9. 12. Oiling changes no counts. 13. L 6-2=4, N 9+2=11. Final Bin N
+      holds 11 bolts.
+    difficulty: adversarial
+  - id: ds-012
+    setup: >
+      Three shuttle buses wait at a depot: the Red bus carries 18 passengers,
+      the Blue bus carries 9, and the Green bus carries 14. An empty van is
+      parked beside them. The following happens in order. First, 5 passengers
+      move from the Red bus to the Blue bus. Second, 6 passengers board the
+      Green bus from the street. Third, the van is refueled. Fourth, if the
+      Blue bus now carries more than 12 passengers, 4 passengers move from the
+      Blue bus to the Green bus; otherwise none move. Fifth, 7 passengers get
+      off the Red bus and leave the depot. Sixth, half of the passengers now
+      on the Green bus get off and leave the depot. Seventh, 3 passengers move
+      from the Green bus to the Red bus. Eighth, the Blue bus's headlights are
+      switched on. Ninth, if the Red bus and the Green bus now carry equal
+      numbers of passengers, 2 passengers board the Red bus from the street;
+      otherwise none board. Tenth, 4 passengers move from the Blue bus to the
+      Red bus. Eleventh, 5 passengers get off the Green bus and leave the
+      depot. Twelfth, the empty van departs. Finally, if the Red bus now
+      carries more than 14 passengers, 6 passengers get off the Red bus and
+      leave the depot; otherwise none get off. No other passengers board,
+      leave, or transfer.
+    question: "How many passengers are on the Red bus now? Answer with a single number written in digits."
+    paraphrases:
+      - "At the end of the sequence, what is the number of passengers on the Red bus? Answer with a single number written in digits."
+      - "Count the passengers left on the Red bus after the final step. Answer with a single number written in digits."
+      - "Once everything is done, how many passengers does the Red bus carry? Answer with a single number written in digits."
+      - "What is the Red bus's final passenger count? Answer with a single number written in digits."
+    expected:
+      type: exact
+      value: "9"
+    rationale: >
+      1. Red 18-5=13, Blue 9+5=14. 2. Green 14+6=20. 3. Refueling the van
+      changes no bus. 4. Blue is 14, more than 12, so Blue 14-4=10 and Green
+      20+4=24. 5. Red 13-7=6. 6. Half of Green's 24 get off: Green 24-12=12.
+      7. Green 12-3=9, Red 6+3=9. 8. Headlights change nothing. 9. Red is 9 and
+      Green is 9, equal, so Red 9+2=11. 10. Blue 10-4=6, Red 11+4=15. 11. Green
+      9-5=4. 12. The empty van departing changes no bus. 13. Red is 15, more
+      than 14, so Red 15-6=9. Final Red bus count is 9.
+    difficulty: adversarial
+  - id: ds-013
+    setup: >
+      Four tins sit on Farid's workbench: tin A holds 9 washers, tin B holds 4
+      washers, tin C holds 6 washers, and tin D holds 2 washers. A mug beside
+      them holds 5 pens. Farid works through the following steps in order. He
+      moves 3 washers from tin A to tin B. He moves the mug of pens to a shelf.
+      He doubles the number of washers in tin D by adding new washers to it.
+      Then, if tin B now holds more than 6 washers, he moves 2 washers from tin
+      B to tin C; otherwise he does nothing. He moves 4 washers from tin C to
+      tin A. He rewrites the faded label on tin B. He removes 3 washers from tin
+      A and pockets them. He swaps the entire contents of tin B and tin D. Then,
+      if tin D now holds fewer than 6 washers, he adds 2 new washers to tin D;
+      otherwise he does nothing. He moves 1 washer from tin D to tin C. He takes
+      one pen from the mug, signs a form, and puts the pen back. Finally he
+      removes 2 washers from tin C and uses them on a bicycle. No other washers
+      are added or removed.
+    question: "How many washers are in tin C now? Answer with a single number and nothing else."
+    paraphrases:
+      - "After Farid finishes every step, what is the number of washers in tin C? Answer with a single number and nothing else."
+      - "Count the washers left in tin C at the end. Answer with a single number and nothing else."
+      - "Once the whole sequence is done, how many washers does tin C hold? Answer with a single number and nothing else."
+      - "What is the final washer count in tin C? Answer with a single number and nothing else."
+    expected:
+      type: exact
+      value: "3"
+    rationale: >
+      1. Start: A=9, B=4, C=6, D=2. 2. Move 3 A to B: A=6, B=7. 3. Mug moved to
+      shelf: no tin changes. 4. D doubled: D=4. 5. B=7 is more than 6, so move 2
+      B to C: B=5, C=8. 6. Move 4 C to A: C=4, A=10. 7. Relabeling tin B changes
+      no counts. 8. Remove 3 from A: A=7. 9. Swap B and D: B=4, D=5. 10. D=5 is
+      fewer than 6, so add 2: D=7. 11. Move 1 D to C: D=6, C=5. 12. Pen borrowed
+      and returned: no tin changes. 13. Remove 2 from C: C=3. Final: tin C holds
+      3.
+    difficulty: adversarial
+  - id: ds-014
+    setup: >
+      Marta has four envelopes on her desk: a white one, a gray one, a brown
+      one, and a yellow one. A silver coin starts inside the white envelope, a
+      button starts inside the gray envelope, a stamp starts inside the brown
+      envelope, and the yellow envelope starts empty. Marta performs the
+      following steps in order. She moves the coin from the white envelope to
+      the yellow envelope. She swaps the entire contents of the white and gray
+      envelopes. She writes her friend's name on the outside of the brown
+      envelope. She moves the coin from the yellow envelope to the gray
+      envelope. She moves the stamp from the brown envelope to the yellow
+      envelope. She swaps the entire contents of the gray and brown envelopes.
+      She swaps the entire contents of the brown and white envelopes. She moves
+      the stamp from the yellow envelope to the gray envelope. She drops a
+      paperclip from her desk into the yellow envelope. She swaps the entire
+      contents of the white and yellow envelopes. She dusts off the gray
+      envelope. Then, if the gray envelope now contains the stamp, she swaps the
+      entire contents of the yellow and brown envelopes; otherwise she does
+      nothing. Finally she stacks the four envelopes in a drawer, moving nothing
+      between them.
+    question: "Which envelope contains the silver coin now? Answer with exactly one word: White, Gray, Brown, or Yellow."
+    paraphrases:
+      - "At the end of all the steps, where is the silver coin? Answer with exactly one word: White, Gray, Brown, or Yellow."
+      - "Once Marta has finished, which envelope holds the silver coin? Answer with exactly one word: White, Gray, Brown, or Yellow."
+      - "In which of the four envelopes does the silver coin end up? Answer with exactly one word: White, Gray, Brown, or Yellow."
+      - "After the final step, name the envelope that contains the silver coin. Answer with exactly one word: White, Gray, Brown, or Yellow."
+    expected:
+      type: choice
+      values: ["White", "Gray", "Brown", "Yellow"]
+      value: "Brown"
+    rationale: >
+      1. Start: white=coin, gray=button, brown=stamp, yellow=empty. 2. Coin
+      white to yellow: yellow=coin, white=empty. 3. Swap white/gray:
+      white=button, gray=empty. 4. Writing on the brown envelope moves nothing.
+      5. Coin yellow to gray: gray=coin, yellow=empty. 6. Stamp brown to yellow:
+      yellow=stamp, brown=empty. 7. Swap gray/brown: brown=coin, gray=empty. 8.
+      Swap brown/white: white=coin, brown=button. 9. Stamp yellow to gray:
+      gray=stamp, yellow=empty. 10. Paperclip into yellow: yellow=paperclip. 11.
+      Swap white/yellow: yellow=coin, white=paperclip. 12. Dusting moves
+      nothing. 13. The gray envelope contains the stamp, so swap yellow/brown:
+      brown=coin, yellow=button. 14. Stacking in the drawer moves nothing.
+      Final: the coin is in the brown envelope.
+    difficulty: adversarial
+  - id: ds-015
+    setup: >
+      In a stockroom, Tomas keeps bolts in three bins: the red bin holds 14
+      bolts, the blue bin holds 6 bolts, and the green bin holds 10 bolts. A
+      paper bag on the counter holds 3 rubber bands. Tomas works through the
+      following steps in order. He moves 5 bolts from the red bin to the blue
+      bin. Then, if the blue bin now holds more than 10 bolts, he moves 3 bolts
+      from the blue bin to the green bin; otherwise he does nothing. He carries
+      the paper bag to the windowsill. He doubles the number of bolts in the red
+      bin by adding new bolts from a supply crate. He moves 6 bolts from the
+      green bin to the red bin. He removes 4 bolts from the blue bin and ships
+      them out. Then, if the red bin now holds at least 20 bolts, he removes
+      half of the bolts now in the red bin and ships them out; otherwise he does
+      nothing. He takes one rubber band from the bag and binds a stack of
+      invoices. He moves 2 bolts from the blue bin to the green bin. He adds 5
+      new bolts to the blue bin. He swaps the entire contents of the blue bin
+      and the green bin. He removes 3 bolts from the green bin and ships them
+      out. Finally he writes the date on the green bin's label. No other bolts
+      are added or removed.
+    question: "How many bolts are in the green bin now? Answer with a single number and nothing else."
+    paraphrases:
+      - "After Tomas completes every step, what is the number of bolts in the green bin? Answer with a single number and nothing else."
+      - "Count the bolts left in the green bin at the end. Answer with a single number and nothing else."
+      - "Once the whole sequence is finished, how many bolts does the green bin hold? Answer with a single number and nothing else."
+      - "What is the final bolt count in the green bin? Answer with a single number and nothing else."
+    expected:
+      type: exact
+      value: "4"
+    rationale: >
+      1. Start: red=14, blue=6, green=10. 2. Move 5 red to blue: red=9, blue=11.
+      3. Blue=11 is more than 10, so move 3 blue to green: blue=8, green=13. 4.
+      Bag to the windowsill: no bin changes. 5. Red doubled: red=18. 6. Move 6
+      green to red: green=7, red=24. 7. Remove 4 from blue: blue=4. 8. Red=24 is
+      at least 20, so remove half (12): red=12. 9. Rubber band on invoices: no
+      bin changes. 10. Move 2 blue to green: blue=2, green=9. 11. Add 5 to blue:
+      blue=7. 12. Swap blue/green: blue=9, green=7. 13. Remove 3 from green:
+      green=4. 14. Writing the date changes nothing. Final: the green bin holds
+      4.
+    difficulty: adversarial
+  - id: ds-016
+    setup: >
+      Rosa and Leo are rearranging a house with four rooms: the kitchen, the
+      garage, the study, and the hallway. At the start the kitchen holds 4
+      chairs, the garage holds 2 chairs, the study holds 5 chairs, and the
+      hallway holds no chairs. A toolbox starts in the garage. The following
+      steps happen in order. Rosa carries the toolbox to the kitchen. Leo moves
+      2 chairs from the study to the garage. Rosa waters a plant in the hallway.
+      Then, if the garage now holds more chairs than the study, Rosa carries the
+      toolbox to the hallway; otherwise the toolbox stays where it is. Leo moves
+      1 chair from the kitchen to the study. Rosa carries the toolbox to the
+      study. Leo sweeps the garage floor. Then, if the kitchen now holds fewer
+      than 4 chairs, Rosa carries the toolbox to the garage; otherwise the
+      toolbox stays where it is. Leo moves 3 chairs from the garage to the
+      kitchen. Then, if the garage now holds exactly 1 chair, Rosa carries the
+      toolbox to the kitchen; otherwise the toolbox stays where it is. Leo
+      replaces a light bulb in the hallway. Leo moves 1 chair from the kitchen
+      to the garage. Then, if the kitchen now holds more than 5 chairs, Rosa
+      carries the toolbox to the study; otherwise the toolbox stays where it is.
+    question: "Which room is the toolbox in now? Answer with exactly one word: Kitchen, Garage, Study, or Hallway."
+    paraphrases:
+      - "At the end of all the steps, where is the toolbox? Answer with exactly one word: Kitchen, Garage, Study, or Hallway."
+      - "Once Rosa and Leo have finished, which room holds the toolbox? Answer with exactly one word: Kitchen, Garage, Study, or Hallway."
+      - "In which of the four rooms does the toolbox end up? Answer with exactly one word: Kitchen, Garage, Study, or Hallway."
+      - "After the final step, name the room that contains the toolbox. Answer with exactly one word: Kitchen, Garage, Study, or Hallway."
+    expected:
+      type: choice
+      values: ["Kitchen", "Garage", "Study", "Hallway"]
+      value: "Kitchen"
+    rationale: >
+      1. Start: chairs are kitchen=4, garage=2, study=5, hallway=0; the toolbox
+      is in the garage. 2. Toolbox to the kitchen. 3. Move 2 chairs study to
+      garage: study=3, garage=4. 4. Watering the plant changes nothing. 5.
+      Garage (4) holds more chairs than the study (3), so the toolbox goes to
+      the hallway. 6. Move 1 chair kitchen to study: kitchen=3, study=4. 7.
+      Toolbox to the study. 8. Sweeping changes nothing. 9. Kitchen (3) holds
+      fewer than 4 chairs, so the toolbox goes to the garage. 10. Move 3 chairs
+      garage to kitchen: garage=1, kitchen=6. 11. The garage holds exactly 1
+      chair, so the toolbox goes to the kitchen. 12. The light bulb changes
+      nothing. 13. Move 1 chair kitchen to garage: kitchen=5, garage=2. 14.
+      Kitchen (5) is not more than 5, so the toolbox stays. Final: the toolbox
+      is in the kitchen.
+    difficulty: adversarial
+  - id: ds-017
+    setup: >
+      Amir, Bella, and Chen are playing a card game at a table. Amir holds 12
+      cards, Bella holds 7 cards, and Chen holds 9 cards. An empty discard pile
+      sits in the middle, and a fresh pack of extra cards sits at the edge of
+      the table. The following steps happen in order. Amir gives 4 cards to
+      Chen. Dana, a spectator, shuffles her own separate deck of 20 cards. Bella
+      gives 3 cards to Amir. Then, if Chen now holds more than 12 cards, Chen
+      puts 5 cards on the discard pile; otherwise he does nothing. Chen gives 2
+      cards to Bella. Amir puts 3 cards on the discard pile. Dana leaves the
+      room with her deck. Bella doubles the number of cards in her hand by
+      drawing new cards from the fresh pack. Then, if Bella now holds at least
+      12 cards, she gives 6 cards to Chen; otherwise she does nothing. Chen puts
+      2 cards on the discard pile. Amir gives 5 cards to Bella. Chen squares up
+      the discard pile without adding or removing any cards. Then, if Amir now
+      holds fewer than 5 cards, he draws 4 cards from the fresh pack; otherwise
+      he does nothing.
+    question: "How many cards does Bella hold now? Answer with a single number and nothing else."
+    paraphrases:
+      - "After all the steps are done, what is the number of cards in Bella's hand? Answer with a single number and nothing else."
+      - "Count the cards Bella is holding at the end. Answer with a single number and nothing else."
+      - "Once the whole sequence is finished, how many cards does Bella have? Answer with a single number and nothing else."
+      - "What is Bella's final card count? Answer with a single number and nothing else."
+    expected:
+      type: exact
+      value: "11"
+    rationale: >
+      1. Start: Amir=12, Bella=7, Chen=9. 2. Amir gives 4 to Chen: Amir=8,
+      Chen=13. 3. Dana's separate deck changes no hands. 4. Bella gives 3 to
+      Amir: Bella=4, Amir=11. 5. Chen=13 is more than 12, so he discards 5:
+      Chen=8. 6. Chen gives 2 to Bella: Chen=6, Bella=6. 7. Amir discards 3:
+      Amir=8. 8. Dana leaving changes nothing. 9. Bella doubles her hand:
+      Bella=12. 10. Bella=12 is at least 12, so she gives 6 to Chen: Bella=6,
+      Chen=12. 11. Chen discards 2: Chen=10. 12. Amir gives 5 to Bella: Amir=3,
+      Bella=11. 13. Squaring the pile changes nothing. 14. Amir=3 is fewer than
+      5, so he draws 4: Amir=7; Bella is unchanged. Final: Bella holds 11 cards.
+    difficulty: adversarial
+  - id: ds-018
+    setup: >
+      In a stable, three barrels of grain stand against a wall: the oak barrel
+      holds 16 scoops, the pine barrel holds 5 scoops, and the birch barrel
+      holds 11 scoops. A burlap sack in the corner holds 7 scoops. Petra works
+      through the following steps in order. She moves 6 scoops from the oak
+      barrel to the pine barrel. Then, if the pine barrel now holds more than 10
+      scoops, she moves 4 scoops from the pine barrel to the birch barrel;
+      otherwise she does nothing. She carries the burlap sack up to the loft.
+      She removes 5 scoops from the birch barrel and feeds them to the horses.
+      She doubles the number of scoops in the pine barrel by adding new grain
+      from a delivery cart. She moves 3 scoops from the birch barrel to the oak
+      barrel. She wipes the lid of the oak barrel. Then, if the oak barrel now
+      holds at least 12 scoops, she removes 6 scoops from it and feeds them to
+      the horses; otherwise she does nothing. She swaps the entire contents of
+      the pine barrel and the birch barrel. She adds 2 scoops of new grain to
+      the oak barrel. She removes 4 scoops from the birch barrel and feeds them
+      to the horses. She chalks a tally mark on the pine barrel. Then, if the
+      birch barrel now holds exactly 10 scoops, she moves 3 scoops from the
+      birch barrel to the pine barrel; otherwise she does nothing.
+    question: "How many scoops of grain are in the pine barrel now? Answer with a single number and nothing else."
+    paraphrases:
+      - "After Petra finishes every step, what is the number of scoops in the pine barrel? Answer with a single number and nothing else."
+      - "Count the scoops of grain left in the pine barrel at the end. Answer with a single number and nothing else."
+      - "Once the whole sequence is done, how many scoops does the pine barrel hold? Answer with a single number and nothing else."
+      - "What is the final scoop count in the pine barrel? Answer with a single number and nothing else."
+    expected:
+      type: exact
+      value: "10"
+    rationale: >
+      1. Start: oak=16, pine=5, birch=11. 2. Move 6 oak to pine: oak=10,
+      pine=11. 3. Pine=11 is more than 10, so move 4 pine to birch: pine=7,
+      birch=15. 4. Sack to the loft: no barrel changes. 5. Remove 5 from birch:
+      birch=10. 6. Pine doubled: pine=14. 7. Move 3 birch to oak: birch=7,
+      oak=13. 8. Wiping the lid changes nothing. 9. Oak=13 is at least 12, so
+      remove 6: oak=7. 10. Swap pine/birch: pine=7, birch=14. 11. Add 2 to oak:
+      oak=9. 12. Remove 4 from birch: birch=10. 13. The chalk mark changes
+      nothing. 14. Birch holds exactly 10, so move 3 birch to pine: birch=7,
+      pine=10. Final: the pine barrel holds 10.
+    difficulty: adversarial
