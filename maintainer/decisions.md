@@ -9,3 +9,4 @@ that is the failure mode this whole repository exists to prevent.
 
 | Date | Artifact | Decision | Reason |
 |---|---|---|---|
+| 2026-07-29 | Issue #2: gradient-frontier saturation | Accepted: build tier-3 | Five-model strategy review consolidated; de-saturation gates the cross-lab study. Execution delegated to the maintainer agent under blanket approval; kill-gate: tier-3 must produce measurable spread at the frontier or the study stops. |
