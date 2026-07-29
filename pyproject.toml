@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ontology-debt"
-version = "0.1.0"
+version = "0.1.1"
 description = "Ontology Debt: audit an LLM's world-model against ontological commitments you declare - and track the debt. CLI: ontodebt."
 readme = "README.md"
 requires-python = ">=3.10"
