@@ -1,0 +1,9 @@
+models:
+  # OpenAI frontier -> small (reasoning family)
+  - {name: gpt-5, provider: openai, model_id: gpt-5, max_tokens: 3000, params: {reasoning_effort: low}, input_price_per_mtok: 1.25, output_price_per_mtok: 10.0, est_output_tokens_per_probe: 300}
+  - {name: gpt-5-mini, provider: openai, model_id: gpt-5-mini, max_tokens: 3000, params: {reasoning_effort: low}, input_price_per_mtok: 0.25, output_price_per_mtok: 2.0, est_output_tokens_per_probe: 300}
+  - {name: gpt-5-nano, provider: openai, model_id: gpt-5-nano, max_tokens: 3000, params: {reasoning_effort: low}, input_price_per_mtok: 0.05, output_price_per_mtok: 0.4, est_output_tokens_per_probe: 300}
+  # Google Gemini frontier -> small (3.x thinking family; generous max_tokens so thinking does not eat the answer)
+  - {name: gemini-3.1-pro, provider: gemini, model_id: gemini-3.1-pro-preview, max_tokens: 8000, params: {}, input_price_per_mtok: 2.0, output_price_per_mtok: 12.0, est_output_tokens_per_probe: 600}
+  - {name: gemini-3.6-flash, provider: gemini, model_id: gemini-3.6-flash, max_tokens: 6000, params: {}, input_price_per_mtok: 0.3, output_price_per_mtok: 2.5, est_output_tokens_per_probe: 400}
+  - {name: gemini-3.1-flash-lite, provider: gemini, model_id: gemini-3.1-flash-lite, max_tokens: 6000, params: {}, input_price_per_mtok: 0.1, output_price_per_mtok: 0.4, est_output_tokens_per_probe: 400}

@@ -72,11 +72,19 @@ class AnthropicProvider(Provider):
 
 
 class OpenAIProvider(Provider):
-    def __init__(self, config: ModelConfig):
+    """OpenAI chat-completions provider. Also serves any OpenAI-compatible
+    endpoint (e.g. Google Gemini's compat layer) when given base_url/api_key."""
+
+    def __init__(self, config: ModelConfig, *, base_url: str | None = None, api_key: str | None = None):
         import openai  # lazy: optional dependency
 
         self._openai = openai
-        self._client = openai.OpenAI()
+        client_kwargs = {}
+        if base_url:
+            client_kwargs["base_url"] = base_url
+        if api_key:
+            client_kwargs["api_key"] = api_key
+        self._client = openai.OpenAI(**client_kwargs)
         self._config = config
 
     def complete(self, system: str, prompt: str) -> Completion:
@@ -200,6 +208,15 @@ def make_provider(config: ModelConfig) -> Provider:
     if config.provider == "openai":
         _require_env("OPENAI_API_KEY")
         return OpenAIProvider(config)
+    if config.provider == "gemini":
+        # Google Gemini via its OpenAI-compatible endpoint - reuses the same
+        # chat-completions path, keyed on GEMINI_API_KEY.
+        _require_env("GEMINI_API_KEY")
+        return OpenAIProvider(
+            config,
+            base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
+            api_key=os.environ["GEMINI_API_KEY"],
+        )
     if config.provider == "claude_cli":
         return ClaudeCLIProvider(config)  # uses Claude Code auth, no API key
     if config.provider == "mock":
@@ -215,7 +232,11 @@ def _require_env(name: str) -> None:
         )
 
 
-REQUIRED_ENV = {"anthropic": "ANTHROPIC_API_KEY", "openai": "OPENAI_API_KEY"}
+REQUIRED_ENV = {
+    "anthropic": "ANTHROPIC_API_KEY",
+    "openai": "OPENAI_API_KEY",
+    "gemini": "GEMINI_API_KEY",
+}
 
 
 def preflight(configs: list[ModelConfig]) -> list[str]:
