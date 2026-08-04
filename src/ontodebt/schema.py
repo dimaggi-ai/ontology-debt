@@ -13,6 +13,7 @@ require an LLM judge.
 from __future__ import annotations
 
 import re
+import warnings
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
@@ -97,7 +98,12 @@ class Expected:
             allowed = {normalize_answer(v) for v in self.values}
             # Reject hedges: if the response mentions more than one distinct
             # allowed option ("Yes and no", "No, wait, yes", echoing
-            # "Yes or No"), it did not commit to an answer.
+            # "Yes or No"), it did not commit to an answer. NOTE: this scans the
+            # whole response, which is correct for the constrained single-word
+            # format these packs demand (verified: committed responses are one
+            # word). A verbose free-form response whose rationale merely names
+            # the other option would be over-flagged as nonconformant — a known
+            # limitation to revisit if a free-form pack is ever added.
             mentioned = {
                 w for w in re.findall(r"[a-z0-9]+", _clean(answer)) if w in allowed
             }
@@ -242,6 +248,16 @@ def _validate_scenario(s: Scenario, commitment_id: str) -> None:
         _check_redos(s.expected.pattern, ctx)
         if s.expected.conformance:
             _check_redos(s.expected.conformance, ctx)
+        else:
+            # Without a conformance pattern, a token that fails `pattern` falls
+            # through to NONCONFORMANT — a VIOLATION can never be recorded for
+            # this scenario. Warn so a pack author does not silently lose the
+            # ability to count wrong-but-answer-shaped responses.
+            warnings.warn(
+                f"{ctx}: regex expected has no `conformance` pattern; wrong "
+                f"answers will be scored NONCONFORMANT, never VIOLATION",
+                stacklevel=2,
+            )
     if s.difficulty not in ("basic", "adversarial"):
         raise ValueError(f"{ctx}: difficulty must be basic|adversarial")
 

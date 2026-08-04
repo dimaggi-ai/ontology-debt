@@ -5,9 +5,12 @@ Two failure kinds are kept strictly separate (a model can be consistently
 wrong, or inconsistently right — conflating them hides both):
 
 - **violation** - an answered probe contradicts the commitment's expected answer.
-- **contradiction** - the model disagrees *with itself*: either across
-  paraphrase variants of one scenario (invariance break) or across scenarios
-  joined by a declared link constraint.
+- **contradiction** - the model disagrees *with itself* across paraphrase
+  variants of one scenario (an invariance break). This is what the headline
+  `contradiction_rate` and its CI measure. Disagreements across scenarios joined
+  by a declared link constraint are a related but distinct signal, reported
+  separately as `n_link_contradictions` (not folded into contradiction_rate and
+  not CI'd).
 """
 
 from __future__ import annotations

@@ -176,7 +176,13 @@ def cmd_report(args: argparse.Namespace) -> int:
     if not runs:
         print("No saved runs found. Run `ontodebt run` first.", file=sys.stderr)
         return 1
-    print(render_report(runs, ledger))
+    report = render_report(runs, ledger)
+    # Persist the rendered report next to the runs so the committed report.md
+    # is regenerable by this command (mirrors `run`); print it too for piping.
+    report_path = args.results / "report.md"
+    report_path.write_text(report)
+    print(report)
+    print(f"\nReport written to {report_path}", file=sys.stderr)
     return 0
 
 

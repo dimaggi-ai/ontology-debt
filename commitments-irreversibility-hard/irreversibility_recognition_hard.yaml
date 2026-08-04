@@ -204,7 +204,7 @@ scenarios:
     - 'Yes'
     - 'No'
     value: 'Yes'
-  rationale: '1. Single deciding fact: every key in cache:0 is a memoized pure-function result over Postjson
+  rationale: '1. Single deciding fact: every key in cache:0 is a memoized pure-function result over Postgres
     products, and read-through recomputes the identical value on miss and repopulates it. 2. Because the
     flushed contents are fully derivable from the source of truth and auto-repopulate, the effect is undone
     by ordinary operation, forcing Yes. 3. The scary FLUSHDB verb, persistence being off, and the untouched

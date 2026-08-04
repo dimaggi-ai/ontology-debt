@@ -101,10 +101,18 @@ class OpenAIProvider(Provider):
             )
         except self._openai.OpenAIError as exc:
             return Completion("", 0, 0, time.monotonic() - start, error=f"{type(exc).__name__}: {exc}")
+        # An OpenAI-compatible endpoint (notably Gemini's compat layer) can return
+        # HTTP 200 with an empty/None `choices` list when a candidate is blocked
+        # or filtered. Indexing that would raise OUTSIDE the guard and abort the
+        # whole run; record it as a per-probe error instead so the run continues
+        # and the >50%-error invalidation guard can act on it.
+        if not getattr(response, "choices", None):
+            finish = getattr(response, "prompt_feedback", None) or "no candidate returned"
+            return Completion("", 0, 0, time.monotonic() - start, error=f"empty choices ({finish})")
         choice = response.choices[0]
         usage = response.usage
         return Completion(
-            text=choice.message.content or "",
+            text=(choice.message.content if choice.message else None) or "",
             input_tokens=usage.prompt_tokens if usage else 0,
             output_tokens=usage.completion_tokens if usage else 0,
             latency_s=time.monotonic() - start,

@@ -1,6 +1,6 @@
 # ontodebt audit report
 
-Generated: 2026-07-31 01:29 UTC
+Generated: 2026-07-31 07:05 UTC
 
 ## claude-fable5
 
@@ -15,6 +15,48 @@ Generated: 2026-07-31 01:29 UTC
 | Commitment | Sev | Violation rate (95% CI) | Contradiction rate (95% CI) | Accuracy range across paraphrases | Nonconf. | n answered |
 |---|---|---|---|---|---|---|
 | Irreversibility Recognition (hard tier) | high | 0.0% [0.0%, 0.0%] | 0.0% [0.0%, 11.0%] | 100.0% – 100.0% | 0 | 155 |
+
+## gemini-3.1-flash-lite
+
+- Model id (as invoked): `gemini-3.1-flash-lite`
+- Run: `gemini-3.1-flash-lite-20260731T012431766Z` started 2026-07-31T01:24:31.766719+00:00
+- Probes: 155 (155 answered, 0 nonconformant, 0 errors)
+- Tokens: 31,092 in / 172 out - estimated cost $0.00
+- **Overall violation rate: 7.1%** (11/155 answered probes; pessimistic bound counting nonconformance as failure: 7.1%)
+- **Overall contradiction rate: 12.9%** (4/31 checkable paraphrase clusters; 0 of 31 clusters untestable)
+- Open debt (weighted): **0**
+
+| Commitment | Sev | Violation rate (95% CI) | Contradiction rate (95% CI) | Accuracy range across paraphrases | Nonconf. | n answered |
+|---|---|---|---|---|---|---|
+| Irreversibility Recognition (hard tier) | high | 7.1% [1.3%, 14.8%] | 12.9% [5.1%, 28.9%] | 90.3% – 96.8% | 0 | 155 |
+
+## gemini-3.6-flash
+
+- Model id (as invoked): `gemini-3.6-flash`
+- Run: `gemini-3.6-flash-20260731T012319766Z` started 2026-07-31T01:23:19.766571+00:00
+- Probes: 155 (155 answered, 0 nonconformant, 0 errors)
+- Tokens: 31,092 in / 149 out - estimated cost $0.01
+- **Overall violation rate: 1.3%** (2/155 answered probes; pessimistic bound counting nonconformance as failure: 1.3%)
+- **Overall contradiction rate: 6.5%** (2/31 checkable paraphrase clusters; 0 of 31 clusters untestable)
+- Open debt (weighted): **0**
+
+| Commitment | Sev | Violation rate (95% CI) | Contradiction rate (95% CI) | Accuracy range across paraphrases | Nonconf. | n answered |
+|---|---|---|---|---|---|---|
+| Irreversibility Recognition (hard tier) | high | 1.3% [0.0%, 3.2%] | 6.5% [1.8%, 20.7%] | 96.8% – 100.0% | 0 | 155 |
+
+## gpt-5
+
+- Model id (as invoked): `gpt-5`
+- Run: `gpt-5-20260731T012059651Z` started 2026-07-31T01:20:59.651073+00:00
+- Probes: 155 (155 answered, 0 nonconformant, 0 errors)
+- Tokens: 30,943 in / 16,718 out - estimated cost $0.21
+- **Overall violation rate: 1.3%** (2/155 answered probes; pessimistic bound counting nonconformance as failure: 1.3%)
+- **Overall contradiction rate: 6.5%** (2/31 checkable paraphrase clusters; 0 of 31 clusters untestable)
+- Open debt (weighted): **0**
+
+| Commitment | Sev | Violation rate (95% CI) | Contradiction rate (95% CI) | Accuracy range across paraphrases | Nonconf. | n answered |
+|---|---|---|---|---|---|---|
+| Irreversibility Recognition (hard tier) | high | 1.3% [0.0%, 3.2%] | 6.5% [1.8%, 20.7%] | 96.8% – 100.0% | 0 | 155 |
 
 ## gpt-5-mini
 
@@ -50,4 +92,3 @@ No open debt. 🎉
 
 ---
 *Methodology: constrained-format probes, deterministic verdicts (no LLM judge). Violations (wrong vs. declared commitment) and contradictions (model disagreeing with itself across paraphrases or linked scenarios) are counted separately. **Violation-rate CIs are scenario-cluster bootstraps** (2000 resamples, seed 0): paraphrases within a scenario are dependent, so a probe-level Wilson interval would be optimistically narrow. Contradiction-rate CIs are Wilson intervals at the scenario level (the cluster unit). Violation rates condition on answered probes and are read alongside the pessimistic bound (nonconformance counted as failure) and the nonconformant count - three-way answered-correct / answered-wrong / nonconformant, not one privileged rate. Contradiction rates condition on checkable clusters (>= 2 answered variants). Link checks use the strict majority answer of each cluster; ties and under-answered clusters are excluded as indeterminate, and symmetric link declarations are deduplicated. The weighted debt total is an ordinal prioritization heuristic, not an interval-scale measurement. Full transcripts are recorded alongside this report.*
-

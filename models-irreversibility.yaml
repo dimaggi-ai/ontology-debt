@@ -7,3 +7,10 @@ models:
   - {name: gemini-3.1-pro, provider: gemini, model_id: gemini-3.1-pro-preview, max_tokens: 8000, params: {}, input_price_per_mtok: 2.0, output_price_per_mtok: 12.0, est_output_tokens_per_probe: 600}
   - {name: gemini-3.6-flash, provider: gemini, model_id: gemini-3.6-flash, max_tokens: 6000, params: {}, input_price_per_mtok: 0.3, output_price_per_mtok: 2.5, est_output_tokens_per_probe: 400}
   - {name: gemini-3.1-flash-lite, provider: gemini, model_id: gemini-3.1-flash-lite, max_tokens: 6000, params: {}, input_price_per_mtok: 0.1, output_price_per_mtok: 0.4, est_output_tokens_per_probe: 400}
+  # Claude Fable 5 was collected KEYLESS via Claude Code subagents (no API key),
+  # and its exact responses are committed. This row REPLAYS those recorded
+  # answers deterministically (MockProvider replay), so the committed 0/0 result
+  # is regenerable by anyone with no API access; a prompt with no recorded answer
+  # errors rather than fabricating one. To re-collect fresh responses, run the
+  # keyless subagent harness instead of `ontodebt run`.
+  - {name: claude-fable5, provider: mock, model_id: claude-fable-5-via-subagents, max_tokens: 100, params: {answer_book_path: examples/irreversibility/answers-claude-fable5.json}, input_price_per_mtok: 0.0, output_price_per_mtok: 0.0, est_output_tokens_per_probe: 6}
