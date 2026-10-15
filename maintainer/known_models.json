@@ -16,6 +16,41 @@
       "created_at": "2026-06-22T14:49:37.000Z"
      }
     },
+    "Qwen/Qwen-Drive-1.0-4B": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "793a9876b368c644",
+     "meta": {
+      "created_at": "2026-08-27T08:14:27.000Z"
+     }
+    },
+    "Qwen/Qwen-Image-2.1": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "89e61046fd348e24",
+     "meta": {
+      "created_at": "2026-09-14T03:47:26.000Z"
+     }
+    },
+    "Qwen/Qwen-Image-2.1-PE-I2I": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "7db9aa5672c0e25d",
+     "meta": {
+      "created_at": "2026-09-20T08:46:47.000Z"
+     }
+    },
+    "Qwen/Qwen-Image-2.1-PE-T2I": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "8f953fd89149efbf",
+     "meta": {
+      "created_at": "2026-09-20T08:45:29.000Z"
+     }
+    },
+    "Qwen/Qwen-Image-2.1-Turbo": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "7e98426ff89e591e",
+     "meta": {
+      "created_at": "2026-10-09T04:50:01.000Z"
+     }
+    },
     "Qwen/Qwen-Image-Bench": {
      "first_seen": "2026-07-26T18:57:48Z",
      "hash": "3874f3bc4ee252b8",
@@ -238,6 +273,48 @@
      "hash": "20651e1a08a8d67d",
      "meta": {
       "created_at": "2026-04-15T06:05:13.000Z"
+     }
+    },
+    "Qwen/Qwen3.8-2.4T-A95B": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "4918cd8ddefcca3a",
+     "meta": {
+      "created_at": "2026-08-08T01:50:52.000Z"
+     }
+    },
+    "Qwen/Qwen3.8-2.4T-A95B-FP8": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "ba5608c069f03574",
+     "meta": {
+      "created_at": "2026-08-08T01:49:49.000Z"
+     }
+    },
+    "Qwen/Qwen3.8-27B": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "14d7b44ba78c4093",
+     "meta": {
+      "created_at": "2026-08-05T08:22:59.000Z"
+     }
+    },
+    "Qwen/Qwen3.8-27B-FP8": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "2797b2425c52ca16",
+     "meta": {
+      "created_at": "2026-08-13T08:01:58.000Z"
+     }
+    },
+    "Qwen/Qwen3.8-Flash-Next": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "8df7f965a27c3fdb",
+     "meta": {
+      "created_at": "2026-08-24T08:24:59.000Z"
+     }
+    },
+    "Qwen/Qwen3.8-Flash-Next-FP8": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "f2621838158c7a22",
+     "meta": {
+      "created_at": "2026-08-24T08:25:23.000Z"
      }
     },
     "Qwen/SAE-Res-Qwen3-1.7B-Base-W32K-L0_100": {
@@ -548,6 +625,13 @@
       "created_at": "2026-04-22T06:04:20.000Z"
      }
     },
+    "deepseek-ai/DeepSeek-V4-Flash-0731": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "abe19d1d44b201d2",
+     "meta": {
+      "created_at": "2026-07-31T07:30:24.000Z"
+     }
+    },
     "deepseek-ai/DeepSeek-V4-Flash-Base": {
      "first_seen": "2026-07-26T18:57:48Z",
      "hash": "b30f88e0cb13be35",
@@ -562,11 +646,25 @@
       "created_at": "2026-06-27T02:27:36.000Z"
      }
     },
+    "deepseek-ai/DeepSeek-V4-Flash-Vision-Exp": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "47d35d86d43c6ae7",
+     "meta": {
+      "created_at": "2026-08-31T06:16:18.000Z"
+     }
+    },
     "deepseek-ai/DeepSeek-V4-Pro": {
      "first_seen": "2026-07-26T18:57:48Z",
      "hash": "8b813bd128a3d78a",
      "meta": {
       "created_at": "2026-04-22T06:04:45.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-V4-Pro-0813": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "9dd616fe000e4b72",
+     "meta": {
+      "created_at": "2026-08-13T03:05:06.000Z"
      }
     },
     "deepseek-ai/DeepSeek-V4-Pro-Base": {
@@ -581,6 +679,13 @@
      "hash": "14b4b2c93d5d5147",
      "meta": {
       "created_at": "2026-06-27T03:02:56.000Z"
+     }
+    },
+    "deepseek-ai/DeepSeek-V4.1-Flash": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "99830583cba5e321",
+     "meta": {
+      "created_at": "2026-09-10T02:17:58.000Z"
      }
     },
     "deepseek-ai/Janus-Pro-1B": {
@@ -714,6 +819,13 @@
      "hash": "4197c5ba98f34593",
      "meta": {
       "created_at": "2026-06-09T12:40:12.000Z"
+     }
+    },
+    "google/embeddinggemma-2": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "9ce75c606cae0139",
+     "meta": {
+      "created_at": "2026-09-14T14:53:42.000Z"
      }
     },
     "google/gemma-4-12B": {
@@ -982,6 +1094,13 @@
       "created_at": "2026-06-04T22:28:22.000Z"
      }
     },
+    "google/gnm-v3": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "3b5e797f2240bd75",
+     "meta": {
+      "created_at": "2026-09-01T17:03:30.000Z"
+     }
+    },
     "google/magenta-realtime-2": {
      "first_seen": "2026-07-26T18:57:48Z",
      "hash": "70f66b4703e0e464",
@@ -1001,6 +1120,62 @@
      "hash": "5a49b97625dba295",
      "meta": {
       "created_at": "2026-06-29T23:04:41.000Z"
+     }
+    },
+    "google/tabfm-1.1.0-pytorch": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "50a5b513e7744c6a",
+     "meta": {
+      "created_at": "2026-07-31T16:21:45.000Z"
+     }
+    },
+    "google/timesfm-3.0-pytorch": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "2e9bd48d38e384fc",
+     "meta": {
+      "created_at": "2026-08-24T22:05:51.000Z"
+     }
+    },
+    "google/tipsv1-b14": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "509242fc1b1e3e18",
+     "meta": {
+      "created_at": "2026-08-19T14:48:47.000Z"
+     }
+    },
+    "google/tipsv1-g14": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "3445e886f8697d3c",
+     "meta": {
+      "created_at": "2026-08-19T16:40:35.000Z"
+     }
+    },
+    "google/tipsv1-g14-lowres": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "c1b4816a1ad282a0",
+     "meta": {
+      "created_at": "2026-08-19T16:41:21.000Z"
+     }
+    },
+    "google/tipsv1-l14": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "0a85139c4ee66849",
+     "meta": {
+      "created_at": "2026-08-19T14:56:11.000Z"
+     }
+    },
+    "google/tipsv1-s14": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "1042a9be8b551667",
+     "meta": {
+      "created_at": "2026-08-19T14:43:49.000Z"
+     }
+    },
+    "google/tipsv1-so400m14": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "c0fecbbe663792ef",
+     "meta": {
+      "created_at": "2026-08-19T15:02:28.000Z"
      }
     },
     "google/tipsv2-b14": {
@@ -1451,6 +1626,13 @@
       "created_at": "2025-07-07T12:22:38.000Z"
      }
     },
+    "mistralai/LIDstral-Arabic": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "f5e8fead7f6fa197",
+     "meta": {
+      "created_at": "2026-10-08T11:37:05.000Z"
+     }
+    },
     "mistralai/Leanstral-1.5-119B-A6B": {
      "first_seen": "2026-07-26T18:57:48Z",
      "hash": "7bbbcfc9ed2439e6",
@@ -1731,6 +1913,13 @@
       "created_at": "2026-03-04T16:38:14.000Z"
      }
     },
+    "mistralai/Shieldstral-1.0-3B": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "cb7790bfdc674103",
+     "meta": {
+      "created_at": "2026-07-16T10:24:13.000Z"
+     }
+    },
     "mistralai/Voxtral-4B-TTS-2603": {
      "first_seen": "2026-07-26T18:57:48Z",
      "hash": "2888c2404bb23f00",
@@ -1750,6 +1939,13 @@
      "hash": "ed7a108eb3bdf3fc",
      "meta": {
       "created_at": "2026-01-21T17:22:02.000Z"
+     }
+    },
+    "mistralai/Voxtral-Mini-4B-Realtime-Arabic": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "649b249b4ee600e6",
+     "meta": {
+      "created_at": "2026-10-08T11:36:06.000Z"
      }
     },
     "mistralai/Voxtral-Small-24B-2507": {
@@ -1827,6 +2023,13 @@
      "hash": "b2da4644be311ccf",
      "meta": {
       "created_at": "2026-06-11T07:51:47.000Z"
+     }
+    },
+    "moonshotai/Kimi-K3": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "b122cab1eb68d3ad",
+     "meta": {
+      "created_at": "2026-06-13T06:42:57.000Z"
      }
     },
     "moonshotai/Kimi-Linear-48B-A3B-Base": {
@@ -2366,6 +2569,34 @@
      "hash": "bb7d0ee882709463",
      "meta": {
       "created_at": "2026-06-16T07:20:33.000Z"
+     }
+    },
+    "zai-org/GLM-5.3": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "b88e36d5d1278d75",
+     "meta": {
+      "created_at": "2026-08-25T06:42:50.000Z"
+     }
+    },
+    "zai-org/GLM-5.3-BF16": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "2b6fb185b3df8b75",
+     "meta": {
+      "created_at": "2026-08-25T06:43:55.000Z"
+     }
+    },
+    "zai-org/GLM-5.3-Flash": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "f4a476bf19c2eaaf",
+     "meta": {
+      "created_at": "2026-08-25T06:43:14.000Z"
+     }
+    },
+    "zai-org/GLM-5.3-Flash-BF16": {
+     "first_seen": "2026-10-14T23:33:34Z",
+     "hash": "979d474a34da3cf1",
+     "meta": {
+      "created_at": "2026-08-25T06:45:05.000Z"
      }
     },
     "zai-org/GLM-ASR-Nano-2512": {
